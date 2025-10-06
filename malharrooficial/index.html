@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malharro - Página principal</title>
+
+<meta name="description" content="Martín Malharro es una institución educativa pública, dedicada a la formación de profesionales versátiles, que puedan actuar en el campo pedagógico, artístico y de la comunicación visual.">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximun-scale=1.0, minimun scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Estilos propios -->
+  <link href="css/styles.css" rel="stylesheet"> <!--Navbar, estilo texto, fondo, footer-->
+  <link href="css/paginainicio.css" rel="stylesheet"> <!--banner, Botones destacados, desplegables carreras, preguntas frecuentes-->
+  <link href="css/3prueba-design-system.css" rel="stylesheet"> <!--Primera prueba de design sistem aplicada-->
+
+</head>
+<body>
+
+    <!--NAVBAR-->
+<nav class="navbar navbar-expand-lg navbar-dark z-index-1000 p-3">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+
+        <!-- Logo + lupa -->
+    <div class="logo-lupa-box">
+        <div class="d-flex align-items-center bg-highlight p-2 rounded">
+      <a href="iniciomalh.html" class="navbar-brand botonlogo" role="button" aria-label="Ir a inicio">
+        <img src="images/Iso_Malharro.svg" alt="Isotipo Malharro" class="logo-nav">
+      </a> 
+      <!--lupa abre modal de búsqueda -->
+      <a href="#" role="button" data-bs-toggle="modal" data-bs-target="#searchModal" aria-label="Buscar">
+        <img src="images/Icon_Lupa.svg" alt="Buscar" class="lupa-nav ms-2">
+      </a>
+    </div>
+  </div>
+    <!-- Botón hamburguesa -->
+    <button class="navbar-toggler collapsed p-2" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+      aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Menú lateral -->
+    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+        <div class="menu-box-lg d-flex flex-column px-3 py-2 rounded">
+
+        <!-- el botón de cierre solo se muestra en móviles -->
+        <button class="btn-close-menu d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-label="Cerrar menú">
+          <img src="images/Icon_X_Blanca.svg" alt="Cerrar menú">
+        </button>
+
+        <ul class="navbar-nav mt-4">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle texitem" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Carreras</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="disenografico.html">Dise&ntilde;o Gr&aacute;fico</a></li>
+              <li><a class="dropdown-item" href="escenografia.html">Escenograf&iacute;a</a></li>
+              <li><a class="dropdown-item" href="fotografia.html">Fotograf&iacute;a</a></li>
+              <li><a class="dropdown-item" href="ilustracion.html">Ilustraci&oacute;n</a></li>
+              <li><a class="dropdown-item" href="mediosav.html">Medios Audiovisuales</a></li>
+              <li><a class="dropdown-item" href="profesorado.html">Profesorado</a></li>
+              <li><a class="dropdown-item" href="realizador.html">Realizador</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Institucional</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Acerca de Malharro</a></li>
+              <li><a class="dropdown-item" href="#">Autoridades</a></li>
+              <li><a class="dropdown-item" href="#">Biblioteca</a></li>
+              <li><a class="dropdown-item" href="#">Consejo Académico</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Cooperadora</a></li>
+              <li><a class="dropdown-item" href="#">Docentes</a></li>
+              <li><a class="dropdown-item" href="#">Nuestros Estudiantes</a></li>
+              <li><a class="dropdown-item" href="#">Pasantías</a></li>
+              <li><a class="dropdown-item" href="#">Planimetr&iacute;a</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Estudiantes</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Convivencia</a></li>
+              <li><a class="dropdown-item" href="#">Documentaci&oacute;n</a></li>
+              <li><a class="dropdown-item" href="#">T&iacute;tulos</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Ciclo 2025</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Horarios</a></li>
+              <li><a class="dropdown-item" href="#">Licencias docentes</a></li>
+              <li><a class="dropdown-item" href="#">Mesas de examen</a></li>
+            </ul>
+          </li>
+         <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Talleres</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">J&oacute;venes - Adultos</a></li>
+              <li><a class="dropdown-item" href="#">Infancias - Adolescentes</a></li>
+            </ul>
+          </li>
+          <li class="nav-item list">
+            <a class="nav-link no-wrap navtext" href="#" >Preguntas frecuentes</a>
+          </li>
+                    <li class="nav-item list">
+            <a class="nav-link" href="#">CAMPUS</a>
+          </li>
+        </ul>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Punto de anclaje para botón subir -->
+  <div id="top"></div>
+
+  <!-- Banner -->
+  <div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="0" class="active indicador-triangulo" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="1" class="indicador-circulo" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="2" class="indicador-cuadrado" aria-label="Slide 3"></button>
+    </div>
+
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="images/BANNER MUESTRA.png" class="d-block w-100 banner-img" alt="Slide 1">
+        <div class="carousel-caption d-flex justify-content-center align-items-center h-100">
+          <h2 class="textocarrusel fw-bold text-shadow"> <span class="fw-bolder"></span></h2>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="images/BANNER MUESTRA.png" class="d-block w-100 banner-img" alt="Slide 2">
+      </div>
+      <div class="carousel-item">
+        <img src="images/BANNER MUESTRA.png" class="d-block w-100 banner-img" alt="Slide 3">
+      </div>
+      </div>
+
+     <div class="degradado-carousel"></div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
+  </div>
+  <!-- ====== FIN banner ====== -->
+
+
+
+  <!-- ====== INICIO BOTONES ====== -->
+<section class="container  espaciado-vertical">
+  <div class="row botones-grid">
+    <div class="botones-uno col-12 justify-content-center col-lg-4 gx-lg-0">
+      <a href="carreras.html" class="btn-bloque btn-carreras">Carreras</a>
+      <a href="https://esavmamalharro-bue.infd.edu.ar/aula/acceso.cgi" class="btn-bloque btn-campus">Campus</a>
+    </div>
+    <div class="botones-uno col-12 justify-content-center col-lg-4 ">
+      <a href="agenda.html" class="btn-bloque btn-agenda">Agenda</a>
+      <a href="estudiantes.html" class="btn-bloque btn-estudiantes">Estudiantes</a>
+    </div>
+    <div class="botones-uno col-12 justify-content-center col-lg-4 gx-lg-0">
+      <a href="institucional.html" class="btn-bloque btn-institucional">Institucional</a>
+      <a href="talleres.html" class="btn-bloque btn-talleres">Talleres</a>
+    </div>
+  </div>
+</section>
+<!--Fin botones de carreras-->
+
+<!-- ====== INICIO acerca de nosotros ====== -->
+<div class="container-fluid espaciado-vertical">
+  <div class="row">
+    <div class="col-md-1"> </div>
+    <div class="nosotros tituloacercanostrs col-12 col-md-5">
+      <h1 class="h1-titulor">Acerca de</h1>
+      <h1 class="h1-titulob"> nosotros</h1>
+    </div>
+    <div class="nosotros textoacercanostrs col-12 col-md-5">
+      <p class="p1-r">Somos una <b>instituci&oacute;n p&uacute;blica en Mar del Plata</b> comprometida con la formaci&oacute;n acad&eacute;mica y profesional en el &aacute;mbito de las artes visuales.
+      Fomentamos la <b>creatividad</b>, el <b>pensamiento cr&iacute;tico</b> y la <b>innovaci&oacute;n</b>, contribuyendo al enriquecimiento cultural y social de nuestra comunidad. 
+      </p>
+
+      <!-- Botón dentro de la misma columna -->
+      <div class="d-flex justify-content-start">
+        <a href="columnas-carreras-disenografico.html" class="btn btn-sabermas">
+          Saber más
+        </a>
+      </div>
+    </div>
+    <div class="col-md-1"> </div>
+
+    </div>
+  </div>
+<!-- ======fin acerca de nosotros====== -->
+
+<div class="contenedor-negro"> <!-- ====== INICIA CONTENEDOR-NEGRO ====== -->
+
+
+    <!-- ====== INICIO DESPLEGABLES CARRERAS ====== -->
+<div class="container-fluid my-4 px-0">   <!-- full-width, sin padding horizontal -->
+<div class="row gx-0">                <!-- gutter-x 0 -->
+  <div class="carrerastitulo">
+    <h1 class="h1-titulor"> Nuestras</h1>
+    <h1 class="h1-titulob"> Carreras</h1>
+  </div>
+    <div class="col-12 px-0">           <!-- sin padding interno -->
+    <div class="accordion" id="accordionCarreras">
+
+       <!-- Ítem Diseño Gráfico     1    -->
+        <div class="accordion-item custom-accordion-item dg">
+        <h2 class="accordion-header" id="headingDG">
+            <button
+            class="accordion-button custom-accordion-btn collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseDG"
+            aria-expanded="false"
+            aria-controls="collapseDG"
+            >
+            <span>Dise&ntilde;o Gr&aacute;fico</span>
+            <img src="images/Icon_DesplegarMenu.svg"
+                class="accordion-icon"
+                alt="Icono desplegar" />
+            </button>
+        </h2>
+        <div
+            id="collapseDG"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingDG"
+            data-bs-parent="#accordionCarreras"
+        >
+            <div class="accordion-body custom-accordion-body">
+            <p class="mb-4">
+                A lo largo de la carrera, los estudiantes <b>aprenden</b> tanto <b>aspectos t&eacute;cnicos</b> (manejo de software de dise&ntilde;o, tipograf&iacute;a, teor&iacute;a del color) como <b>est&eacute;ticos y conceptuales</b> (composici&oacute;n, identidad visual, historia del arte y el dise&ntilde;o y comunicaci&oacute;n visual).
+            </p>
+            <a href="sub-carreras-disenografico.html"
+                class="btn btn-sabermas-dg">
+                Saber m&aacute;s
+            </a>
+            <img src="images/Personaje_DisenoGrafico_C.svg"
+                class="decorativo"
+                alt="" aria-hidden="true" />
+            </div>
+        </div>
+        </div>
+        <!-- /TERMINA Ítem Diseño Gráfico   1 -->
+
+
+
+        <!-- Ítem Escenografía     2     -->
+        <div class="accordion-item custom-accordion-item es">
+        <h2 class="accordion-header" id="headingES">
+            <button
+            class="accordion-button custom-accordion-btn collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseES"
+            aria-expanded="false"
+            aria-controls="collapseES"
+            >
+            <span>Escenograf&iacute;a</span>
+            <img src="images/Icon_DesplegarMenu.svg"
+                class="accordion-icon"
+                alt="Icono desplegar" />
+            </button>
+        </h2>
+        <div
+            id="collapseES"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingES"
+            data-bs-parent="#accordionCarreras"
+        >
+            <div class="accordion-body custom-accordion-body">
+            <p class="mb-4">
+                La carrera forma profesionales capaces de <b>crear y construir espacios esc&eacute;nicos</b> que acompa&ntilde;en y potencien la narrativa de una obra teatral, cinematogr&aacute;fica o audiovisual. El escen&oacute;grafo <b>transforma ideas, textos y emociones en espacios visuales</b> que enriquecen la experiencia del espectador, uniendo arte, t&eacute;cnica y dramaturgia.
+            </p>
+            <a href="columnas-carreras-disenografico.html"
+                class="btn btn-sabermas-es">
+                Saber m&aacute;s
+            </a>
+            <img src="images/Personaje_Escenografía_C.svg"
+                class="decorativo"
+                alt="" aria-hidden="true" />
+            </div>
+        </div>
+        </div>
+        <!-- /TERMINA Ítem Escenografía  2  -->        
+
+
+        <!-- Ítem Fotografía      3      -->
+        <div class="accordion-item custom-accordion-item fo">
+        <h2 class="accordion-header" id="headingES">
+            <button
+            class="accordion-button custom-accordion-btn collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseFO"
+            aria-expanded="false"
+            aria-controls="collapseFO"
+            >
+            <span>Fotograf&iacute;a</span>
+            <img src="images/Icon_DesplegarMenu.svg"
+                class="accordion-icon"
+                alt="Icono desplegar" />
+            </button>
+        </h2>
+        <div
+            id="collapseFO"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingFO"
+            data-bs-parent="#accordionCarreras"
+        >
+            <div class="accordion-body custom-accordion-body">
+            <p class="mb-4">
+                La carrera forma personas capaces de <b>expresar ideas, emociones y realidades a trav&eacute;s de im&aacute;genes fotogr&aacute;ficas</b>, combinando sensibilidad est&eacute;tica con dominio t&eacute;cnico. Es mucho m&aacute;s que tomar una foto: <b>es saber ver el mundo con intenci&oacute;n</b>, contar historias y documentar momentos con una mirada propia y profesional.
+            </p>
+            <a href="columnas-carreras-disenografico.html"
+                class="btn btn-sabermas-fo">
+                Saber m&aacute;s
+            </a>
+            <img src="images/Personaje_Fotografia_C.svg"
+                class="decorativo"
+                alt="" aria-hidden="true" />
+            </div>
+        </div>
+        </div>
+        <!-- /TERMINA Ítem Fotografía   3  -->       
+
+
+
+        <!-- Ítem Ilustración       4      -->
+        <div class="accordion-item custom-accordion-item il">
+        <h2 class="accordion-header" id="headingIL">
+            <button
+            class="accordion-button custom-accordion-btn collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseIL"
+            aria-expanded="false"
+            aria-controls="collapseIL"
+            >
+            <span>Ilustraci&oacute;n</span>
+            <img src="images/Icon_DesplegarMenu.svg"
+                class="accordion-icon"
+                alt="Icono desplegar" />
+            </button>
+        </h2>
+        <div
+            id="collapseIL"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingIL"
+            data-bs-parent="#accordionCarreras"
+        >
+            <div class="accordion-body custom-accordion-body">
+            <p class="mb-4">
+                La carrera forma personas capaces de <b>comunicar visualmente ideas, textos y emociones a trav&eacute;s del dibujo</b>. La ilustraci&oacute;n no es solo arte: es un lenguaje visual que acompa&ntilde;a, complementa o incluso reemplaza a las palabras para transmitir mensajes de forma clara, creativa y poderosa.
+            </p>
+            <a href="columnas-carreras-disenografico.html"
+                class="btn btn-sabermas-il">
+                Saber m&aacute;s
+            </a>
+            <img src="images/Personaje_Ilustracion_C.svg"
+                class="decorativo"
+                alt="" aria-hidden="true" />
+            </div>
+        </div>
+        </div>
+        <!-- /TERMINA Ítem Ilustración    4  -->       
+
+
+                <!-- Ítem Medios Audiovisuales      5     -->
+        <div class="accordion-item custom-accordion-item ma">
+        <h2 class="accordion-header" id="headingES">
+            <button
+            class="accordion-button custom-accordion-btn collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseMA"
+            aria-expanded="false"
+            aria-controls="collapseMA"
+            >
+            <span>Medios Audivisuales</span>
+            <img src="images/Icon_DesplegarMenu.svg"
+                class="accordion-icon"
+                alt="Icono desplegar" />
+            </button>
+        </h2>
+        <div
+            id="collapseMA"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingMA"
+            data-bs-parent="#accordionCarreras"
+        >
+            <div class="accordion-body custom-accordion-body">
+            <p class="mb-4">
+                La carrera de Medios Audiovisuales forma profesionales capacitados para <b>crear contenidos para plataformas digitales, cine y televisi&oacute;n</b>, abarcando tanto lo t&eacute;cnico como lo creativo. Un realizador audiovisual <b>piensa, produce y comunica a trav&eacute;s de la imagen</b> en movimiento, con una mirada cr&iacute;tica y comprometida con su entorno.
+            </p>
+            <a href="columnas-carreras-disenografico.html"
+                class="btn btn-sabermas-ma">
+                Saber m&aacute;s
+            </a>
+            <img src="images/Personaje_MediosA_C.svg"
+                class="decorativo"
+                alt="" aria-hidden="true" />
+            </div>
+        </div>
+        </div>
+        <!-- /TERMINA Ítem Medios Audiovisuales        5      -->       
+
+
+
+                <!-- Ítem Profesorado   6-->
+        <div class="accordion-item custom-accordion-item pr">
+        <h2 class="accordion-header" id="headingPR">
+            <button
+            class="accordion-button custom-accordion-btn collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapsePR"
+            aria-expanded="false"
+            aria-controls="collapsePR"
+            >
+            <span>Profesorado</span>
+            <img src="images/Icon_DesplegarMenu.svg"
+                class="accordion-icon"
+                alt="Icono desplegar" />
+            </button>
+        </h2>
+        <div
+            id="collapsePR"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingPR"
+            data-bs-parent="#accordionCarreras"
+        >
+            <div class="accordion-body custom-accordion-body">
+            <p class="mb-4">
+                El Profesorado en Artes forma profesionales capaces de enseñar y <b>transmitir el arte como una herramienta de conocimiento, expresi&oacute;n y transformaci&oacute;n</b> personal y social. La carrera <b>prepara docentes que no solo ense&ntilde;an</b> t&eacute;cnicas, sino que <b>tambi&eacute;n acompa&ntilde;an</b> procesos creativos, fomentan el pensamiento cr&iacute;tico y promueven el acceso a la cultura.
+            </p>
+            <a href="columnas-carreras-disenografico.html"
+                class="btn btn-sabermas-pr">
+                Saber m&aacute;s
+            </a>
+            <img src="images/Personaje_Profesorado_C.svg"
+                class="decorativo"
+                alt="" aria-hidden="true" />
+            </div>
+        </div>
+        </div>
+        <!-- /TERMINA Ítem Profesorado      6       -->       
+
+
+                <!-- Ítem Realizador en AV  7  -->
+        <div class="accordion-item custom-accordion-item re">
+        <h2 class="accordion-header" id="headingRE">
+            <button
+            class="accordion-button custom-accordion-btn collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseRE"
+            aria-expanded="false"
+            aria-controls="collapseRE"
+            >
+            <span>Realizador en Artes Visuales</span>
+            <img src="images/Icon_DesplegarMenu.svg"
+                class="accordion-icon"
+                alt="Icono desplegar"/>
+            </button>
+        </h2>
+        <div
+            id="collapseRE"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingRE"
+            data-bs-parent="#accordionCarreras"
+        >
+            <div class="accordion-body custom-accordion-body">
+            <p class="mb-4">
+                La carrera de Realizador en Artes Visuales <b>forma artistas con una mirada contempor&aacute;nea</b>, capaces de crear obras en distintas disciplinas y de participar activamente en el mundo del arte. 
+               <b> No solo se aprende a producir, sino tambi&eacute;n a pensar el arte</b>: a construir un discurso propio, tanto individual como colectivo, que dialogue con el contexto social y cultural actual.
+            </p>
+            <a href="columnas-carreras-disenografico.html"
+                class="btn btn-sabermas-re">
+                Saber m&aacute;s
+            </a>
+            <img src="images/Personaje_Realizador_C.svg"
+                class="decorativo"
+                alt="" aria-hidden="true"/>
+            </div>
+        </div>
+        </div>
+        <!-- /TERMINA Ítem  Realizador en AV   7 -->       
+
+
+
+
+    </div><!-- /.accordion -->
+    </div><!-- /.col-12 -->
+</div><!-- /.row -->
+</div><!-- /.container-fluid -->
+
+<!-- ====== FIN DESPLEGABLES ====== -->
+
+
+
+<!-- ====== INICIO AGENDA ====== -->
+
+<div class="container-fluid espaciado-vertical">
+  <div class="row justify-content-center text-center">
+    <div class="col-12">
+      <h1 class="agenda-titulo h1-titulob">Agenda</h1>
+      <p class="agenda-subtitulo p1-r">
+        Descubrí los eventos, mesas de exámenes y jornadas que tenés este año.
+      </p>
+    </div>
+  </div>
+</div>
+</div> <!-- ====== TERMINA CONTENEDOR-NEGRO ====== -->
+
+<div class="row justify-content-center">
+    <div class="col-12 ">
+       <div class="agenda-wrapper">
+          <!-- Botón izquierda -->
+  <button class="agenda-btn left-btn" id="prev-btn">
+  <img src="images/Icon_Agenda_Actualizado.svg" alt="Anterior">
+  </button>
+  
+    <!-- Botón derecha -->
+  <button class="agenda-btn right-btn" id="next-btn">
+  <img src="images/Icon_Agenda_Actualizado.svg" alt="Siguiente">
+  </button>
+
+       </div>
+      
+    <div class="agenda-grid"><!-- Contenedor-->
+
+<!-- Evento 1-->
+  <div class="agenda-card active"> 
+<!-- Imagen dinámica -->
+    <img class="agenda-image" src="images/CHARLA FEED.png" alt="Imagen del evento">
+  
+    <!-- Etiquetas -->
+    <div class="agenda-tags" id="agenda-tags">
+      <span class="agenda-tag p14-etiqueta-agenda">CHARLAS</span>
+      <span class="agenda-tag p14-etiqueta-agenda">JORNADAS</span>
+    </div>
+
+    <!-- Info evento -->
+    <div class="agenda-info d-flex">
+      <div class="agenda-date text-center" id="agenda-date">
+        <p class="agenda-mes p11-mes-agenda-light">Oct</p>
+        <p class="agenda-dia p12-dia-agenda-light">24</p>
+      </div>
+
+      <div class="agenda-divider"></div>
+      <div class="agenda-texto" id="agenda-datedos">
+      <p class="p13-texto-agenda-light">Taller de afiches <br> <!-- para separar texto-->
+      por Coco Cerella</p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<!-- Evento 2 centro-->
+  <div class="agenda-card"> 
+
+<!-- Imagen dinámica -->
+    <img class="agenda-image" src="images/AVISO dos.png" alt="Imagen del evento">
+
+
+    <!-- Etiquetas -->
+    <div class="agenda-tags" id="agenda-tags">
+      <span class="agenda-tag p14-etiqueta-agenda">CHARLAS</span>
+      <span class="agenda-tag p14-etiqueta-agenda">JORNADAS</span>
+    </div>
+
+    <!-- Info evento -->
+    <div class="agenda-info d-flex">
+      <div class="agenda-date text-center" id="agenda-date">
+        <p class="agenda-mes p11-mes-agenda-light">Oct</p>
+        <p class="agenda-dia p12-dia-agenda-light">24</p>
+      </div>
+
+      <div class="agenda-divider"></div>
+      <div class="agenda-texto" id="agenda-datedos">
+      <p class="p13-texto-agenda-light">Taller de afiches <br> <!-- para separar texto-->
+      por Coco Cerella</p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<!-- Evento 3-->
+  <div class="agenda-card"> 
+
+<!-- Imagen dinámica -->
+    <img class="agenda-image" src="images/AVISO uno.png" alt="Imagen del evento">
+
+
+    <!-- Etiquetas -->
+    <div class="agenda-tags" id="agenda-tags">
+      <span class="agenda-tag p14-etiqueta-agenda">CHARLAS</span>
+      <span class="agenda-tag p14-etiqueta-agenda">JORNADAS</span>
+    </div>
+
+    <!-- Info evento -->
+    <div class="agenda-info d-flex">
+      <div class="agenda-date text-center" id="agenda-date">
+        <p class="agenda-mes p11-mes-agenda-light">Oct</p>
+        <p class="agenda-dia p12-dia-agenda-light">24</p>
+      </div>
+
+      <div class="agenda-divider"></div>
+      <div class="agenda-texto" id="agenda-datedos">
+      <p class="p13-texto-agenda-light">Taller de afiches <br> <!-- para separar texto-->
+      por Coco Cerella</p>
+      </div>
+     </div>
+    </div>
+  </div>
+
+
+  <!-- Botón agenda completa -->
+    <div class="d-flex justify-content-center mt-3">
+    <button class="btn-agenda01">Ver agenda completa</button>
+    </div>
+</div>
+</div>
+
+<!-- ====== FIN AGENDA ====== -->
+
+
+<!-- ====== INICIO formando prof ====== -->
+<div class="container-fluid espaciado-vertical">
+  <div class="row">
+    <div class="col-md-1"> </div>
+    <div class=" titulo-prof col-12 col-md-5">
+      <h1>60 a&ntilde;os formando profesionales</h1>
+    </div>
+    <div class="texto-prof col-12 col-md-5">
+      <p>
+        <b>Brindamos a nuestros estudiantes una formaci&oacute;n especializada que les permita insertarse en el mundo laboral con &eacute;xito.</b>
+        <br> <br>
+        La Escuela promueve el v&iacute;nculo ofreciendo espacios de encuentro con <b>empresas referentes del sector</b>, charlas, talleres y eventos que permiten a los estudiantes generar <b>conexiones valiosas</b> para su desarrollo profesional.
+        <br> <br>
+        <b>“La Malharro”</b> sigue formando artistas y dise&ntilde;adores listos para aportar su creatividad al mundo.
+      </p>
+    </div>
+     <div class="col-md-1"> </div>
+  </div>
+</div>
+<!-- ====== FIN formando prof ====== -->
+
+
+
+<!-- ====== INICIO NUESTROS ESTUDIANTES ====== -->
+<div class="container-fluid espaciado-vertical">
+  <div class="row justify-content-center">
+    <div class="nuestros-estudiantes col-12"> <!--forma circular-->
+        <div class="estudiantes-titulo col-12"> <!--titulo-->
+          <h1 class="h1-titulor">Nuestros <br>
+            <b>estudiantes</b></h1>
+        </div>
+        <div class="estudiantes-parrafo p1-r"> <!--parrafo-->
+          <p>Descubr&iacute; los proyectos creados en nuestros talleres y aulas.</p>
+        </div>
+
+        <div class="galeria d-flex align-items-center col-12">
+        <div class="col-6 col-md-3">
+          <img src="images/AVISO uno.png" class="galeria-img">
+        </div>
+        </div>
+    </div>
+  </div>
+</div>
+<!-- ====== FIN NUESTROS ESTUDIANTES ====== -->
+
+
+
+<!-- ====== INICIO PREGUNTAS FRECUENTES ====== -->
+<section class="container espaciado-vertical" id="preguntasfrecuentes">
+  <h1 class="container mb-3 d-flex justify-content-center">Preguntas frecuentes</h1> 
+  <div class="faq-list"> <!-- Contenedor de todas las preguntas y respuestas. -->
+    
+    <!-- ====== Preguntas ====== -->
+
+<details class="faq-item"> 
+  <summary class="faq-summary">
+    ¿Dónde queda la Malharro?
+    <img src="images/Icon_FlechaAgendaPreguntas.svg" class="chevron" aria-hidden="true">
+  </summary>
+  <div class="faq-content">
+    <div class="col-12 col-md-7">
+    <p>
+      La Escuela se encuentra en la ciudad de Mar del Plata. Ubicada en la esquina de Luro y La Pampa, frente a la Terminal de micros.
+    </p>
+    </div>
+    <!-- Vista previa del mapa -->
+    <div class="map-preview col-md-12">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3144.449087550747!2d-57.56621552511716!3d-37.98998424412818!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9584d951f12bae1f%3A0x7b0eaea299a69b09!2sEscuela%20de%20Artes%20Visuales%20M.A%20Malharro!5e0!3m2!1ses-419!2sar!4v1756941987999!5m2!1ses-419!2sar" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        width="600"
+        height="450"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  <div class="col-md-5"></div>
+  </div>
+</details>
+
+   <!-- ====== Pregunta 2 ====== -->
+   <div class="">
+    <details class="faq-item">
+      <summary class="faq-summary">
+        ¿Se puede cursar más de una carrera a la vez?
+        <img src="images/Icon_FlechaAgendaPreguntas.svg" class="chevron" aria-hidden="true">
+      </summary>
+      <div class="faq-content">
+        <div class="col-12 col-md-8">
+        <p> (hacer respuesta)</p>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+    </details>
+
+    <!-- ====== Pregunta 3 ====== -->
+   <div class="">
+    <details class="faq-item">
+      <summary class="faq-summary">
+        ¿Cuando comienzan las clases?
+        <img src="images/Icon_FlechaAgendaPreguntas.svg" class="chevron" aria-hidden="true">
+      </summary>
+      <div class="faq-content">
+        <div class="col-12 col-md-8">
+        <p>El ciclo lectivo suele comenzar en abril y se divide en dos cuatrimestres. Hay períodos específicos para inscripciones, cursadas, exámenes y mesas finales. El calendario académico se publica en el sitio web institucional, redes sociales y en los murales de la escuela.</p>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+    </details>
+
+        <!-- ====== Pregunta 4 ====== -->
+    <details class="faq-item">
+      <summary class="faq-summary">
+        ¿Cuáles son los horarios de cursada?
+        <img src="images/Icon_FlechaAgendaPreguntas.svg" class="chevron" aria-hidden="true">
+      </summary>
+      <div class="faq-content">
+        <div class="col-12 col-md-8">
+        <p>La escuela organiza sus actividades en tres turnos: mañana, tarde y noche. Cada carrera tiene asignado un turno específico, y los horarios pueden variar según el año y la materia. Es importante consultar el cronograma actualizado que publica la institución al inicio de cada ciclo lectivo o contactar a la preceptoría correspondiente.</p>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+    </details>
+
+        <!-- ====== Pregunta 5 ====== -->
+    <details class="faq-item">
+      <summary class="faq-summary">
+        ¿La escuela ofrece cursos o talleres además de las carreras?
+        <img src="images/Icon_FlechaAgendaPreguntas.svg" class="chevron" aria-hidden="true">
+      </summary>
+      <div class="faq-content">
+        <div class="col-12 col-md-6">
+        <p>Sí. La escuela ofrece espacios de formación abiertos a la comunidad a través de talleres y cursos de extensión. Están pensados para quienes desean ampliar su formación, explorar nuevas técnicas o profundizar en lenguajes artísticos específicos. La oferta se actualiza periódicamente y contempla diversas disciplinas como dibujo, pintura, fotografía, diseño y medios digitales. Puedes consultar m&aacute;s información en el apartado de talleres</p>
+        </div>
+        <div class="col-md-6"></div>
+      </div>
+    </details>
+
+        <!-- ====== Pregunta 6 ====== -->
+    <details class="faq-item">
+      <summary class="faq-summary">
+        ¿Qué requisitos necesito para inscribirme en una carrera?
+        <img src="images/Icon_FlechaAgendaPreguntas.svg" class="chevron" aria-hidden="true">
+      </summary>
+      <div class="faq-content">
+        <div class="col-12 col-md-8">
+
+        
+        <p>Para ingresar a una carrera superior se solicita título secundario completo, DNI y descargar el formulario de inscripción online para presentar durante el periodo de inscripciones</p>
+       </div>
+        <div class="col-md-4"></div>
+      </div>
+    </details>
+
+
+    
+  </div> <!-- Fin contenedor de preguntas -->
+</section>
+<!-- ====== FIN PREGUNTAS FRECUENTES ====== -->
+
+
+
+<!-- ====== INICIO FOOTER ====== -->
+<iframe src="footer.html" frameborder="0" class="iframefooter"></iframe>
+
+<!-- ====== inicio modal buscador====== -->
+  <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true" role="search">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content position-relative border-0">
+          <button type="button" class="btn-close-svg" data-bs-dismiss="modal" aria-label="Cerrar búsqueda">
+            <img src="images/Icon_X_Magenta.svg" alt="Cerrar barra de búsqueda">
+          </button>
+          <div class="container-icono-lupa">
+            <img src="images/Icon_LupaBarraBusqueda.svg" alt="ícono lupa">
+          </div>
+          <div class="modal-body p-0">
+            <div class="search-bar">
+              <input type="text" class="form-control" placeholder="Buscar..." aria-label="Buscar">
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+ <!-- ====== fin modal buscador====== -->
+
+
+<!-- ====== js de flechas de agenda====== -->
+
+<script>
+  const cards = document.querySelectorAll('.agenda-card');
+  let currentIndex = 0;
+
+  function showCard(index) {
+    cards.forEach((card, i) => {
+      card.classList.toggle('active', i === index);
+    });
+  }
+
+  document.getElementById('next-btn').addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % cards.length;
+    showCard(currentIndex);
+  });
+
+  document.getElementById('prev-btn').addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+    showCard(currentIndex);
+  });
+</script>
+
+  <!-- Bootstrap JS -->
+  <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

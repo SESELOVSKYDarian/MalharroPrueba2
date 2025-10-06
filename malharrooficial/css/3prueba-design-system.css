@@ -1,0 +1,382 @@
+:root{  /*TIPOGRAFÍA  - COLORES MÁS ABAJO*/
+/* ¿HABÍA QUE PONER OTRA OPCIÓN POR SI FALLABA INTER O CON SANS SERIF ESTABA BIEN? */
+--font-family: 'Inter', sans-serif;
+
+ /*-----------PÁGINA PRINCIPAL--------*/
+ --h1-titulor: 40px;       /* H1 - Título Regular - Pág. Principal */
+ --h1-titulob: 40px;       /* H1 - Título SemiBold - Pág. Principal */
+ --h1-btn-acceso: 24px;     /* H1 - Título Botón Accesos directos */
+ --h1-btn-sabermas: 16px;    /* H1 - Título Botón Saber más */
+ --h2-titulocam: 28px;      /* H2 - Título Medium - Pág. Principal */
+ --p1-r: 18px;          /* P1 - Texto 1 Regular - Pág. Principal */ 
+ --p2-b: 18px;          /* P2 - Texto 1 Destacado Bold - Pág. Principal */
+ --p3-dr: 16px;         /* P3 - Texto 2 Desplegado Regular - Pág. Principal */
+ --p4-db: 16px;         /* P4 - Texto 2 Desplegado Destacado Semibold - Pág. Principal */
+
+ /* -----------SUBPÁGINAS------------ */
+ --h1-subr: 34px;        /* H1 - Título Regular - Sub Página */
+ --h1-subb: 34px;        /* H1 - Título Semibold - Sub Página */
+ --h2-subs: 20px;        /* H2 - Título Semibold - Sub Página */
+ --h2-sub-db: 20px;       /* H2 - Título Desplegado Bold - Sub Página */
+ --h3-tsecc: 20px;        /* H3 - Título de Sección Medium - Sub Página */
+ --p5-r: 16px;          /* P5 - Texto Regular - Sub Página */
+ --p6-db: 16px;         /* P6 - Texto Destacado Bold - Sub Página */
+ --p7-d-t-apartado: 14px;    /* P7 - Texto Desplegado de Apartado Medium Itálica - Sub Página */
+ --p8-d-r: 14px;         /* P8 - Texto Desplegado Regular - Sub Página */
+ --p9-d-dest: 14px;       /* P9 - Texto Desplegado Bold - Sub Página */
+ --p10-clickr: 14px;       /* P10 - Texto Link Regular - Sub Página */
+ --p11-mes-agenda-light: 20px;  /* P11 - Texto Mes Agenda Regular - Sub Página */
+ --p11-mes-agenda-dark: 20px;  /* P11 - Texto Mes Agenda Regular - Sub Página */
+ --p12-dia-agenda-light: 24px;  /* P12 - Texto Día Agenda Semibold - Sub Página */
+ --p12-dia-agenda-dark: 24px;  /* P12 - Texto Día Agenda Semibold - Sub Página */
+ --p13-texto-agenda-light: 14px; /* P13 - Texto Descripción Agenda Medium - Sub Página */
+ --p13-texto-agenda-dark: 14px; /* P13 - Texto Descripción Agenda Medium - Sub Página */
+ --p14-etiqueta-agenda: 10px;  /* P14 - Texto Etiqueta Agenda Regular - Sub Página */
+
+ /*------------PESOS----------------- */
+ --peso-regular: 400;
+ --peso-medium: 500;
+ --peso-semibold: 600;
+ --peso-bold-1: 600;
+ --peso-bold-2: 7000;
+
+ /*---------Line-height-------------- */
+ --lh-tight: 1.2;
+ --lh-title: 0.9;
+ --lh-body: 1.5;
+
+ /* Colores base   PODEMOS ESTABLECER DESDE ACÁ  --p1-r: #111;  */
+}
+
+body {
+  font-family: var(--font-family); }
+
+/*-----------PÁGINA PRINCIPAL--------*/
+.h1-titulor    { font-size: var(--h1-titulor); font-weight: var(--peso-regular); line-height: var(--lh-title); }
+.h1-titulob    { font-size: var(--h1-titulob); font-weight: var(--peso-semibold); line-height: var(--lh-title); }
+.h1-btn-acceso  { font-size: var(--h1-btn-acceso); font-weight: var(--peso-semibold); line-height: var(--lh-title); }
+.h1-btn-sabermas { font-size: var(--h1-btn-sabermas); }
+.h2-titulocam   { font-size: var(--h2-titulocam); font-weight: var(--peso-medium); line-height: var(--lh-title); }
+.p1-r       { font-size: var(--p1-r); font-weight: var(--peso-regular); line-height: var(--lh-body); }
+.p2-b       { font-size: var(--p2-b); font-weight: var(--peso-bold-1); line-height: var(--lh-body); }
+.p3-dr      { font-size: var(--p3-dr); font-weight: var(--peso-regular); line-height: var(--lh-body); }
+.p4-db      { font-size: var(--p4-db); font-weight: var(--peso-semibold); line-height: var(--lh-body); }
+
+/* -----------SUBPÁGINAS------------ */
+.h1-subr     { font-size: var(--h1-subr); font-weight: var(--peso-regular); line-height: var(--lh-title); }
+.h1-subb     { font-size: var(--h1-subb); font-weight: var(--peso-semibold); line-height: var(--lh-title); }
+.h2-subs     { font-size: var(--h2-subs); font-weight : var(--peso-semibold); line-height: var(--lh-title); }
+.h2-sub-db    { font-size: var(--h2-sub-db); font-weight: var(--peso-bold-2); line-height: var(--lh-title); }
+.h3-tsecc     { font-size: var(--h3-tsecc); font-weight: var(--peso-medium); line-height: var(--lh-title); }
+.p5-r       { font-size: var(--p5-r); font-weight: var(--peso-regular); line-height: var(--lh-body); }
+.p6-db      { font-size: var(--p6-db); font-weight: var(--peso-bold-1); line-height: var(--lh-body); }
+.p7-d-t-apartado { font-size: var(--p7-d-t-apartado); font-weight: var(--peso-medium); font-style: italic; line-height: var(--lh-body); }
+.p8-d-r      { font-size: var(--p8-d-r); font-weight: var(--peso-regular); line-height: var(--lh-body); }
+.p9-d-dest    { font-size: var(--p9-d-dest); font-weight: var(--peso-bold-1); line-height: var(--lh-body); }
+.p10-clickr    { font-size: var(--p10-clickr); font-weight: var(--peso-regular); line-height: var(--lh-body);}
+.p11-mes-agenda-light{ font-size: var(--p11-mes-agenda-light); font-weight: var(--peso-regular); line-height: var(--lh-body); }
+.p11-mes-agenda-dark { font-size: var(--p11-mes-agenda-dark); font-weight: var(--peso-regular); line-height: var(--lh-body); }
+.p12-dia-agenda-light{ font-size: var(--p12-dia-agenda-light); font-weight: var(--peso-semibold); line-height: var(--lh-body); }
+.p12-dia-agenda-dark { font-size: var(--p12-dia-agenda-dark); font-weight: var(--peso-semibold); line-height: var(--lh-body); }
+.p13-texto-agenda-light{ font-size: var(--p13-texto-agenda-light); font-weight: var(--peso-medium); line-height: var(--lh-body); }
+.p13-texto-agenda-dark { font-size: var(--p13-texto-agenda-dark); font-weight: var(--peso-medium); line-height: var(--lh-body); }
+.p14-etiqueta-agenda{ font-size: var(--p14-etiqueta-agenda); font-weight: var(--peso-regular); line-height: var(--lh-body); }
+
+/* 5) Modificadores de color y énfasis
+.ds-muted   { color: var(--c-text-weak); }
+.p10-clickr:hover{ text-decoration: underline; }
+.ds-uppercase { text-transform: uppercase; letter-spacing: 0.02em; } SE PUEDE PONER QUE ALGO APAREZCA EN CAJA ALTA  */
+
+/* DESKTOP   -  VER SI ES NECESARIO HACER EL CÁLCULO O SE PUEDE PONER DIRECTAMENTE EL TAMAÑO */
+@media (min-width: 992px){
+ .ds-h1    { font-size: calc(var(--fs-h1) * 1.05); }
+
+}
+/* DESKTOP   -  VER SI ES NECESARIO HACER EL CÁLCULO O SE PUEDE PONER DIRECTAMENTE EL TAMAÑO */
+
+:root {  /*-------------COLORES-------------*/
+ /*----PRIMARIOS - SECUNDARIOS - ACENTOS----*/
+ --color-primary-01:   #f4155b;
+ --color-primary-02:   #5044C4;
+ --color-primary-03:   #018C8C;
+
+ --color-secondary-01:  #AF1374;
+ --color-secondary-02:  #6BAFFF;
+
+ --color-accent-01:   #E1E211;
+ --color-accent-02:   #FDC103;
+
+ /*----NEUTROS----*/
+ --color-neutral-9:   #1b1b1b;
+ --color-neutral-8:   #2e2e2e; 
+ --color-neutral-6:   #5c5c5c;
+ --color-neutral-4:   #a3a3a3;
+ --color-neutral-2:   #cccccc;
+ --color-background:   #f3f3f3;
+ --color-neutral-0:   #ffffff;
+
+ /*----CARRERAS----*/ 
+ --color-dg:       #F4155B;  /* Diseño Gráfico */
+ --color-escenografia:  #018C8C;  /* Escenografía */
+ --color-fotografia:   #E1E211;  /* Fotografía */
+ --color-ilustracion:  #6BAFFF;  /* Ilustración */
+ --color-medios-av:   #5044C4;  /* Medios Audiovisuales */
+ --color-profesorado:  #FDC103;  /* Profesorado */
+ --color-realizador:   #AF1374;  /* Realizador Artes Visuales */
+
+ --color-dg-9:      #F62D6C;
+ --color-dg-7:      #F85C8D;
+ --color-dg-5:      #FCC4D6;
+ --color-dg-3:      #FEEAF0;
+
+ --color-escenografia-9: #1B9898;
+ --color-escenografia-7: #4EAFAF;
+ --color-escenografia-5: #80C6C6;
+ --color-escenografia-3: #B3DDDD;
+
+ --color-fotografia-9:  #E4E529;
+ --color-fotografia-7:  #EAEB59;
+ --color-fotografia-5:  #F0F188;
+ --color-fotografia-3:  #F6F7B8;
+
+ --color-ilustracion-9: #7AB7FF;
+ --color-ilustracion-7: #98C7FF;
+ --color-ilustracion-5: #B5D7FF;
+ --color-ilustracion-3: #D3E7FF;
+
+ --color-medios-av-9:  #6257CA;
+ --color-medios-av-7:  #857DD6;
+ --color-medios-av-5:  #A8A2E2;
+ --color-medios-av-3:  #CBC7EE;
+
+ --color-profesorado-9: #FEC81D;
+ --color-profesorado-7: #FED44F;
+ --color-profesorado-5: #FEE081;
+ --color-profesorado-3: #FFEDB4;
+
+ --color-realizador-9:  #B72B82;
+ --color-realizador-7:  #C75A9E;
+ --color-realizador-5:  #D789BA;
+ --color-realizador-3:  #E7B8D5;
+
+}
+
+/*-----------BOTONES SABER MÁS--------*/
+.btn-sabermas        { font-size: var(--h1-btn-sabermas); font-weight: var(--peso-medium); line-height: var(--lh-title); box-shadow: 12px;}
+.btn-sabermas-esceno     { font-size: var(--h1-btn-sabermas); font-weight: var(--peso-medium); line-height: var(--lh-title); box-shadow: 12px;}
+.btn-sabermas-fotografia1  { font-size: var(--h1-btn-sabermas); font-weight: var(--peso-medium); line-height: var(--lh-title); box-shadow: 12px;}
+.btn-sabermas-fotografia2  { font-size: var(--h1-btn-sabermas); font-weight: var(--peso-medium); line-height: var(--lh-title); box-shadow: 12px;}
+.btn-sabermas-ilustracion  { font-size: var(--h1-btn-sabermas); font-weight: var(--peso-medium); line-height: var(--lh-title); box-shadow: 12px;}
+.btn-sabermas-mediosav    { font-size: var(--h1-btn-sabermas); font-weight: var(--peso-medium); line-height: var(--lh-title); box-shadow: 12px;}
+.btn-sabermas-profesorado1  { font-size: var(--h1-btn-sabermas); font-weight: var(--peso-medium); line-height: var(--lh-title); box-shadow: 12px;} 
+.btn-sabermas-profesorado2  { font-size: var(--h1-btn-sabermas); font-weight: var(--peso-medium); line-height: var(--lh-title); box-shadow: 12px;}
+.btn-sabermas-realizador   { font-size: var(--h1-btn-sabermas); font-weight: var(--peso-medium); line-height: var(--lh-title); box-shadow: 12px;}
+
+/*  SABER MÁS GENERAL Y DISEÑO GRÁFICO*/
+.btn-sabermas{
+ background-color: var(--color-neutral-0) ;
+ color: var(--color-dg) ;
+ padding: 15px 16px 13px 16px ;      /* espacio interno */
+ /* margin: top right bottom left */
+ margin: 14px 0px 32px 24px;
+ border-radius: 10px ;     
+ border: none ;
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3) ;
+}
+.btn-sabermas:hover{
+ box-shadow: 0 1px 8px var(--color-dg);
+ color: var(--color-dg);
+}
+.btn-sabermas:active{
+ background-color: var(--color-dg);
+ color:var(--color-neutral-0);
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+
+/*  SABER MÁS ESCENOGRAFÍA*/
+.btn-sabermas-esceno{
+ background-color: var(--color-neutral-0);
+ color: var(--color-escenografia);
+ padding: 15px 16px 13px 16px ;      /* espacio interno */
+ margin: 14px 0px 32px 24px;
+ border-radius: 10px;     
+ border: none;
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+.btn-sabermas-esceno:hover{
+ box-shadow: 0 1px 8px var(--color-escenografia);
+ color: var(--color-escenografia);
+}
+.btn-sabermas-esceno:active{
+ background-color: var(--color-escenografia);
+ color: var(--color-neutral-0);
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+
+/*  SABER MÁS FOTOGRAFÍA*/
+.btn-sabermas-fotografia1{
+ background-color: var(--color-neutral-9);
+ color: var(--color-fotografia);
+ padding: 15px 16px 13px 16px ;      /* espacio interno */
+ margin: 14px 0px 32px 24px;
+ border-radius: 10px;     
+ border: none;
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+.btn-sabermas-fotografia1:hover{
+ box-shadow: 0 1px 8px var(--color-fotografia);
+ color: var(--color-fotografia);
+}
+.btn-sabermas-fotografia1:active{
+ background-color: var(--color-fotografia-3);
+ color: var(--color-neutral-9);
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-sabermas-fotografia2{
+ background-color: var(--color-fotografia);
+ color: var(--color-neutral-9);
+ padding: 15px 16px 13px 16px ;      /* espacio interno */
+ margin: 14px 0px 32px 24px;
+ border-radius: 10px;     
+ border: none;
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+.btn-sabermas-fotografia2:hover{
+ box-shadow: 0 1px 8px var(--color-fotografia);
+ color: var(--color-neutral-9);
+}
+.btn-sabermas-fotografia2:active{
+ background-color: var(--color-neutral-9);
+ color: var(--color-fotografia);
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+
+/*  SABER MÁS ILUSTRACIÓN*/
+.btn-sabermas-ilustracion{
+ background-color: var(--color-neutral-0);
+ color: var(--color-ilustracion);
+ padding: 15px 16px 13px 16px ;      /* espacio interno */
+ margin: 14px 0px 32px 24px;
+ border-radius: 10px;     
+ border: none;
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+.btn-sabermas-ilustracion:hover{
+ box-shadow: 0 1px 8px var(--color-ilustracion);
+ color: var(--color-ilustracion);
+}
+.btn-sabermas-ilustracion:active{
+ background-color: var(--color-ilustracion);
+ color: var(--color-neutral-0);
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+
+/*  SABER MÁS MEDIOS AV*/
+.btn-sabermas-mediosav{
+ background-color: var(--color-neutral-0);
+ color: var(--color-medios-av);
+ padding: 15px 16px 13px 16px ;      /* espacio interno */
+ margin: 14px 0px 32px 24px;
+ border-radius: 10px;     
+ border: none;
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+.btn-sabermas-mediosav:hover{
+ box-shadow: 0 1px 8px var(--color-medios-av);
+ color: var(--color-medios-av);
+}
+.btn-sabermas-mediosav:active{
+ background-color: var(--color-medios-av);
+ color: var(--color-neutral-0);
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+
+/*  SABER MÁS PROFESORADO*/
+.btn-sabermas-profesorado1{
+ background-color: var(--color-neutral-9);
+ color: var(--color-profesorado);
+ padding: 15px 16px 13px 16px ;      /* espacio interno */
+ margin: 14px 0px 32px 24px;
+ border-radius: 10px;     
+ border: none;
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+.btn-sabermas-profesorado1:hover{
+ box-shadow: 0 1px 8px var(--color-profesorado);
+ color: var(--color-profesorado);
+}
+.btn-sabermas-profesorado1:active{
+ background-color: var(--color-profesorado-3);
+ color: var(--color-neutral-9);
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-sabermas-profesorado2{
+ background-color: var(--color-profesorado);
+ color: var(--color-neutral-9);
+ padding: 15px 16px 13px 16px ;      /* espacio interno */
+ margin: 14px 0px 32px 24px;
+ border-radius: 10px;     
+ border: none;
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+.btn-sabermas-profesorado2:hover{
+ box-shadow: 0 1px 8px var(--color-profesorado);
+ color: var(--color-neutral-9);
+}
+.btn-sabermas-profesorado2:active{
+ background-color: var(--color-neutral-9);
+ color: var(--color-profesorado-3);
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+
+/*  SABER MÁS REALIZADOR*/
+.btn-sabermas-realizador{
+ background-color: var(--color-neutral-0);
+ color: var(--color-realizador);
+ padding: 15px 16px 13px 16px ; /* espacio interno */
+ margin: 14px 0px 32px 24px;
+ border-radius: 10px; 
+ border: none;
+ box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+.btn-sabermas-realizador:hover{
+   box-shadow: 0 1px 8px var(--color-realizador);
+ color: var(--color-realizador);
+}
+.btn-sabermas-realizador:active{
+background-color: var(--color-realizador);
+color: var(--color-neutral-0);
+box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
+}
+
+/*---------TEXTOS Y BOTONES AGENDA---------*/
+.etiqueta-agenda {
+text-transform: uppercase;
+font-size: var(--p14-etiqueta-agenda); 
+background-color: var(--color-neutral-0);
+color: var(--color-neutral-9);
+padding: 6px 8px; /* espacio interno */
+border-radius: 100px;
+border: none;
+}
+
+.etiqueta-agenda-act {
+ text-transform: uppercase;
+ font-size: var(--p14-etiqueta-agenda);
+  background-color: var(--color-neutral-0);
+ color: var(--color-primary-01);
+ padding: 6px 8px;/* espacio interno */
+ border-radius: 100px;
+ border: none;
+}
+
+.p11-mes-agenda-light{ color: var(--color-neutral-0);}
+.p11-mes-agenda-dark{ color: var(--color-neutral-9);}
+
+.p12-dia-agenda-light{ color: var(--color-neutral-0);}
+.p12-dia-agenda-dark{ color: var(--color-neutral-9);}
+
+.p13-texto-agenda-light{ color: var(--color-neutral-0);}
+.p13-texto-agenda-dark{ color: var(--color-neutral-9);}

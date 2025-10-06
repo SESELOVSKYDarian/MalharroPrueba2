@@ -1,0 +1,467 @@
+/*Tipografía*/
+body{
+  background: #f3f3f3;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+   overflow-x: hidden;
+}
+
+/* espacio entre secciones REPLICAR*/
+.espaciado-vertical {
+  margin-top: 32px;     /* espacio arriba */
+  margin-bottom: 16px;  /* espacio abajo */
+}
+/* espacio entre secciones REPLICAR*/
+
+/* Contenedor logo + lupa */
+.logo-lupa-box {
+  background-color: #F4155B; /* color de fondo del contenedor, ajustable */
+  border-radius: 7px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);  
+  display: flex;
+  align-items:normal;
+  justify-content:center;
+  margin-left: 24px;
+  width: 148px;
+  height: 48px;
+}
+
+.botonlogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  margin-left: 5px;
+}
+
+.botonlupa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  margin-right: 25px;
+}
+
+/* Ajustes internos */
+.logo-nav { height: 23px; width: auto; }
+.lupa-nav { height: 24px; width: auto; }
+.hamburguesa-nav { height: 24px; width: auto; }
+
+/* Espaciado */
+.logo-lupa-box .btn { background: transparent; border: none; }
+
+/* Navbar sobre banner */
+.navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: transparent;
+}
+
+/* ================= INICIO de modificaciones del modal para lupa buscador ================= */
+/* Barra de búsqueda en modal */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #e0e0e0;
+  border-radius: 18px;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid #D0032E;
+}
+
+.search-bar .form-control {
+  border: none;
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+  margin: 0 0.5rem;
+}
+
+/* BACKDROP BLANCO SEMITRANSPARENTE CON FADE */
+.modal-backdrop {
+  opacity: 0.8 !important;
+  transition: opacity 0.3s ease-out !important;
+}
+.modal-backdrop.fade { opacity: 0 !important; }
+.modal-backdrop.show {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  opacity: 1 !important;
+}
+.modal-content{
+  background-color:transparent;
+}
+/* ANIMACIÓN FADE-IN PARA EL DIÁLOGO DEL MODAL */
+#searchModal.fade .modal-dialog {
+  transform: translateY(-10px);
+  opacity: 0;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+#searchModal.show .modal-dialog {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Botón cerrar modal */
+.btn-close-svg {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+.btn-close-svg img {
+  display: block;
+  width: auto;
+  height: auto;
+}
+
+/* ================= Icono lupa en modal, modificaciones ================= */
+.container-icono-lupa {
+  text-align: center;
+  margin: 5rem auto 2rem;
+}
+.container-icono-lupa img {
+  max-width: 100%;
+  height: auto;
+}
+/* ================= Fin modificaciones icono lupa en modal ================= */
+/* ================= FIN modificaciones del modal para lupa buscador ================= */
+
+
+/* ================= MENU HAMBURGUESA ================= */
+
+/* Overlay lateral derecho, posición de menú hamburguesa desplegado*/
+.navbar-collapse {
+  position:fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 80%;
+  max-width: 350px;
+  background-color: #1b1b1b;
+  box-shadow: -4px 0 12px rgba(0,0,0,0.2);
+  z-index: 1050;
+  padding-top: 10rem;
+  padding-right: 1rem;
+  overflow-y: auto;
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(100%);
+}
+
+/* Cuando el collapse está activo, aparece. Fondo del menú hamburguesa desplegado */
+.navbar-collapse.show {
+  transform: translateX(0);
+}
+
+/* Ocultar cuando colapsa */
+.collapse.navbar-collapse:not(.show) {
+  display: block; /* necesario para que funcione la animación */
+}
+
+/* Botón cerrar menú */
+.btn-close-menu {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  position: absolute;
+  top:1rem;
+  right: 1rem;
+  z-index: 2;
+  display: none; /* oculto por defecto */
+}
+.navbar-collapse.show .btn-close-menu {
+  display: block; /* visible sólo cuando el menú está abierto */
+
+}
+.btn-close-menu img {
+  width: 24px;
+  height: 24px;
+}
+
+/* Estilos del listado del menú */
+.navbar-nav {
+  text-align: right;
+}
+.dropdown-menu {
+  text-align: right;
+}
+
+/* Recuadro en links del menú */
+.navbar-nav .nav-link {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin: 0.25rem 0;
+  border-radius: 7px;
+  background: 0.2s;
+}
+
+.navbar-toggler {
+  background-color: #F4155B;
+}
+
+/* ================= Menú hamburguesa para pantallas large  ================= */
+@media (min-width: 992px) /*Esa es la medida large, en caso de usar xl, luego modificar*/
+{
+  .navbar-collapse {
+    position: static !important;
+    transform: none !important;
+    height: auto !important;
+    width: auto !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    font-size: 20px;
+  }
+
+  .btn-close-menu {
+    display: none !important;
+  }
+
+  .navbar-nav {
+    flex-direction: row !important;
+    text-align: right !important;
+  }
+
+  .dropdown-menu {
+    position: absolute !important;
+    text-align: left !important;
+}
+
+}
+
+
+/* ================= FIN Menú hamburguesa para pantallas large  ================= */
+
+/* ================= INICIO contenedor menú para pantallas large  ================= */
+.menu-box-lg {
+ /*background:linear-gradient(to bottom, #F4155B, #000000);*/
+  border-radius: 7px;
+  /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);*/
+  gap: 1rem;
+  width: fit-content;
+  height: 60px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.dropdown-content.active {
+  animation: dropFade 0.9s ease forwards;
+}
+
+.menu-box-lg {
+  animation: fadeSlideIn 0.4s ease forwards;
+}
+
+
+.navbar-nav .nav-item {
+  margin: 0;
+}
+
+.navbar-nav .nav-link {
+  padding: 0.5rem 1rem;
+  white-space: nowrap; /* para que no se dividan en dos líneas */
+}
+
+/*Para que preguntas frecuentes no se divida en dos lineas*/
+.no-wrap {
+  white-space: nowrap;
+}
+
+
+/* ================= FIN contenedor menú para pantallas large  ================= */
+
+/* ================= FIN Menú hamburguesa  ================= */
+
+/* ====== FOOTER ====== */
+.iframefooter{
+  width: 100%;
+  height: 1100px;
+  margin-bottom: 0 !important;
+}
+
+@media (min-width: 992px){
+  .iframefooter{
+    width: 100%;
+    height: 615px;
+    margin-bottom: 0px !important;
+    margin: left 4px;
+  }
+}
+
+.footer-malharro {
+  position: relative;
+  color: white;
+  overflow: hidden;
+  padding-top: 100px; /* espacio para que se vea la curva arriba del contenido */
+  height: fit-content
+}
+
+.footer-forma-curva {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 150px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.footer-forma-curva svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.contenido-footer {
+  position: relative;
+  background-color: #1b1b1b;
+  z-index: 1;
+}
+
+
+/* Reset Bootstrap spacing */
+.container-fluid,
+.row {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Frase */
+.footer-frase {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+@media (min-width: 768px) {
+  .footer-frase { font-size: 40px; }
+}
+
+.logo-campus{
+  padding-top: 36px;
+  padding-bottom: 36px;
+  padding-left: 26px;
+}
+/* Campus */
+.footer-campus {
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  gap: 2rem;
+}
+
+.footer-campus-link {
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s, text-decoration 0.2s;
+}
+.footer-campus-link:hover {
+  text-decoration: underline;
+  transform: scale(1.05);
+}
+
+/* Links */
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 26px;
+}
+.footer-link {
+  display: block;
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background-color 0.2s, transform 0.2s;
+}
+.footer-link:hover {
+  text-decoration: underline;
+  transform: scale(1.03);
+}
+
+/* Dirección */
+.footer-direccion {
+  color: #C1C1C1;
+  font-size: 12px;
+  font-weight: 600;
+  padding-left: 26px;
+  padding-top: 32px;
+}
+
+/* Redes sociales */
+.footer-social {
+  display: flex;
+  gap: 16px;
+  justify-content: left;
+  align-items: left;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 26px;
+}
+.footer-social a {
+  transition: transform 0.2s;
+}
+.footer-social a:hover {
+  transform: scale(1.1);
+}
+.footer-social img {
+  width: auto;
+  height: auto;
+  pointer-events: none;
+}
+
+/* Logos institucionales */
+.footer-logos {
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1rem 0;
+  width: 100%;
+}
+.footer-logo {
+  max-height: 40px;
+}
+
+/* Créditos */
+.footer-creditos {
+  color: white;
+  font-size: 13px;
+  margin-top: 1rem;
+}
+
+/* Botón Scroll-to-Top */
+#scrollTopBtn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  background-color: #e6007e; /* magenta institucional */
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  display: none; /* oculto por defecto */
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  transition: transform 0.2s, background-color 0.3s, opacity 0.3s;
+  z-index: 9999;
+}
+
