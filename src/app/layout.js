@@ -1,10 +1,10 @@
 // src/app/layout.js
 import { Geist, Geist_Mono, Inter } from "next/font/google";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import { clientIDGoogle } from "./config";
 import { Toaster } from "react-hot-toast";
-import "@/styles/styles.css";
-import "@/styles/componentes-styles.css";
+import "../../malharrooficial/css/bootstrap.min.css";
+import "../../malharrooficial/css/styles.css";
+import "../../malharrooficial/css/paginainicio.css";
+import "../../malharrooficial/css/3prueba-design-system.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -19,10 +19,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es">
       <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable}`}>
-        <GoogleOAuthProvider clientId={clientIDGoogle || ""}>
-          {children}
-          <Toaster position="top-right" />
-        </GoogleOAuthProvider>
+        {children}
+        <Toaster position="top-right" />
       </body>
     </html>
   );

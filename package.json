@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "node scripts/dev.js",
+    "dev:frontend": "next dev --turbopack",
+    "dev:backend": "npm --prefix backend run dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@react-oauth/google": "^0.12.2",
     "axios": "^1.9.0",
     "next": "15.3.1",
     "react": "^19.0.0",

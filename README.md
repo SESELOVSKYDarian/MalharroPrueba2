@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Malharro Plataforma Web
 
-## Getting Started
+Este monorepo contiene el frontend en Next.js y un backend en Express que comparten los estilos originales del sitio estático de malharrooficial.
 
-First, run the development server:
+## Requisitos previos
+
+* Node.js 20+
+* PostgreSQL 14+ con una base de datos accesible para el backend
+* Credenciales SMTP válidas para enviar el código de verificación al administrador
+
+## Configuración
+
+1. Instalar dependencias del frontend:
+   ```bash
+   npm install
+   ```
+2. Configurar el backend duplicando el archivo [`backend/.env.example`](backend/.env.example) y renombrándolo como `backend/.env`. Actualizá los valores de conexión a PostgreSQL, las credenciales SMTP y el correo/contraseña del usuario administrador.
+3. Instalá las dependencias del backend:
+   ```bash
+   cd backend
+   npm install
+   cd ..
+   ```
+
+4. Definí las variables de entorno del frontend en un archivo `.env.local` (no versionado):
+   ```bash
+   NEXT_PUBLIC_API_URL=http://localhost:4000
+   ```
+
+## Desarrollo
+
+Ejecutá ambos servidores con un único comando desde la raíz del proyecto:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+El script levanta el frontend en [http://localhost:3000](http://localhost:3000) y el backend en el puerto configurado (por defecto 4000). La base de datos se inicializa automáticamente con el contenido del sitio público para el carrusel, la agenda, la usina, la navegación y el footer.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Backend
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+El backend expone una API REST bajo `/api` con autenticación mediante JWT para operaciones administrativas. La ruta `POST /api/auth/login` envía un código de verificación por correo al administrador y `POST /api/auth/verify` entrega el token JWT si el código es válido.
 
-## Learn More
+Los contenidos dinámicos (carrusel, agenda, usina, textos, navbar y footer) se editan desde el dashboard del frontend y se guardan en PostgreSQL. Los archivos subidos desde el panel se almacenan en `backend/uploads` y quedan disponibles públicamente en `/uploads/`.
 
-To learn more about Next.js, take a look at the following resources:
+### Frontend
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+El sitio público replica el diseño original utilizando directamente los estilos de `malharrooficial/css`. Los componentes principales (`Navbar`, `Carousel`, `Agenda`, `Usina` y `Footer`) consumen los endpoints REST para renderizar la información actualizada.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+El dashboard requiere iniciar sesión con el correo administrativo definido en el backend. Tras ingresar usuario y contraseña se envía un código de seis dígitos por email; al validarlo se accede al panel.
 
-## Deploy on Vercel
+## Scripts disponibles
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* `npm run dev` – levanta frontend y backend simultáneamente.
+* `npm run dev:frontend` – sólo el servidor Next.js.
+* `npm run dev:backend` – sólo el servidor Express.
+* `npm run build` / `npm run start` – comandos estándar de Next.js para producción.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notas
+
+* Las imágenes históricas se sirven desde `/malharrooficial/images`, compartidas por el frontend y el backend.
+* El directorio `backend/uploads` se ignora en git y se crea automáticamente al subir archivos.
+* Si el entorno bloquea el acceso al registro de npm, instalá las dependencias de forma manual con un mirror autorizado.
