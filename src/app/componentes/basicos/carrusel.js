@@ -25,7 +25,6 @@ const NextArrow = ({ onClick }) => (
 export default function Carrusel() {
   const sliderRef = useRef(null); // Referencia al slider
   const [imagenesCarrusel, setImagenesCarrusel] = useState([]); // Imágenes del carrusel
-  const [title, setTitle] = useState(''); // Título global del carrusel
 
   // Configuración del carrusel
   const settings = {
@@ -46,13 +45,13 @@ export default function Carrusel() {
 
   // Carga las imágenes del carrusel al montar el componente
   useEffect(() => {
-    fetch(`${API_URL}/carrusels?populate=carrusel`)
+    fetch(`${API_URL}/slider`, { cache: "no-store" })
       .then(res => res.json())
       .then(data => {
-        const item = data.data?.[0];
-        if (item) {
-          setTitle(item.title); // Guarda el título
-          setImagenesCarrusel(item.carrusel ?? []); // Guarda las imágenes
+        if (Array.isArray(data)) {
+          setImagenesCarrusel(data);
+        } else {
+          setImagenesCarrusel([]);
         }
       })
       .catch(err => console.error('Error al cargar imágenes:', err));
@@ -63,22 +62,23 @@ export default function Carrusel() {
       {/* Carrusel usando react-slick */}
       <Slider ref={sliderRef} {...settings}>
         {imagenesCarrusel.map((imagen, index) => {
-          // Obtiene la URL de la imagen (versión grande si existe)
-          const url = imagen.formats?.large?.url || imagen.url;
+          const url = imagen.imageUrl;
           return (
             <div key={`slide-${index}`} style={{ width: '100%' }}>
               <div
                 className='carrusel-img'
                 style={{
-                  backgroundImage: `linear-gradient(rgba(120, 51, 51, 0.5), rgba(0, 0, 0, 0.5)), url(${url})`,
+                  backgroundImage: url
+                    ? `linear-gradient(rgba(120, 51, 51, 0.5), rgba(0, 0, 0, 0.5)), url(${url})`
+                    : undefined,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }}
               >
                 {/* Muestra el título si existe */}
-                {title && (
+                {imagen.captionText && (
                   <div className='titulo'>
-                    <ReactMarkdown>{title}</ReactMarkdown>
+                    <ReactMarkdown>{imagen.captionText}</ReactMarkdown>
                   </div>
                 )}
               </div>

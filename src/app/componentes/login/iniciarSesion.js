@@ -1,74 +1,134 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import { API_URL } from "@/app/config";
-import LoginWithGoogle from "./loginWithGoogle";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
+const STEPS = {
+  REQUEST: "request",
+  VERIFY: "verify",
+};
+
 export default function LoginPage() {
-  const [identifier, setIdentifier] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+  const [step, setStep] = useState(STEPS.REQUEST);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleRequestCode = useCallback(
+    async (event) => {
+      event.preventDefault();
+      setLoading(true);
+      try {
+        const res = await fetch(`${API_URL}/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
 
-    try {
-      const res = await fetch(`${API_URL}/auth/local`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier, password }),
-      });
+        const data = await res.json();
 
-      const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data?.error || "No se pudo enviar el código");
+        }
 
-      if (!res.ok) throw new Error(data?.error?.message || "Login inválido");
+        toast.success("Enviamos un código de verificación al correo configurado.");
+        setStep(STEPS.VERIFY);
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [email]
+  );
 
-      localStorage.setItem("jwt", data.jwt);
-      toast.success(`Bienvenido, ${data.user.username}!`);
-      router.push("/"); // 🔹 redirige al inicio
-    } catch (err) {
-      toast.error(err.message);
-    }
-  };
+  const handleVerifyCode = useCallback(
+    async (event) => {
+      event.preventDefault();
+      setLoading(true);
+      try {
+        const res = await fetch(`${API_URL}/auth/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, code }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data?.error || "Código inválido");
+        }
+
+        localStorage.setItem("jwt", data.token);
+        toast.success("Inicio de sesión exitoso");
+        router.push("/dashboard");
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [email, code, router]
+  );
 
   return (
     <div className="body-inicio-sesion">
       <div className="form-inicio-sesion">
-        <h2 className="title-inicio-sesion">Iniciar sesión</h2>
-        <form onSubmit={handleLogin}>
-          <div className="form-group">
-            <label className="block form-label">Email o usuario</label>
-            <input
-              type="text"
-              placeholder="Email o usuario"
-              className="form-input"
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="block form-label">Contraseña</label>
-            <input
-              type="password"
-              placeholder="Contraseña"
-              className="form-input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button className="form-button">Ingresar</button>
-        </form>
+        <h2 className="title-inicio-sesion">Panel administrativo</h2>
+        {step === STEPS.REQUEST ? (
+          <form onSubmit={handleRequestCode}>
+            <div className="form-group">
+              <label className="block form-label">Correo del administrador</label>
+              <input
+                type="email"
+                placeholder="correo@ejemplo.com"
+                className="form-input"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+              />
+            </div>
+            <button className="form-button" disabled={loading}>
+              {loading ? "Enviando..." : "Enviar código"}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleVerifyCode}>
+            <div className="form-group">
+              <label className="block form-label">Código de verificación</label>
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]{6}"
+                maxLength={6}
+                placeholder="123456"
+                className="form-input"
+                value={code}
+                onChange={(event) => setCode(event.target.value)}
+                required
+              />
+            </div>
+            <button className="form-button" disabled={loading}>
+              {loading ? "Verificando..." : "Verificar"}
+            </button>
+            <button
+              type="button"
+              className="return-button"
+              onClick={() => {
+                setCode("");
+                setStep(STEPS.REQUEST);
+              }}
+            >
+              Cambiar correo
+            </button>
+          </form>
+        )}
         <div className="buttons-container">
-          <LoginWithGoogle mode="login" />
-          <Link href="/registrar/">
-            <button className="return-button">Registrarse</button>
-          </Link>
           <Link href="/">
-            <button className="return-button">Volver</button>
+            <button className="return-button">Volver al inicio</button>
           </Link>
         </div>
       </div>

@@ -25,8 +25,8 @@ export const UserMenu = () => {
 
 {open && (
   <div className="user-menu-dropdown">
-    <p><strong>{user.nombre}</strong></p>
-    <p>{user.email}</p>
+    <p><strong>{user.email}</strong></p>
+    <p>{user.role === "admin" ? "Administrador" : user.role}</p>
     <button onClick={handleLogout}>Cerrar sesión</button>
   </div>
 )}

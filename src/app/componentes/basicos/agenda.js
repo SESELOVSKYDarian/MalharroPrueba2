@@ -30,17 +30,20 @@ export default function Agenda() {
   useEffect(() => {
     async function fetchAgendas() {
       try {
-        // Llama a la API de agendas incluyendo las imágenes
-        const res = await fetch(`${API_URL}/agendas?populate=imagen`, {
-          cache: "no-store", // Evita usar caché (siempre solicita datos nuevos)
+        const res = await fetch(`${API_URL}/agenda`, {
+          cache: "no-store",
         });
         if (!res.ok) {
           console.error("Error en fetch:", res.statusText);
           return;
         }
 
-        const { data } = await res.json(); // Extrae los datos del JSON
-        setAgendas(data); // Almacena los datos en el estado
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setAgendas(data);
+        } else {
+          setAgendas([]);
+        }
       } catch (err) {
         console.error("Error en getAgendas:", err);
       }
@@ -90,8 +93,7 @@ export default function Agenda() {
         // Muestra el carrusel de agendas con sus datos
         <Slider ref={sliderRef} {...settings}>
           {agendas.map((item) => {
-            const { id, tituloActividad, contenidoActividad, fecha, imagen } = item;
-            const imageUrl = imagen.url;
+            const { id, titulo, descripcion, fecha, imageUrl } = item;
 
             return (
               <div key={id} className="agenda-container">
@@ -117,7 +119,7 @@ export default function Agenda() {
                         strong: ({ node, ...props }) => <strong className="texto-negrita" {...props} />
                       }}
                     >
-                      {tituloActividad}
+                      {titulo}
                     </ReactMarkdown>
                   </div>
 
@@ -129,12 +131,12 @@ export default function Agenda() {
                         strong: ({ node, ...props }) => <strong className="texto-negrita" {...props} />
                       }}
                     >
-                      {tituloActividad}
+                      {titulo}
                     </ReactMarkdown>
 
                     {/* Texto adicional del evento */}
                     <div className="texto-contenido-actividad">
-                      <p>{contenidoActividad}</p>
+                      <p>{descripcion}</p>
                     </div>
                   </div>
                 </div>
