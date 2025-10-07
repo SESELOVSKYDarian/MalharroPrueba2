@@ -2,21 +2,43 @@ import nodemailer from "nodemailer";
 import { config } from "../config.js";
 
 let transporter;
+const useConsoleTransport = !config.smtp.host && config.smtp.devConsole;
 
 export function getTransporter() {
-  if (!transporter) {
+  if (transporter) {
+    return transporter;
+  }
+
+  if (!config.smtp.host && !useConsoleTransport) {
+    throw new Error(
+      "No hay un servidor SMTP configurado. Define SMTP_HOST o habilita el fallback de consola con SMTP_DEV_CONSOLE=true"
+    );
+  }
+
+  if (useConsoleTransport) {
     transporter = nodemailer.createTransport({
-      host: config.smtp.host,
-      port: config.smtp.port,
-      secure: config.smtp.secure,
-      auth: config.smtp.user
-        ? {
+      streamTransport: true,
+      newline: "unix",
+      buffer: true,
+    });
+    return transporter;
+  }
+
+  const transportOptions = {
+    host: config.smtp.host,
+    secure: config.smtp.secure,
+    ...(config.smtp.port ? { port: config.smtp.port } : {}),
+    ...(config.smtp.user
+      ? {
+          auth: {
             user: config.smtp.user,
             pass: config.smtp.pass,
-          }
-        : undefined,
-    });
-  }
+          },
+        }
+      : {}),
+  };
+
+  transporter = nodemailer.createTransport(transportOptions);
   return transporter;
 }
 
@@ -31,11 +53,16 @@ export async function sendVerificationCode(email, code) {
     </div>
   `;
 
-  await transport.sendMail({
+  const info = await transport.sendMail({
     from: config.smtp.from,
     to: email,
     subject: "Código de verificación - Dashboard Malharro",
     text: `Tu código de verificación es ${code}. Vence en 10 minutos.`,
     html,
   });
+
+  if (useConsoleTransport) {
+    const output = Buffer.isBuffer(info.message) ? info.message.toString() : info.message;
+    console.info("[DEV EMAIL] Se generó un correo simulado para %s:\n%s", email, output);
+  }
 }

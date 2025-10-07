@@ -16,12 +16,13 @@ export const config = {
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "8h",
   adminEmail: process.env.ADMIN_EMAIL || "admin@example.com",
   smtp: {
-    host: process.env.SMTP_HOST || "localhost",
-    port: Number(process.env.SMTP_PORT || 1025),
+    host: process.env.SMTP_HOST?.trim() || "",
+    port: process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefined,
     secure: process.env.SMTP_SECURE === "true",
     user: process.env.SMTP_USER || "",
     pass: process.env.SMTP_PASS || "",
     from: process.env.EMAIL_FROM || process.env.ADMIN_EMAIL || "admin@example.com",
+    devConsole: process.env.SMTP_DEV_CONSOLE !== "false",
   },
   postgres: {
     host: process.env.PGHOST,

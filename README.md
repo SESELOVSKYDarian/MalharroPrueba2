@@ -6,7 +6,7 @@ Este monorepo contiene el frontend en Next.js y un backend en Express que compar
 
 * Node.js 20+
 * PostgreSQL 14+ con una base de datos accesible para el backend
-* Credenciales SMTP válidas para enviar el código de verificación al administrador
+* Credenciales SMTP válidas para enviar el código de verificación al administrador (o usar el fallback de consola incluido para desarrollo)
 
 ## Configuración
 
@@ -14,7 +14,7 @@ Este monorepo contiene el frontend en Next.js y un backend en Express que compar
    ```bash
    npm install
    ```
-2. Configurar el backend duplicando el archivo [`backend/.env.example`](backend/.env.example) y renombrándolo como `backend/.env`. Actualizá los valores de conexión a PostgreSQL, las credenciales SMTP y el correo/contraseña del usuario administrador.
+2. Configurar el backend duplicando el archivo [`backend/.env.example`](backend/.env.example) y renombrándolo como `backend/.env`. Actualizá los valores de conexión a PostgreSQL, las credenciales SMTP y el correo/contraseña del usuario administrador. Si no contás con un servidor SMTP en desarrollo, dejá `SMTP_HOST` vacío para que los correos se impriman en consola.
 3. Si necesitás reinstalar manualmente sólo el backend (por ejemplo en entornos sin scripts postinstall), ejecutá:
    ```bash
    npm --prefix backend install
@@ -52,7 +52,7 @@ El dashboard requiere iniciar sesión con el correo administrativo definido en e
 1. Asegurate de que el backend esté corriendo (por defecto en `http://localhost:4000`).
 2. Abrí [http://localhost:3000/login](http://localhost:3000/login) en el navegador para ver el formulario de inicio de sesión de administrador.
 3. Ingresá el correo y la contraseña configurados en el archivo `backend/.env`.
-4. Revisá la casilla del correo administrador para obtener el código de verificación y completalo en la segunda pantalla. Si el código es correcto, se redirige automáticamente al dashboard en `/dashboard`.
+4. Revisá la casilla del correo administrador (o la salida de la consola si usás el fallback de desarrollo) para obtener el código de verificación y completalo en la segunda pantalla. Si el código es correcto, se redirige automáticamente al dashboard en `/dashboard`.
 
 ## Scripts disponibles
 
