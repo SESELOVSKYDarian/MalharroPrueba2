@@ -116,7 +116,7 @@ export default function LoginPage() {
                     onChange={(event) => setCode(event.target.value)}
                     required
                     maxLength={6}
-                    pattern="\\d{6}"
+                    pattern="[0-9]{6}"
                     inputMode="numeric"
                   />
                 </div>
