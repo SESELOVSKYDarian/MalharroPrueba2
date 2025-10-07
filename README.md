@@ -10,16 +10,14 @@ Este monorepo contiene el frontend en Next.js y un backend en Express que compar
 
 ## Configuración
 
-1. Instalar dependencias del frontend:
+1. Instalar dependencias del frontend y backend (el script `postinstall` se encarga de correr `npm install` dentro de `backend`):
    ```bash
    npm install
    ```
 2. Configurar el backend duplicando el archivo [`backend/.env.example`](backend/.env.example) y renombrándolo como `backend/.env`. Actualizá los valores de conexión a PostgreSQL, las credenciales SMTP y el correo/contraseña del usuario administrador.
-3. Instalá las dependencias del backend:
+3. Si necesitás reinstalar manualmente sólo el backend (por ejemplo en entornos sin scripts postinstall), ejecutá:
    ```bash
-   cd backend
-   npm install
-   cd ..
+   npm --prefix backend install
    ```
 
 4. Definí las variables de entorno del frontend en un archivo `.env.local` (no versionado):

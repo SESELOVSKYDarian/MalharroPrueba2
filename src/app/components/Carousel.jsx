@@ -14,7 +14,7 @@ export default function Carousel() {
   const [slides, setSlides] = useState([]);
 
   useEffect(() => {
-    import("bootstrap/dist/js/bootstrap.bundle.min.js").catch(() => {});
+    import("../../../malharrooficial/js/bootstrap.bundle.min.js").catch(() => {});
   }, []);
 
   useEffect(() => {

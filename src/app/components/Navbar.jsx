@@ -18,7 +18,7 @@ export default function Navbar() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    import("bootstrap/dist/js/bootstrap.bundle.min.js").catch(() => {});
+    import("../../../malharrooficial/js/bootstrap.bundle.min.js").catch(() => {});
   }, []);
 
   useEffect(() => {
