@@ -47,6 +47,13 @@ El sitio público replica el diseño original utilizando directamente los estilo
 
 El dashboard requiere iniciar sesión con el correo administrativo definido en el backend. Tras ingresar usuario y contraseña se envía un código de seis dígitos por email; al validarlo se accede al panel.
 
+### Acceso al dashboard
+
+1. Asegurate de que el backend esté corriendo (por defecto en `http://localhost:4000`).
+2. Abrí [http://localhost:3000/login](http://localhost:3000/login) en el navegador para ver el formulario de inicio de sesión de administrador.
+3. Ingresá el correo y la contraseña configurados en el archivo `backend/.env`.
+4. Revisá la casilla del correo administrador para obtener el código de verificación y completalo en la segunda pantalla. Si el código es correcto, se redirige automáticamente al dashboard en `/dashboard`.
+
 ## Scripts disponibles
 
 * `npm run dev` – levanta frontend y backend simultáneamente.
