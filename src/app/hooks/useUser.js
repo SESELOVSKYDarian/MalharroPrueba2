@@ -11,9 +11,8 @@ export function useUser() {
     try {
       const jwt = localStorage.getItem("jwt");
       if (!jwt) { setUser(null); setLoading(false); return; }
-      // Strapi v4 users-permissions:
-      const data = await apiFetch("/users/me?populate=*");
-      setUser(data || null);
+      const data = await apiFetch("/api/auth/me");
+      setUser(data.user || null);
     } catch (e) {
       console.error("useUser error:", e);
       setUser(null);

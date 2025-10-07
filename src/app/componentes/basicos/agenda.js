@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { API_URL } from "@/app/config";
 import Slider from 'react-slick'; // Librería para carruseles
 import ReactMarkdown from 'react-markdown'; // Para renderizar texto con formato Markdown
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'; // Íconos de flechas
@@ -30,17 +29,14 @@ export default function Agenda() {
   useEffect(() => {
     async function fetchAgendas() {
       try {
-        // Llama a la API de agendas incluyendo las imágenes
-        const res = await fetch(`${API_URL}/agendas?populate=imagen`, {
-          cache: "no-store", // Evita usar caché (siempre solicita datos nuevos)
-        });
+        const res = await fetch(`/api/agenda`, { cache: 'no-store' });
         if (!res.ok) {
           console.error("Error en fetch:", res.statusText);
           return;
         }
 
-        const { data } = await res.json(); // Extrae los datos del JSON
-        setAgendas(data); // Almacena los datos en el estado
+        const { items } = await res.json();
+        setAgendas(Array.isArray(items) ? items : []);
       } catch (err) {
         console.error("Error en getAgendas:", err);
       }
@@ -90,8 +86,10 @@ export default function Agenda() {
         // Muestra el carrusel de agendas con sus datos
         <Slider ref={sliderRef} {...settings}>
           {agendas.map((item) => {
-            const { id, tituloActividad, contenidoActividad, fecha, imagen } = item;
-            const imageUrl = imagen.url;
+            const { id, titulo, descripcion, fecha, imageUrl } = item;
+            const fechaLegible = fecha
+              ? new Date(fecha).toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' })
+              : '';
 
             return (
               <div key={id} className="agenda-container">
@@ -108,16 +106,16 @@ export default function Agenda() {
                   {/* Información visible siempre */}
                   <div className="agenda-contenido">
                     <div className="fecha">
-                      <p>{fecha}</p>
+                      <p>{fechaLegible}</p>
                     </div>
                     {/* Título renderizado como markdown */}
                     <ReactMarkdown
                       components={{
-                        p: ({ node, ...props }) => <p className="texto-regular" {...props} />,
+                        p: ({ node, ...props }) => <p className="texto-regular" {...props} />, 
                         strong: ({ node, ...props }) => <strong className="texto-negrita" {...props} />
                       }}
                     >
-                      {tituloActividad}
+                      {titulo}
                     </ReactMarkdown>
                   </div>
 
@@ -125,16 +123,16 @@ export default function Agenda() {
                   <div className="agenda-contenido-hover">
                     <ReactMarkdown
                       components={{
-                        p: ({ node, ...props }) => <p className="texto-regular" {...props} />,
+                        p: ({ node, ...props }) => <p className="texto-regular" {...props} />, 
                         strong: ({ node, ...props }) => <strong className="texto-negrita" {...props} />
                       }}
                     >
-                      {tituloActividad}
+                      {titulo}
                     </ReactMarkdown>
 
                     {/* Texto adicional del evento */}
                     <div className="texto-contenido-actividad">
-                      <p>{contenidoActividad}</p>
+                      <p>{descripcion}</p>
                     </div>
                   </div>
                 </div>

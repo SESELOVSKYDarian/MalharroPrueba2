@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { API_URL } from "@/app/config";
 import LoginWithGoogle from "./loginWithGoogle";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -15,7 +14,7 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${API_URL}/auth/local`, {
+      const res = await fetch(`/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ identifier, password }),
@@ -23,9 +22,9 @@ export default function LoginPage() {
 
       const data = await res.json();
 
-      if (!res.ok) throw new Error(data?.error?.message || "Login inválido");
+      if (!res.ok) throw new Error(data?.message || "Login inválido");
 
-      localStorage.setItem("jwt", data.jwt);
+      localStorage.setItem("jwt", data.token);
       toast.success(`Bienvenido, ${data.user.username}!`);
       router.push("/"); // 🔹 redirige al inicio
     } catch (err) {

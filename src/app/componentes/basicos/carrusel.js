@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { API_URL } from '@/app/config';
 import Slider from 'react-slick';
 import ReactMarkdown from 'react-markdown';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
@@ -25,7 +24,7 @@ const NextArrow = ({ onClick }) => (
 export default function Carrusel() {
   const sliderRef = useRef(null); // Referencia al slider
   const [imagenesCarrusel, setImagenesCarrusel] = useState([]); // Imágenes del carrusel
-  const [title, setTitle] = useState(''); // Título global del carrusel
+  const [isLoading, setIsLoading] = useState(true);
 
   // Configuración del carrusel
   const settings = {
@@ -46,46 +45,44 @@ export default function Carrusel() {
 
   // Carga las imágenes del carrusel al montar el componente
   useEffect(() => {
-    fetch(`${API_URL}/carrusels?populate=carrusel`)
-      .then(res => res.json())
-      .then(data => {
-        const item = data.data?.[0];
-        if (item) {
-          setTitle(item.title); // Guarda el título
-          setImagenesCarrusel(item.carrusel ?? []); // Guarda las imágenes
-        }
+    fetch(`/api/slider`, { cache: 'no-store' })
+      .then(res => {
+        if (!res.ok) throw new Error('No se pudo obtener el carrusel');
+        return res.json();
       })
-      .catch(err => console.error('Error al cargar imágenes:', err));
+      .then((data) => {
+        setImagenesCarrusel(Array.isArray(data.items) ? data.items : []);
+      })
+      .catch(err => console.error('Error al cargar imágenes:', err))
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
     <div className="carrusel-container">
-      {/* Carrusel usando react-slick */}
-      <Slider ref={sliderRef} {...settings}>
-        {imagenesCarrusel.map((imagen, index) => {
-          // Obtiene la URL de la imagen (versión grande si existe)
-          const url = imagen.formats?.large?.url || imagen.url;
-          return (
-            <div key={`slide-${index}`} style={{ width: '100%' }}>
+      {isLoading ? (
+        <p className="carrusel-loading">Cargando carrusel…</p>
+      ) : imagenesCarrusel.length === 0 ? (
+        <p className="carrusel-empty">No hay imágenes disponibles.</p>
+      ) : (
+        <Slider ref={sliderRef} {...settings}>
+          {imagenesCarrusel.map((imagen) => (
+            <div key={imagen.id} className="slider-item">
               <div
-                className='carrusel-img'
+                className="slider-item__image"
                 style={{
-                  backgroundImage: `linear-gradient(rgba(120, 51, 51, 0.5), rgba(0, 0, 0, 0.5)), url(${url})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
+                  backgroundImage: `url(${imagen.imageUrl})`
                 }}
               >
-                {/* Muestra el título si existe */}
-                {title && (
-                  <div className='titulo'>
-                    <ReactMarkdown>{title}</ReactMarkdown>
+                {imagen.captionText && (
+                  <div className="slider-item__caption">
+                    <ReactMarkdown>{imagen.captionText}</ReactMarkdown>
                   </div>
                 )}
               </div>
             </div>
-          );
-        })}
-      </Slider>
+          ))}
+        </Slider>
+      )}
     </div>
   );
 }

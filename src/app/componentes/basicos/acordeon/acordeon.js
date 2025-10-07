@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { getAcordeonByAcordeonID } from './acordeonByID';
-import { API_URL } from '@/app/config';
 
 export default function Acordeon({ acordeonID }) {
   const [labels, setLabels] = useState([]); // Almacena los ítems del acordeón

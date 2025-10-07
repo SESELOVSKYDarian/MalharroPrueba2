@@ -4,7 +4,6 @@ import { getTextoByTextoId } from "./textoById";
 import { checkUserRole } from '../../validacion/checkRole';
 import ReactMarkdown from 'react-markdown';
 import { handleSave } from '../../validacion/handleSave';
-import { API_URL } from "@/app/config";
 
 export const Texto = ({ textoID }) => {
     const jwt = typeof window !== "undefined" ? localStorage.getItem("jwt") : null;
@@ -20,7 +19,7 @@ export const Texto = ({ textoID }) => {
         // Verifica si el usuario es administrador
         const verifyAdmin = async () => {
             const role = await checkUserRole();
-            if (role === "Administrador") setIsAdmin(true);
+            if (role === "ADMIN") setIsAdmin(true);
         };
         
         verifyAdmin();
@@ -36,8 +35,9 @@ export const Texto = ({ textoID }) => {
             try {
                 const result = await getTextoByTextoId(textoID);
                 if (result) {
-                    setTexto(result);
-                    setEditedText(result);
+                    setTexto(result.contenido || '');
+                    setEditedText(result.contenido || '');
+                    setID(result.id);
                     setStatus('success');
                 } else {
                     setStatus('error');
@@ -46,13 +46,6 @@ export const Texto = ({ textoID }) => {
                 console.error('Fetch error:', error);
                 setStatus('error');
             }
-            const getRes = await fetch(`${API_URL}/textos?filters[textoID][$eq]=${textoID}`, {
-                headers: {
-                    'Authorization': `Bearer ${jwt}` // Agrega el token de autenticación
-                }
-            });
-            const getData = await getRes.json();
-            setID(getData.data[0].documentId);
 
         };
 
@@ -61,9 +54,17 @@ export const Texto = ({ textoID }) => {
 
     // Guarda los cambios realizados al texto
     const saveContent = async () => {
+        if (!realID) {
+            alert("No se pudo identificar el texto a actualizar");
+            return;
+        }
+        if (!jwt) {
+            alert("Debes iniciar sesión para editar");
+            return;
+        }
         try {
             await handleSave({
-                objetoAEditar: "texto",
+                objetoAEditar: "textos",
                 idObjeto: realID,
                 nuevoContenido: editedText,
                 jwt,
@@ -73,8 +74,8 @@ export const Texto = ({ textoID }) => {
             // Recarga el contenido actualizado desde el servidor
             const result = await getTextoByTextoId(textoID);
             if (result) {
-                setTexto(result);
-                setEditedText(result);
+                setTexto(result.contenido || '');
+                setEditedText(result.contenido || '');
             }
 
             setIsEditing(false); // Cierra modo edición
