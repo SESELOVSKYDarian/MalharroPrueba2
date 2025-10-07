@@ -30,9 +30,9 @@ export default function Page() {
             </button>
           </Link>
 
-          <Link href="/registrar/">
+          <Link href="/dashboard/">
             <button className="register">
-              <h4>Registrarse</h4>
+              <h4>Panel</h4>
             </button>
           </Link>
         </div>

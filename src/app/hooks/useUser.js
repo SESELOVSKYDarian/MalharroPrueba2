@@ -1,28 +1,52 @@
-// src/app/hooks/useUser.js
 "use client";
-import { useEffect, useState } from "react";
-import { apiFetch } from "../lib/api";
+import { useCallback, useEffect, useState } from "react";
+
+function decodeJwt(token) {
+  try {
+    const [, payload] = token.split(".");
+    if (!payload) return null;
+    const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const decoded = JSON.parse(atob(normalized));
+    return decoded;
+  } catch (error) {
+    console.error("No se pudo decodificar el token", error);
+    return null;
+  }
+}
 
 export function useUser() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  async function load() {
+  const load = useCallback(() => {
     try {
       const jwt = localStorage.getItem("jwt");
-      if (!jwt) { setUser(null); setLoading(false); return; }
-      // Strapi v4 users-permissions:
-      const data = await apiFetch("/users/me?populate=*");
-      setUser(data || null);
-    } catch (e) {
-      console.error("useUser error:", e);
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  }
+      if (!jwt) {
+        setUser(null);
+        return;
+      }
 
-  useEffect(() => { load(); }, []);
+      const payload = decodeJwt(jwt);
+      if (!payload) {
+        setUser(null);
+        return;
+      }
+
+      setUser({
+        email: payload.sub,
+        role: payload.role,
+        exp: payload.exp,
+      });
+    } catch (error) {
+      console.error("useUser error:", error);
+      setUser(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    load();
+    setLoading(false);
+  }, [load]);
 
   return { user, loading, reloadUser: load };
 }

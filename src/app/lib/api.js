@@ -7,17 +7,14 @@ export function toAbsoluteURL(path) {
 }
 
 export async function apiFetch(path, options = {}) {
-  const base = process.env.NEXT_PUBLIC_API_URL || '';
+  const base = process.env.NEXT_PUBLIC_API_URL || '/api';
   const jwt = typeof window !== 'undefined' ? localStorage.getItem('jwt') : null;
-  const apiToken = process.env.NEXT_PUBLIC_API_TOKEN;
 
   const headers = {
     ...(options.headers || {}),
   };
 
-  // Si hay JWT de usuario, lo priorizamos; si no, token de API (opcional)
   if (jwt) headers.Authorization = `Bearer ${jwt}`;
-  else if (apiToken) headers.Authorization = `Bearer ${apiToken}`;
 
   const res = await fetch(`${base}${path}`, { ...options, headers });
   if (!res.ok) {

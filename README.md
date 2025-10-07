@@ -2,23 +2,25 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### Variables de entorno
+
+Define los siguientes valores en tu `.env.local` (puedes tomar como referencia `env.example`):
+
+```
+ADMIN_EMAIL=correo@ejemplo.com
+JWT_SECRET=clave-super-secreta
+```
+
+- `ADMIN_EMAIL` corresponde al único correo autorizado para ingresar al panel.
+- `JWT_SECRET` es la clave usada para firmar los tokens de sesión (HS256). Mantén este valor en secreto.
+
+### Servidor de desarrollo
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+El panel admin está disponible en [http://localhost:3000/login](http://localhost:3000/login). El flujo de acceso envía un código temporal al correo configurado (el código también queda registrado en `data/last-verification-code.log` para entornos de desarrollo).
 
 ## Learn More
 
