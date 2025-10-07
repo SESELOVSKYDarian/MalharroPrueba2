@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { API_URL } from "@/app/config";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import LoginWithGoogle from "./loginWithGoogle";
@@ -40,7 +39,7 @@ export default function Register() {
     }
 
     try {
-      const res = await fetch(`${API_URL}/auth/local/register`, {
+      const res = await fetch(`/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
@@ -50,10 +49,10 @@ export default function Register() {
 
       if (res.ok) {
         // login automático y redirección
-        localStorage.setItem("jwt", data.jwt);
-        router.push("/"); 
+        localStorage.setItem("jwt", data.token);
+        router.push("/");
       } else {
-        toast.error(data?.error?.message || "Error en el registro.");
+        toast.error(data?.message || "Error en el registro.");
       }
     } catch (error) {
       console.error("Error:", error);

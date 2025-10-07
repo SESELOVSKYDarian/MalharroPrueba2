@@ -33,8 +33,8 @@ export const Imagen = ({ ImagenID, className }) => {
         fetchData();
     }, [ImagenID]);
 
-    if (status === 'loading') return <p className="text">Cargando...</p>;
-    if (status === 'error') return <p className="text">No se encontró la imagen</p>;
+    if (status === 'loading') return null;
+    if (status === 'error') return null;
 
     return (
         <div className={`relative ${className}`}>
