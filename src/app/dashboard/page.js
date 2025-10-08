@@ -7,7 +7,7 @@ import { API_URL } from "../config";
 import styles from "./dashboard.module.css";
 
 const initialSlider = { imageUrl: "", captionText: "" };
-const initialAgenda = { titulo: "", descripcion: "", fecha: "", imageUrl: "" };
+const initialAgenda = { titulo: "", descripcion: "", fecha: "", imageUrl: "", tags: [] };
 const initialUsina = { titulo: "", texto: "", imageUrl: "" };
 const initialFaq = { question: "", answer: "", position: "" };
 
@@ -46,9 +46,13 @@ export default function Dashboard() {
   const [agendaItems, setAgendaItems] = useState([]);
   const [newAgenda, setNewAgenda] = useState(initialAgenda);
   const [newAgendaFile, setNewAgendaFile] = useState(null);
+  const [newAgendaTagInput, setNewAgendaTagInput] = useState("");
+  const [newAgendaTagEditingIndex, setNewAgendaTagEditingIndex] = useState(-1);
   const [agendaEditingId, setAgendaEditingId] = useState(null);
   const [agendaDraft, setAgendaDraft] = useState(initialAgenda);
   const [agendaDraftFile, setAgendaDraftFile] = useState(null);
+  const [agendaDraftTagInput, setAgendaDraftTagInput] = useState("");
+  const [agendaDraftTagEditingIndex, setAgendaDraftTagEditingIndex] = useState(-1);
 
   const [usinaItems, setUsinaItems] = useState([]);
   const [newUsina, setNewUsina] = useState(initialUsina);
@@ -104,7 +108,13 @@ export default function Dashboard() {
     const res = await fetch(buildUrl(`/api/agenda`), { cache: "no-store" });
     if (!res.ok) return;
     const data = await res.json();
-    setAgendaItems(Array.isArray(data.items) ? data.items : []);
+    const items = Array.isArray(data.items)
+      ? data.items.map((item) => ({
+          ...item,
+          tags: Array.isArray(item.tags) ? item.tags : [],
+        }))
+      : [];
+    setAgendaItems(items);
   }, [buildUrl]);
 
   const loadUsina = useCallback(async () => {
@@ -161,6 +171,104 @@ export default function Dashboard() {
     },
     [buildUrl]
   );
+
+  const normalizeTagValue = (value) => value.replace(/\s+/g, " ").trim();
+
+  const handleNewAgendaTagSubmit = () => {
+    const nextValue = normalizeTagValue(newAgendaTagInput);
+    if (!nextValue) {
+      toast.error("Ingresá una etiqueta para la agenda");
+      return;
+    }
+
+    const currentTags = Array.isArray(newAgenda.tags) ? [...newAgenda.tags] : [];
+    if (newAgendaTagEditingIndex >= 0) {
+      currentTags[newAgendaTagEditingIndex] = nextValue;
+    } else {
+      if (currentTags.includes(nextValue)) {
+        toast.error("Esa etiqueta ya está cargada");
+        return;
+      }
+      currentTags.push(nextValue);
+    }
+
+    setNewAgenda({ ...newAgenda, tags: currentTags });
+    setNewAgendaTagInput("");
+    setNewAgendaTagEditingIndex(-1);
+  };
+
+  const handleRemoveNewAgendaTag = (index) => {
+    const currentTags = Array.isArray(newAgenda.tags) ? [...newAgenda.tags] : [];
+    if (index < 0 || index >= currentTags.length) return;
+    currentTags.splice(index, 1);
+    setNewAgenda({ ...newAgenda, tags: currentTags });
+    setNewAgendaTagInput((previous) => {
+      if (newAgendaTagEditingIndex === index) {
+        return "";
+      }
+      return previous;
+    });
+    setNewAgendaTagEditingIndex((previous) => {
+      if (previous === index) return -1;
+      if (previous > index) return previous - 1;
+      return previous;
+    });
+  };
+
+  const handleBeginEditNewAgendaTag = (index) => {
+    const currentTags = Array.isArray(newAgenda.tags) ? newAgenda.tags : [];
+    if (index < 0 || index >= currentTags.length) return;
+    setNewAgendaTagInput(currentTags[index]);
+    setNewAgendaTagEditingIndex(index);
+  };
+
+  const handleAgendaDraftTagSubmit = () => {
+    const nextValue = normalizeTagValue(agendaDraftTagInput);
+    if (!nextValue) {
+      toast.error("Ingresá una etiqueta para la agenda");
+      return;
+    }
+
+    const currentTags = Array.isArray(agendaDraft.tags) ? [...agendaDraft.tags] : [];
+    if (agendaDraftTagEditingIndex >= 0) {
+      currentTags[agendaDraftTagEditingIndex] = nextValue;
+    } else {
+      if (currentTags.includes(nextValue)) {
+        toast.error("Esa etiqueta ya está cargada");
+        return;
+      }
+      currentTags.push(nextValue);
+    }
+
+    setAgendaDraft({ ...agendaDraft, tags: currentTags });
+    setAgendaDraftTagInput("");
+    setAgendaDraftTagEditingIndex(-1);
+  };
+
+  const handleRemoveAgendaDraftTag = (index) => {
+    const currentTags = Array.isArray(agendaDraft.tags) ? [...agendaDraft.tags] : [];
+    if (index < 0 || index >= currentTags.length) return;
+    currentTags.splice(index, 1);
+    setAgendaDraft({ ...agendaDraft, tags: currentTags });
+    setAgendaDraftTagInput((previous) => {
+      if (agendaDraftTagEditingIndex === index) {
+        return "";
+      }
+      return previous;
+    });
+    setAgendaDraftTagEditingIndex((previous) => {
+      if (previous === index) return -1;
+      if (previous > index) return previous - 1;
+      return previous;
+    });
+  };
+
+  const handleBeginEditAgendaDraftTag = (index) => {
+    const currentTags = Array.isArray(agendaDraft.tags) ? agendaDraft.tags : [];
+    if (index < 0 || index >= currentTags.length) return;
+    setAgendaDraftTagInput(currentTags[index]);
+    setAgendaDraftTagEditingIndex(index);
+  };
 
   useEffect(() => {
     async function verifyAuth() {
@@ -262,6 +370,13 @@ export default function Dashboard() {
       toast.error("Título y fecha son obligatorios");
       return;
     }
+    const sanitizedTags = Array.isArray(newAgenda.tags)
+      ? newAgenda.tags.map((tag) => normalizeTagValue(tag)).filter(Boolean)
+      : [];
+    if (!sanitizedTags.length) {
+      toast.error("Agregá al menos una etiqueta para el evento");
+      return;
+    }
     try {
       let imageUrl = newAgenda.imageUrl;
       if (newAgendaFile) {
@@ -270,13 +385,15 @@ export default function Dashboard() {
       const res = await authFetch(`/api/agenda`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...newAgenda, imageUrl }),
+        body: JSON.stringify({ ...newAgenda, tags: sanitizedTags, imageUrl }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message || "No se pudo crear el evento");
       toast.success("Evento añadido a la agenda");
-      setNewAgenda(initialAgenda);
+      setNewAgenda({ ...initialAgenda });
       setNewAgendaFile(null);
+      setNewAgendaTagInput("");
+      setNewAgendaTagEditingIndex(-1);
       loadAgenda();
     } catch (error) {
       toast.error(error.message);
@@ -284,6 +401,13 @@ export default function Dashboard() {
   };
 
   const handleUpdateAgenda = async (id) => {
+    const sanitizedTags = Array.isArray(agendaDraft.tags)
+      ? agendaDraft.tags.map((tag) => normalizeTagValue(tag)).filter(Boolean)
+      : [];
+    if (!sanitizedTags.length) {
+      toast.error("Agregá al menos una etiqueta para el evento");
+      return;
+    }
     try {
       let imageUrl = agendaDraft.imageUrl;
       if (agendaDraftFile) {
@@ -292,14 +416,16 @@ export default function Dashboard() {
       const res = await authFetch(`/api/agenda/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...agendaDraft, imageUrl }),
+        body: JSON.stringify({ ...agendaDraft, tags: sanitizedTags, imageUrl }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message || "No se pudo actualizar el evento");
       toast.success("Evento actualizado");
       setAgendaEditingId(null);
-      setAgendaDraft(initialAgenda);
+      setAgendaDraft({ ...initialAgenda });
       setAgendaDraftFile(null);
+      setAgendaDraftTagInput("");
+      setAgendaDraftTagEditingIndex(-1);
       loadAgenda();
     } catch (error) {
       toast.error(error.message);
@@ -689,6 +815,58 @@ export default function Dashboard() {
                 className={styles.textarea}
               />
             </label>
+            <div className={`${styles.label} ${styles.formGridFull}`}>
+              <span>Etiquetas</span>
+              <div className={styles.tagField}>
+                <div className={styles.tagInputRow}>
+                  <input
+                    type="text"
+                    value={newAgendaTagInput}
+                    onChange={(e) => setNewAgendaTagInput(e.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === ",") {
+                        event.preventDefault();
+                        handleNewAgendaTagSubmit();
+                      }
+                    }}
+                    className={styles.input}
+                    placeholder="Ej: Mesas de examen"
+                  />
+                  <button
+                    type="button"
+                    className={styles.tagSubmitButton}
+                    onClick={handleNewAgendaTagSubmit}
+                  >
+                    {newAgendaTagEditingIndex >= 0 ? "Guardar etiqueta" : "Agregar etiqueta"}
+                  </button>
+                </div>
+                <p className={styles.tagHelper}>
+                  Presioná Enter para agregar etiquetas o elegí una existente para editarla.
+                </p>
+                <div className={styles.tagList}>
+                  {(newAgenda.tags || []).map((tag, index) => (
+                    <span key={`${tag}-${index}`} className={styles.tagPill}>
+                      <span>{tag}</span>
+                      <button
+                        type="button"
+                        className={`${styles.tagButton} ${styles.tagEdit}`}
+                        onClick={() => handleBeginEditNewAgendaTag(index)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        type="button"
+                        className={`${styles.tagButton} ${styles.tagRemove}`}
+                        onClick={() => handleRemoveNewAgendaTag(index)}
+                        aria-label={`Quitar etiqueta ${tag}`}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
           <div className={styles.formActions}>
             <button type="submit" className={styles.button}>
@@ -769,6 +947,58 @@ export default function Dashboard() {
                         className={styles.textarea}
                       />
                     </label>
+                    <div className={styles.fieldGroup}>
+                      <span className={styles.fieldLabel}>Etiquetas</span>
+                      <div className={styles.tagField}>
+                        <div className={styles.tagInputRow}>
+                          <input
+                            type="text"
+                            value={agendaDraftTagInput}
+                            onChange={(e) => setAgendaDraftTagInput(e.target.value)}
+                            onKeyDown={(event) => {
+                              if (event.key === "Enter" || event.key === ",") {
+                                event.preventDefault();
+                                handleAgendaDraftTagSubmit();
+                              }
+                            }}
+                            className={styles.input}
+                            placeholder="Ej: Presentaciones"
+                          />
+                          <button
+                            type="button"
+                            className={styles.tagSubmitButton}
+                            onClick={handleAgendaDraftTagSubmit}
+                          >
+                            {agendaDraftTagEditingIndex >= 0 ? "Guardar etiqueta" : "Agregar etiqueta"}
+                          </button>
+                        </div>
+                        <p className={styles.tagHelper}>
+                          Editá, quitá o sumá etiquetas para mantener organizada la agenda.
+                        </p>
+                        <div className={styles.tagList}>
+                          {(agendaDraft.tags || []).map((tag, index) => (
+                            <span key={`${item.id}-tag-${index}`} className={styles.tagPill}>
+                              <span>{tag}</span>
+                              <button
+                                type="button"
+                                className={`${styles.tagButton} ${styles.tagEdit}`}
+                                onClick={() => handleBeginEditAgendaDraftTag(index)}
+                              >
+                                Editar
+                              </button>
+                              <button
+                                type="button"
+                                className={`${styles.tagButton} ${styles.tagRemove}`}
+                                onClick={() => handleRemoveAgendaDraftTag(index)}
+                                aria-label={`Quitar etiqueta ${tag}`}
+                              >
+                                ×
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                     <div className={styles.cardActions}>
                       <button type="button" className={styles.button} onClick={() => handleUpdateAgenda(item.id)}>
                         Guardar
@@ -778,8 +1008,10 @@ export default function Dashboard() {
                         className={`${styles.button} ${styles.buttonSecondary}`}
                         onClick={() => {
                           setAgendaEditingId(null);
-                          setAgendaDraft(initialAgenda);
+                          setAgendaDraft({ ...initialAgenda });
                           setAgendaDraftFile(null);
+                          setAgendaDraftTagInput("");
+                          setAgendaDraftTagEditingIndex(-1);
                         }}
                       >
                         Cancelar
@@ -792,6 +1024,15 @@ export default function Dashboard() {
                       <h3>{item.titulo}</h3>
                       <p className={styles.cardMeta}>{fechaLegible}</p>
                       <p className={styles.cardText}>{item.descripcion}</p>
+                      {Array.isArray(item.tags) && item.tags.length > 0 && (
+                        <div className={styles.cardTags}>
+                          {item.tags.map((tag, index) => (
+                            <span key={`${item.id}-display-tag-${index}`} className={styles.cardTag}>
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
                     <div className={styles.cardActions}>
                       <button
@@ -804,8 +1045,11 @@ export default function Dashboard() {
                             descripcion: item.descripcion || "",
                             fecha: item.fecha ? item.fecha.substring(0, 10) : "",
                             imageUrl: item.imageUrl || "",
+                            tags: Array.isArray(item.tags) ? item.tags : [],
                           });
                           setAgendaDraftFile(null);
+                          setAgendaDraftTagInput("");
+                          setAgendaDraftTagEditingIndex(-1);
                         }}
                       >
                         Editar

@@ -69,10 +69,10 @@ export default function Usina() {
           <div className="estudiantes-parrafo p1-r">
             <p dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
           </div>
-          <div className="galeria d-flex align-items-center col-12 flex-wrap justify-content-center gap-4">
+          <div className="galeria galeria-grid col-12">
             {cards.length ? (
               cards.map((card) => (
-                <div key={card.id} className="col-6 col-md-3 d-flex justify-content-center">
+                <div key={card.id} className="galeria-item">
                   <img
                     src={asset(card.imageUrl)}
                     alt={card.titulo || "Proyecto de nuestros estudiantes"}
@@ -86,6 +86,73 @@ export default function Usina() {
           </div>
         </div>
       </div>
+      <style jsx>{`
+        :global(.nuestros-estudiantes) {
+          overflow: hidden;
+        }
+
+        :global(.galeria.galeria-grid) {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(140px, 1fr));
+          gap: 24px;
+          justify-items: center;
+          padding: 0 24px 48px;
+        }
+
+        :global(.galeria-item) {
+          width: 100%;
+          max-width: 220px;
+          display: flex;
+          justify-content: center;
+        }
+
+        :global(.galeria-img) {
+          width: 100%;
+          height: auto;
+          aspect-ratio: 3 / 4;
+          object-fit: cover;
+          border-radius: 24px;
+          box-shadow: 0 20px 45px rgba(15, 23, 42, 0.2);
+        }
+
+        @media (max-width: 1199.98px) {
+          :global(.nuestros-estudiantes) {
+            clip-path: none;
+            border-radius: 72px 72px 0 0;
+            padding-bottom: 64px;
+            height: auto;
+          }
+
+          :global(.galeria.galeria-grid) {
+            grid-template-columns: repeat(3, minmax(140px, 1fr));
+            gap: 20px;
+          }
+        }
+
+        @media (max-width: 991.98px) {
+          :global(.galeria.galeria-grid) {
+            grid-template-columns: repeat(2, minmax(140px, 1fr));
+            padding: 0 24px 40px;
+          }
+        }
+
+        @media (max-width: 575.98px) {
+          :global(.nuestros-estudiantes) {
+            border-radius: 48px 48px 0 0;
+            padding-bottom: 48px;
+          }
+
+          :global(.galeria.galeria-grid) {
+            grid-template-columns: repeat(2, minmax(120px, 1fr));
+            gap: 16px;
+            padding: 0 18px 32px;
+          }
+
+          :global(.galeria-img) {
+            border-radius: 20px;
+          }
+        }
+      `}</style>
     </section>
   );
 }
