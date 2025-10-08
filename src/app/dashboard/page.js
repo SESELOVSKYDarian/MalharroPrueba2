@@ -9,6 +9,7 @@ import styles from "./dashboard.module.css";
 const initialSlider = { imageUrl: "", captionText: "" };
 const initialAgenda = { titulo: "", descripcion: "", fecha: "", imageUrl: "" };
 const initialUsina = { titulo: "", texto: "", imageUrl: "" };
+const initialFaq = { question: "", answer: "", position: "" };
 
 function useFilePreview(file) {
   const [preview, setPreview] = useState(null);
@@ -58,6 +59,10 @@ export default function Dashboard() {
 
   const [textos, setTextos] = useState([]);
   const [textosDraft, setTextosDraft] = useState({});
+  const [faqs, setFaqs] = useState([]);
+  const [newFaq, setNewFaq] = useState(initialFaq);
+  const [faqEditingId, setFaqEditingId] = useState(null);
+  const [faqDraft, setFaqDraft] = useState(initialFaq);
 
   const newSliderPreview = useFilePreview(newSliderFile);
   const sliderDraftPreview = useFilePreview(sliderDraftFile);
@@ -123,6 +128,13 @@ export default function Dashboard() {
     }
   }, [buildUrl]);
 
+  const loadFaqs = useCallback(async () => {
+    const res = await fetch(buildUrl(`/api/faqs`), { cache: "no-store" });
+    if (!res.ok) return;
+    const data = await res.json();
+    setFaqs(Array.isArray(data.items) ? data.items : []);
+  }, [buildUrl]);
+
   const uploadFile = useCallback(
     async (file) => {
       if (!file) return null;
@@ -139,6 +151,15 @@ export default function Dashboard() {
       return data.url;
     },
     [authFetch]
+  );
+
+  const resolveImage = useCallback(
+    (value) => {
+      if (!value) return "";
+      if (/^(?:https?:|data:|blob:)/i.test(value)) return value;
+      return buildUrl(value);
+    },
+    [buildUrl]
   );
 
   useEffect(() => {
@@ -162,7 +183,7 @@ export default function Dashboard() {
           return;
         }
         setUser(data.user);
-        await Promise.all([loadSlider(), loadAgenda(), loadUsina(), loadTextos()]);
+        await Promise.all([loadSlider(), loadAgenda(), loadUsina(), loadTextos(), loadFaqs()]);
       } catch (error) {
         console.error(error);
         toast.error("No se pudo validar la sesión");
@@ -173,7 +194,7 @@ export default function Dashboard() {
     }
 
     verifyAuth();
-  }, [token, router, buildUrl, loadSlider, loadAgenda, loadUsina, loadTextos]);
+  }, [token, router, buildUrl, loadSlider, loadAgenda, loadUsina, loadTextos, loadFaqs]);
 
   const handleCreateSlider = async (event) => {
     event.preventDefault();
@@ -363,7 +384,7 @@ export default function Dashboard() {
 
   const handleSaveTexto = async (texto) => {
     try {
-      const res = await authFetch(`/api/texts/${texto.id}`, {
+      const res = await authFetch(`/api/texts/${texto.slug}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ contenido: textosDraft[texto.id] ?? texto.contenido }),
@@ -372,6 +393,89 @@ export default function Dashboard() {
       if (!res.ok) throw new Error(data?.message || "No se pudo actualizar el texto");
       toast.success("Texto guardado");
       loadTextos();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleCreateFaq = async (event) => {
+    event.preventDefault();
+    if (!newFaq.question.trim() || !newFaq.answer.trim()) {
+      toast.error("Completá la pregunta y la respuesta");
+      return;
+    }
+
+    try {
+      const payload = {
+        question: newFaq.question,
+        answer: newFaq.answer,
+      };
+      if (newFaq.position !== "") {
+        const parsedPosition = Number(newFaq.position);
+        if (!Number.isNaN(parsedPosition)) {
+          payload.position = parsedPosition;
+        }
+      }
+
+      const res = await authFetch(`/api/faqs`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.message || "No se pudo crear la pregunta");
+      toast.success("Pregunta añadida");
+      setNewFaq(initialFaq);
+      loadFaqs();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleUpdateFaq = async (id) => {
+    if (!faqDraft.question.trim() || !faqDraft.answer.trim()) {
+      toast.error("Completá la pregunta y la respuesta");
+      return;
+    }
+
+    try {
+      const payload = {
+        question: faqDraft.question,
+        answer: faqDraft.answer,
+      };
+      if (faqDraft.position !== "") {
+        const parsedPosition = Number(faqDraft.position);
+        if (!Number.isNaN(parsedPosition)) {
+          payload.position = parsedPosition;
+        }
+      }
+
+      const res = await authFetch(`/api/faqs/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.message || "No se pudo actualizar la pregunta");
+      toast.success("Pregunta actualizada");
+      setFaqEditingId(null);
+      setFaqDraft(initialFaq);
+      loadFaqs();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleDeleteFaq = async (id) => {
+    if (!confirm("¿Eliminar esta pregunta frecuente?")) return;
+    try {
+      const res = await authFetch(`/api/faqs/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.message || "No se pudo eliminar la pregunta");
+      toast.success("Pregunta eliminada");
+      setFaqEditingId((current) => (current === id ? null : current));
+      setFaqDraft(initialFaq);
+      loadFaqs();
     } catch (error) {
       toast.error(error.message);
     }
@@ -448,12 +552,20 @@ export default function Dashboard() {
         <div className={styles.cardGrid}>
           {sliderItems.map((item) => {
             const isEditing = editingSliderId === item.id;
-            const preview = isEditing && sliderDraftPreview ? sliderDraftPreview : item.imageUrl;
+            const baseImage = resolveImage(item.imageUrl);
+            const editingImage = sliderDraftFile
+              ? sliderDraftPreview || baseImage
+              : resolveImage(sliderDraft.imageUrl || item.imageUrl);
+            const preview = isEditing ? editingImage : baseImage;
             return (
               <div key={item.id} className={styles.card}>
                 {preview && <img src={preview} alt="Vista previa" className={styles.cardThumb} />}
                 {isEditing ? (
                   <>
+                    <div className={styles.fieldGroup}>
+                      <span className={styles.fieldLabel}>Imagen actual</span>
+                      {baseImage && <img src={baseImage} alt="Imagen actual" className={styles.preview} />}
+                    </div>
                     <div className={styles.fieldGroup}>
                       <span className={styles.fieldLabel}>Reemplazar imagen</span>
                       <input
@@ -588,7 +700,11 @@ export default function Dashboard() {
         <div className={styles.cardGrid}>
           {agendaItems.map((item) => {
             const isEditing = agendaEditingId === item.id;
-            const preview = isEditing && agendaDraftPreview ? agendaDraftPreview : item.imageUrl;
+            const baseImage = resolveImage(item.imageUrl);
+            const editingImage = agendaDraftFile
+              ? agendaDraftPreview || baseImage
+              : resolveImage(agendaDraft.imageUrl || item.imageUrl);
+            const preview = isEditing ? editingImage : baseImage;
             const fechaLegible = item.fecha
               ? new Date(item.fecha).toLocaleDateString("es-AR", {
                   year: "numeric",
@@ -619,6 +735,10 @@ export default function Dashboard() {
                         className={styles.input}
                       />
                     </label>
+                    <div className={styles.fieldGroup}>
+                      <span className={styles.fieldLabel}>Imagen actual</span>
+                      {baseImage && <img src={baseImage} alt="Imagen actual" className={styles.preview} />}
+                    </div>
                     <div className={styles.fieldGroup}>
                       <span className={styles.fieldLabel}>Reemplazar imagen</span>
                       <input
@@ -753,7 +873,11 @@ export default function Dashboard() {
         <div className={styles.cardGrid}>
           {usinaItems.map((item) => {
             const isEditing = usinaEditingId === item.id;
-            const preview = isEditing && usinaDraftPreview ? usinaDraftPreview : item.imageUrl;
+            const baseImage = resolveImage(item.imageUrl);
+            const editingImage = usinaDraftFile
+              ? usinaDraftPreview || baseImage
+              : resolveImage(usinaDraft.imageUrl || item.imageUrl);
+            const preview = isEditing ? editingImage : baseImage;
             return (
               <div key={item.id} className={styles.card}>
                 {preview && <img src={preview} alt="Vista previa" className={styles.cardThumb} />}
@@ -768,6 +892,10 @@ export default function Dashboard() {
                         className={styles.input}
                       />
                     </label>
+                    <div className={styles.fieldGroup}>
+                      <span className={styles.fieldLabel}>Imagen actual</span>
+                      {baseImage && <img src={baseImage} alt="Imagen actual" className={styles.preview} />}
+                    </div>
                     <div className={styles.fieldGroup}>
                       <span className={styles.fieldLabel}>Reemplazar imagen</span>
                       <input
@@ -862,7 +990,8 @@ export default function Dashboard() {
           {textos.map((texto) => (
             <div key={texto.id} className={`${styles.card} ${styles.textCard}`}>
               <div className={styles.cardInfo}>
-                <h3>{texto.seccion}</h3>
+                <h3>{texto.titulo || texto.slug}</h3>
+                <p className={styles.cardMeta}>Slug: {texto.slug}</p>
                 <textarea
                   value={textosDraft[texto.id] ?? ""}
                   onChange={(e) => setTextosDraft({ ...textosDraft, [texto.id]: e.target.value })}
@@ -876,6 +1005,141 @@ export default function Dashboard() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.sectionHead}>
+          <h2>Preguntas frecuentes</h2>
+          <p>Sumá o actualizá las dudas habituales que aparecen en el sitio.</p>
+        </div>
+        <form className={styles.form} onSubmit={handleCreateFaq}>
+          <div className={styles.formGrid}>
+            <label className={styles.label}>
+              Pregunta
+              <input
+                type="text"
+                className={styles.input}
+                value={newFaq.question}
+                onChange={(e) => setNewFaq({ ...newFaq, question: e.target.value })}
+                required
+              />
+            </label>
+            <label className={`${styles.label} ${styles.formGridFull}`}>
+              Respuesta
+              <textarea
+                className={`${styles.textarea} ${styles.textareaDense}`}
+                value={newFaq.answer}
+                onChange={(e) => setNewFaq({ ...newFaq, answer: e.target.value })}
+                required
+              />
+            </label>
+            <label className={styles.label}>
+              Posición
+              <input
+                type="number"
+                className={styles.input}
+                value={newFaq.position}
+                onChange={(e) => setNewFaq({ ...newFaq, position: e.target.value })}
+                min="0"
+                placeholder="Opcional"
+              />
+            </label>
+          </div>
+          <div className={styles.formActions}>
+            <button type="submit" className={styles.button}>
+              Añadir pregunta
+            </button>
+          </div>
+        </form>
+
+        <div className={styles.cardGrid}>
+          {faqs.map((faq) => {
+            const isEditing = faqEditingId === faq.id;
+            return (
+              <div key={faq.id} className={`${styles.card} ${styles.textCard}`}>
+                {isEditing ? (
+                  <>
+                    <label className={styles.label}>
+                      Pregunta
+                      <input
+                        type="text"
+                        className={styles.input}
+                        value={faqDraft.question}
+                        onChange={(e) => setFaqDraft({ ...faqDraft, question: e.target.value })}
+                      />
+                    </label>
+                    <label className={`${styles.label} ${styles.formGridFull}`}>
+                      Respuesta
+                      <textarea
+                        className={`${styles.textarea} ${styles.textareaDense}`}
+                        value={faqDraft.answer}
+                        onChange={(e) => setFaqDraft({ ...faqDraft, answer: e.target.value })}
+                      />
+                    </label>
+                    <label className={styles.label}>
+                      Posición
+                      <input
+                        type="number"
+                        className={styles.input}
+                        value={faqDraft.position}
+                        onChange={(e) => setFaqDraft({ ...faqDraft, position: e.target.value })}
+                      />
+                    </label>
+                    <div className={styles.cardActions}>
+                      <button type="button" className={styles.button} onClick={() => handleUpdateFaq(faq.id)}>
+                        Guardar
+                      </button>
+                      <button
+                        type="button"
+                        className={`${styles.button} ${styles.buttonSecondary}`}
+                        onClick={() => {
+                          setFaqEditingId(null);
+                          setFaqDraft(initialFaq);
+                        }}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className={styles.cardInfo}>
+                      <h3>{faq.question}</h3>
+                      <p className={styles.cardMeta}>Posición: {faq.position ?? "—"}</p>
+                      <div
+                        className={styles.cardText}
+                        dangerouslySetInnerHTML={{ __html: faq.answer }}
+                      />
+                    </div>
+                    <div className={styles.cardActions}>
+                      <button
+                        type="button"
+                        className={styles.button}
+                        onClick={() => {
+                          setFaqEditingId(faq.id);
+                          setFaqDraft({
+                            question: faq.question,
+                            answer: faq.answer,
+                            position: faq.position !== null && faq.position !== undefined ? String(faq.position) : "",
+                          });
+                        }}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        type="button"
+                        className={`${styles.button} ${styles.buttonDanger}`}
+                        onClick={() => handleDeleteFaq(faq.id)}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })}
         </div>
       </section>
     </div>

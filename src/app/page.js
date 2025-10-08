@@ -2,6 +2,7 @@ import Navbar from "./components/Navbar";
 import Carousel from "./components/Carousel";
 import Agenda from "./components/Agenda";
 import Usina from "./components/Usina";
+import Faqs from "./components/Faqs";
 import Footer from "./components/Footer";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +14,30 @@ const asset = (path) => {
   return `${base}${path}`;
 };
 
-export default function Page() {
+const apiBase = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000").replace(/\/$/, "");
+
+async function fetchSiteText(slug) {
+  try {
+    const response = await fetch(`${apiBase}/api/texts/${slug}`, { cache: "no-store" });
+    if (!response.ok) {
+      return null;
+    }
+    return response.json();
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export default async function Page() {
+  const [sixtyHeadingData, sixtyBodyData] = await Promise.all([
+    fetchSiteText("home_60_heading"),
+    fetchSiteText("home_60_body"),
+  ]);
+
+  const sixtyHeading = sixtyHeadingData?.contenido || sixtyHeadingData?.titulo || "60 años formando profesionales";
+  const sixtyBody = sixtyBodyData?.contenido || sixtyBodyData?.titulo || "";
+
   return (
     <div className="malharro-home">
       <div id="top"></div>
@@ -127,9 +151,22 @@ export default function Page() {
           </section>
         </section>
 
-        <section className="usina-section-wrapper">
-          <Usina />
+        <section className="container-fluid espaciado-vertical" id="formando-profesionales">
+          <div className="row">
+            <div className="col-md-1" aria-hidden="true"></div>
+            <div className="titulo-prof col-12 col-md-5">
+              <h1 dangerouslySetInnerHTML={{ __html: sixtyHeading }} />
+            </div>
+            <div className="texto-prof col-12 col-md-5">
+              <p dangerouslySetInnerHTML={{ __html: sixtyBody }} />
+            </div>
+            <div className="col-md-1" aria-hidden="true"></div>
+          </div>
         </section>
+
+        <Usina />
+
+        <Faqs />
       </main>
 
       <Footer />

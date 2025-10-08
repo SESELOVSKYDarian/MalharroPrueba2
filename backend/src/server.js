@@ -11,6 +11,7 @@ import usinaRoutes from "./routes/usina.routes.js";
 import textsRoutes from "./routes/texts.routes.js";
 import sectionsRoutes from "./routes/sections.routes.js";
 import uploadsRoutes from "./routes/uploads.routes.js";
+import faqsRoutes from "./routes/faqs.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,6 +44,7 @@ app.use("/api/usina", usinaRoutes);
 app.use("/api/texts", textsRoutes);
 app.use("/api/sections", sectionsRoutes);
 app.use("/api/uploads", uploadsRoutes);
+app.use("/api/faqs", faqsRoutes);
 
 assertConfig();
 

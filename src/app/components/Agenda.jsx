@@ -23,17 +23,39 @@ const formatDate = (dateString) => {
 export default function Agenda() {
   const [events, setEvents] = useState([]);
   const [cursor, setCursor] = useState(0);
+  const [ctaLabel, setCtaLabel] = useState("Ver agenda completa");
+  const [ctaUrl, setCtaUrl] = useState("#");
 
   useEffect(() => {
     async function fetchAgenda() {
       try {
-        const response = await fetch(`${API_URL}/api/agenda`, { cache: "no-store" });
-        if (!response.ok) throw new Error("No se pudo cargar la agenda");
-        const data = await response.json();
-        setEvents(Array.isArray(data.items) ? data.items : []);
+        const [agendaResponse, labelResponse, urlResponse] = await Promise.all([
+          fetch(`${API_URL}/api/agenda`, { cache: "no-store" }),
+          fetch(`${API_URL}/api/texts/home_agenda_cta_label`, { cache: "no-store" }),
+          fetch(`${API_URL}/api/texts/home_agenda_cta_url`, { cache: "no-store" }),
+        ]);
+
+        if (agendaResponse.ok) {
+          const data = await agendaResponse.json();
+          setEvents(Array.isArray(data.items) ? data.items : []);
+        } else {
+          throw new Error("No se pudo cargar la agenda");
+        }
+
+        if (labelResponse.ok) {
+          const labelData = await labelResponse.json();
+          setCtaLabel(labelData.contenido || labelData.titulo || "Ver agenda completa");
+        }
+
+        if (urlResponse.ok) {
+          const urlData = await urlResponse.json();
+          setCtaUrl(urlData.contenido || "#");
+        }
       } catch (error) {
         console.error(error);
         setEvents([]);
+        setCtaLabel("Ver agenda completa");
+        setCtaUrl("#");
       }
     }
 
@@ -107,6 +129,16 @@ export default function Agenda() {
                 </div>
               );
             })}
+          </div>
+          <div className="d-flex justify-content-center mt-3">
+            <a
+              className="btn-agenda01"
+              href={ctaUrl || "#"}
+              target={ctaUrl && /^https?:/i.test(ctaUrl) ? "_blank" : undefined}
+              rel={ctaUrl && /^https?:/i.test(ctaUrl) ? "noreferrer" : undefined}
+            >
+              {ctaLabel}
+            </a>
           </div>
         </div>
       </div>

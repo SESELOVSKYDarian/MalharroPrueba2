@@ -64,6 +64,13 @@ export async function initializeDatabase() {
     data JSONB NOT NULL
   );`);
 
+  await query(`CREATE TABLE IF NOT EXISTS faqs (
+    id SERIAL PRIMARY KEY,
+    question TEXT NOT NULL,
+    answer TEXT NOT NULL,
+    position INTEGER NOT NULL DEFAULT 0
+  );`);
+
   await query(`CREATE TABLE IF NOT EXISTS login_codes (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -198,6 +205,55 @@ export async function initializeDatabase() {
     [defaultFooter]
   );
 
+  const textSeeds = [
+    {
+      slug: "home_60_heading",
+      titulo: "60 años formando profesionales - Título",
+      contenido: "60 años formando profesionales",
+    },
+    {
+      slug: "home_60_body",
+      titulo: "60 años formando profesionales - Texto",
+      contenido:
+        "<b>Brindamos a nuestros estudiantes una formación especializada que les permita insertarse en el mundo laboral con éxito.</b><br><br>La Escuela promueve el vínculo ofreciendo espacios de encuentro con <b>empresas referentes del sector</b>, charlas, talleres y eventos que permiten a los estudiantes generar <b>conexiones valiosas</b> para su desarrollo profesional.<br><br><b>“La Malharro”</b> sigue formando artistas y diseñadores listos para aportar su creatividad al mundo.",
+    },
+    {
+      slug: "home_agenda_cta_label",
+      titulo: "Agenda - Texto botón",
+      contenido: "Ver agenda completa",
+    },
+    {
+      slug: "home_agenda_cta_url",
+      titulo: "Agenda - Enlace botón",
+      contenido: "#",
+    },
+    {
+      slug: "home_students_title",
+      titulo: "Nuestros estudiantes - Título",
+      contenido: "Nuestros <br><b>estudiantes</b>",
+    },
+    {
+      slug: "home_students_description",
+      titulo: "Nuestros estudiantes - Descripción",
+      contenido: "Descubrí los proyectos creados en nuestros talleres y aulas.",
+    },
+    {
+      slug: "home_faq_title",
+      titulo: "Preguntas frecuentes - Título",
+      contenido: "Preguntas frecuentes",
+    },
+  ];
+
+  for (const seed of textSeeds) {
+    // Sequential inserts ensure deterministic ordering for seeds.
+    await query(
+      `INSERT INTO site_texts (slug, titulo, contenido)
+       VALUES ($1, $2, $3)
+       ON CONFLICT (slug) DO NOTHING;`,
+      [seed.slug, seed.titulo, seed.contenido]
+    );
+  }
+
   const sliderCount = await query(`SELECT COUNT(*) AS count FROM carousel_slides`);
   if (Number(sliderCount.rows[0]?.count || 0) === 0) {
     await query(
@@ -224,6 +280,17 @@ export async function initializeDatabase() {
       `INSERT INTO usina_posts (titulo, texto, image_url) VALUES
         ('Historias que inspiran', 'Nuestros egresados comparten proyectos que transforman la comunidad.', '/malharrooficial/images/CHARLA FEED.png'),
         ('Proyectos interdisciplinarios', 'Diseño, ilustración y medios audiovisuales se unen para crear experiencias únicas.', '/malharrooficial/images/AVISO uno.png')`
+    );
+  }
+
+  const faqCount = await query(`SELECT COUNT(*) AS count FROM faqs`);
+  if (Number(faqCount.rows[0]?.count || 0) === 0) {
+    await query(
+      `INSERT INTO faqs (question, answer, position) VALUES
+        ('¿Dónde queda la Malharro?', 'La Escuela se encuentra en la ciudad de Mar del Plata. Ubicada en la esquina de Luro y La Pampa, frente a la Terminal de micros.<br><br><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3144.449087550747!2d-57.56621552511716!3d-37.98998424412818!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9584d951f12bae1f%3A0x7b0eaea299a69b09!2sEscuela%20de%20Artes%20Visuales%20M.A%20Malharro!5e0!3m2!1ses-419!2sar!4v1756941987999!5m2!1ses-419!2sar" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>', 1),
+        ('¿Se puede cursar más de una carrera a la vez?', 'Consultar con el equipo académico permite evaluar la carga horaria y compatibilidad de materias para cada caso en particular.', 2),
+        ('¿Cuándo comienzan las clases?', 'El ciclo lectivo suele comenzar en abril y se divide en dos cuatrimestres. El calendario académico se publica en el sitio web institucional y se informa a través de los canales oficiales.', 3)
+      `
     );
   }
 }
