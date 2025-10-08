@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { API_URL } from "../config";
 
 const initialSlider = { imageUrl: "", captionText: "" };
 const initialAgenda = { titulo: "", descripcion: "", fecha: "", imageUrl: "" };
@@ -32,39 +33,50 @@ export default function Dashboard() {
   const [textosDraft, setTextosDraft] = useState({});
 
   const token = useMemo(() => (typeof window !== "undefined" ? localStorage.getItem("jwt") : null), []);
+  const apiBase = useMemo(() => (API_URL || "").replace(/\/$/, ""), []);
+
+  const buildUrl = useCallback(
+    (path) => {
+      if (!path) return apiBase;
+      if (/^https?:/i.test(path)) return path;
+      const normalized = path.startsWith("/") ? path : `/${path}`;
+      return `${apiBase}${normalized}`;
+    },
+    [apiBase]
+  );
 
   const authFetch = useCallback(
     (url, options = {}) => {
       const headers = { ...(options.headers || {}) };
       if (token) headers.Authorization = `Bearer ${token}`;
-      return fetch(url, { ...options, headers });
+      return fetch(buildUrl(url), { ...options, headers });
     },
-    [token]
+    [token, buildUrl]
   );
 
   const loadSlider = useCallback(async () => {
-    const res = await fetch(`/api/slider`, { cache: "no-store" });
+    const res = await fetch(buildUrl(`/api/carousel`), { cache: "no-store" });
     if (!res.ok) return;
     const data = await res.json();
     setSliderItems(Array.isArray(data.items) ? data.items : []);
-  }, []);
+  }, [buildUrl]);
 
   const loadAgenda = useCallback(async () => {
-    const res = await fetch(`/api/agenda`, { cache: "no-store" });
+    const res = await fetch(buildUrl(`/api/agenda`), { cache: "no-store" });
     if (!res.ok) return;
     const data = await res.json();
     setAgendaItems(Array.isArray(data.items) ? data.items : []);
-  }, []);
+  }, [buildUrl]);
 
   const loadUsina = useCallback(async () => {
-    const res = await fetch(`/api/usina`, { cache: "no-store" });
+    const res = await fetch(buildUrl(`/api/usina`), { cache: "no-store" });
     if (!res.ok) return;
     const data = await res.json();
     setUsinaItems(Array.isArray(data.items) ? data.items : []);
-  }, []);
+  }, [buildUrl]);
 
   const loadTextos = useCallback(async () => {
-    const res = await fetch(`/api/textos`, { cache: "no-store" });
+    const res = await fetch(buildUrl(`/api/texts`), { cache: "no-store" });
     if (!res.ok) return;
     const data = await res.json();
     if (Array.isArray(data.items)) {
@@ -75,7 +87,7 @@ export default function Dashboard() {
       });
       setTextosDraft(drafts);
     }
-  }, []);
+  }, [buildUrl]);
 
   useEffect(() => {
     async function verifyAuth() {
@@ -87,7 +99,7 @@ export default function Dashboard() {
       }
 
       try {
-        const res = await fetch(`/api/auth/me`, {
+        const res = await fetch(buildUrl(`/api/auth/me`), {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("No autenticado");
@@ -118,7 +130,7 @@ export default function Dashboard() {
       return;
     }
     try {
-      const res = await authFetch(`/api/slider`, {
+      const res = await authFetch(`/api/carousel`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newSlider),
@@ -135,7 +147,7 @@ export default function Dashboard() {
 
   const handleUpdateSlider = async (id) => {
     try {
-      const res = await authFetch(`/api/slider/${id}`, {
+      const res = await authFetch(`/api/carousel/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(sliderDraft),
@@ -153,7 +165,7 @@ export default function Dashboard() {
   const handleDeleteSlider = async (id) => {
     if (!confirm("¿Eliminar esta imagen del carrusel?")) return;
     try {
-      const res = await authFetch(`/api/slider/${id}`, { method: "DELETE" });
+      const res = await authFetch(`/api/carousel/${id}`, { method: "DELETE" });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message || "No se pudo eliminar la imagen");
       toast.success("Imagen eliminada");
@@ -269,7 +281,7 @@ export default function Dashboard() {
 
   const handleSaveTexto = async (texto) => {
     try {
-      const res = await authFetch(`/api/textos/${texto.id}`, {
+      const res = await authFetch(`/api/texts/${texto.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ contenido: textosDraft[texto.id] ?? texto.contenido }),
