@@ -29,14 +29,91 @@ async function fetchSiteText(slug) {
   }
 }
 
+async function fetchCareers() {
+  try {
+    const response = await fetch(`${apiBase}/api/sections/careers`, { cache: "no-store" });
+    if (!response.ok) {
+      return null;
+    }
+    return response.json();
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+const defaultCareerVisuals = [
+  {
+    id: "diseno-grafico",
+    name: "Diseño Gráfico",
+    accent: "dg",
+    decoration: "/malharrooficial/images/Personaje_DisenoGrafico_C.svg",
+  },
+  {
+    id: "escenografia",
+    name: "Escenografía",
+    accent: "es",
+    decoration: "/malharrooficial/images/Personaje_DisenoGrafico_C.svg",
+  },
+  {
+    id: "fotografia",
+    name: "Fotografía",
+    accent: "fo",
+    decoration: "/malharrooficial/images/Personaje_Fotografia_C.svg",
+  },
+  {
+    id: "ilustracion",
+    name: "Ilustración",
+    accent: "il",
+    decoration: "/malharrooficial/images/Personaje_Ilustracion_C.svg",
+  },
+  {
+    id: "medios-audiovisuales",
+    name: "Medios Audiovisuales",
+    accent: "ma",
+    decoration: "/malharrooficial/images/Personaje_MediosA_C.svg",
+  },
+  {
+    id: "profesorado",
+    name: "Profesorado",
+    accent: "pr",
+    decoration: "/malharrooficial/images/Personaje_Profesorado_C.svg",
+  },
+  {
+    id: "realizador",
+    name: "Realizador en AV",
+    accent: "re",
+    decoration: "/malharrooficial/images/Personaje_Realizador_C.svg",
+  },
+];
+
+const defaultCareerAccentOrder = ["dg", "es", "fo", "il", "ma", "pr", "re"];
+const defaultCareerDecoration = "/malharrooficial/images/Personaje_DisenoGrafico_C.svg";
+
 export default async function Page() {
-  const [sixtyHeadingData, sixtyBodyData] = await Promise.all([
+  const [sixtyHeadingData, sixtyBodyData, careersData] = await Promise.all([
     fetchSiteText("home_60_heading"),
     fetchSiteText("home_60_body"),
+    fetchCareers(),
   ]);
 
   const sixtyHeading = sixtyHeadingData?.contenido || sixtyHeadingData?.titulo || "60 años formando profesionales";
   const sixtyBody = sixtyBodyData?.contenido || sixtyBodyData?.titulo || "";
+
+  const rawCareers = Array.isArray(careersData?.data?.items) ? careersData.data.items : [];
+  const baseCareers = rawCareers.length ? rawCareers : defaultCareerVisuals;
+  const careers = baseCareers.map((career, index) => {
+    const preset =
+      defaultCareerVisuals.find((item) => item.id === career.id) || defaultCareerVisuals[index] || defaultCareerVisuals[0];
+    const accent = career.accent || preset?.accent || defaultCareerAccentOrder[index % defaultCareerAccentOrder.length];
+    const decoration = career.decoration || preset?.decoration || defaultCareerDecoration;
+    return {
+      ...preset,
+      ...career,
+      accent,
+      decoration,
+    };
+  });
 
   return (
     <div className="malharro-home">
@@ -107,13 +184,19 @@ export default async function Page() {
               </div>
               <div className="col-12 px-0">
                 <div className="accordion" id="accordionCarreras">
-                  {["Diseño Gráfico", "Escenografía", "Fotografía", "Ilustración", "Medios Audiovisuales", "Profesorado", "Realizador en AV"].map((career, index) => {
-                    const slug = career.toLowerCase().replace(/\s+/g, "-");
-                    const collapseId = `collapse-${slug}`;
-                    const headingId = `heading-${slug}`;
-                    const accent = ["dg", "es", "fo", "il", "ma", "pr", "re"][index] || "dg";
+                  {careers.map((career, index) => {
+                    const slug = (career.id || career.name || `career-${index}`)
+                      .toString()
+                      .toLowerCase()
+                      .replace(/[^a-z0-9]+/g, "-")
+                      .replace(/^-+|-+$/g, "");
+                    const collapseId = `collapse-${slug || index}`;
+                    const headingId = `heading-${slug || index}`;
+                    const accent = career.accent || defaultCareerAccentOrder[index % defaultCareerAccentOrder.length] || "dg";
+                    const pdfUrl = career.pdfUrl ? asset(career.pdfUrl) : "";
+                    const hasPdf = Boolean(pdfUrl);
                     return (
-                      <div key={slug} className={`accordion-item custom-accordion-item ${accent}`}>
+                      <div key={career.id || slug || index} className={`accordion-item custom-accordion-item ${accent}`}>
                         <h2 className="accordion-header" id={headingId}>
                           <button
                             className="accordion-button custom-accordion-btn collapsed"
@@ -123,7 +206,7 @@ export default async function Page() {
                             aria-expanded="false"
                             aria-controls={collapseId}
                           >
-                            <span>{career}</span>
+                            <span>{career.name || career.title || "Carrera"}</span>
                             <img src={asset("/malharrooficial/images/Icon_DesplegarMenu.svg")} className="accordion-icon" alt="Icono desplegar" />
                           </button>
                         </h2>
@@ -132,10 +215,16 @@ export default async function Page() {
                             <p className="mb-4">
                               Información detallada disponible próximamente.
                             </p>
-                            <a href="#" className={`btn btn-sabermas-${accent}`}>
+                            <a
+                              href={hasPdf ? pdfUrl : undefined}
+                              className={`btn btn-sabermas-${accent}`}
+                              target={hasPdf ? "_blank" : undefined}
+                              rel={hasPdf ? "noreferrer" : undefined}
+                              aria-disabled={hasPdf ? undefined : true}
+                            >
                               Saber más
                             </a>
-                            <img src={asset("/malharrooficial/images/Personaje_DisenoGrafico_C.svg")} className="decorativo" alt="" aria-hidden="true" />
+                            <img src={asset(career.decoration)} className="decorativo" alt="" aria-hidden="true" />
                           </div>
                         </div>
                       </div>
