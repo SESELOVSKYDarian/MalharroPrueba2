@@ -1,17 +1,19 @@
 import express from "express";
 import { authenticate } from "../middleware/auth.js";
-import { query } from "../db.js";
+import {
+  getFaqs,
+  getNextFaqPosition,
+  createFaq,
+  updateFaq,
+  deleteFaq,
+} from "../services/dataStore.js";
 
 const router = express.Router();
 
 router.get("/", async (_req, res) => {
   try {
-    const { rows } = await query(
-      `SELECT id, question, answer, position, tags
-       FROM faqs
-       ORDER BY position ASC, id ASC`
-    );
-    return res.json({ items: rows });
+    const items = await getFaqs();
+    return res.json({ items });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "No se pudieron obtener las preguntas frecuentes" });
@@ -39,18 +41,17 @@ router.post("/", authenticate, async (req, res) => {
   try {
     let finalPosition = Number.isFinite(Number(position)) ? Number(position) : null;
     if (finalPosition === null) {
-      const { rows } = await query(`SELECT COALESCE(MAX(position), 0) + 1 AS next FROM faqs`);
-      finalPosition = Number(rows[0]?.next || 1);
+      finalPosition = await getNextFaqPosition();
     }
 
-    const { rows } = await query(
-      `INSERT INTO faqs (question, answer, position, tags)
-       VALUES ($1, $2, $3, $4)
-       RETURNING id, question, answer, position, tags`,
-      [question.trim(), answer.trim(), finalPosition, normalizedTags]
-    );
+    const created = await createFaq({
+      question: question.trim(),
+      answer: answer.trim(),
+      position: finalPosition,
+      tags: normalizedTags,
+    });
 
-    return res.status(201).json(rows[0]);
+    return res.status(201).json(created);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "No se pudo crear la pregunta frecuente" });
@@ -65,24 +66,20 @@ router.put("/:id", authenticate, async (req, res) => {
     return res.status(400).json({ message: "No hay cambios para aplicar" });
   }
 
-  const updates = [];
-  const values = [];
+  const updatePayload = {};
 
   if (typeof question === "string") {
-    updates.push(`question = $${updates.length + 1}`);
-    values.push(question.trim());
+    updatePayload.question = question.trim();
   }
 
   if (typeof answer === "string") {
-    updates.push(`answer = $${updates.length + 1}`);
-    values.push(answer.trim());
+    updatePayload.answer = answer.trim();
   }
 
   if (typeof position !== "undefined") {
     const parsed = Number(position);
     if (Number.isFinite(parsed)) {
-      updates.push(`position = $${updates.length + 1}`);
-      values.push(parsed);
+      updatePayload.position = parsed;
     }
   }
 
@@ -94,26 +91,15 @@ router.put("/:id", authenticate, async (req, res) => {
     if (!normalizedTags.length) {
       return res.status(400).json({ message: "Agregá al menos una etiqueta" });
     }
-    updates.push(`tags = $${updates.length + 1}`);
-    values.push(normalizedTags);
+    updatePayload.tags = normalizedTags;
   }
 
-  if (!updates.length) {
+  if (!Object.keys(updatePayload).length) {
     return res.status(400).json({ message: "No hay cambios para aplicar" });
   }
 
-  values.push(id);
-
   try {
-    const { rows } = await query(
-      `UPDATE faqs
-       SET ${updates.join(", ")}
-       WHERE id = $${updates.length + 1}
-       RETURNING id, question, answer, position, tags`,
-      values
-    );
-
-    const item = rows[0];
+    const item = await updateFaq(id, updatePayload);
     if (!item) {
       return res.status(404).json({ message: "Pregunta frecuente no encontrada" });
     }
@@ -128,8 +114,8 @@ router.put("/:id", authenticate, async (req, res) => {
 router.delete("/:id", authenticate, async (req, res) => {
   const { id } = req.params;
   try {
-    const { rowCount } = await query(`DELETE FROM faqs WHERE id = $1`, [id]);
-    if (!rowCount) {
+    const removed = await deleteFaq(id);
+    if (!removed) {
       return res.status(404).json({ message: "Pregunta frecuente no encontrada" });
     }
     return res.json({ message: "Pregunta frecuente eliminada" });
