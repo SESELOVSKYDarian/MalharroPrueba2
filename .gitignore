@@ -1,6 +1,8 @@
 node_modules/
 .next/
 .env*
+!backend/.env.example
+backend/uploads/
 .DS_Store
 npm-debug.log*
 *.log
