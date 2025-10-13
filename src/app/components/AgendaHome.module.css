@@ -1,0 +1,295 @@
+.section {
+  background: linear-gradient(180deg, #1b1a1d 0%, #111016 100%);
+  color: #fff;
+  padding: clamp(3rem, 6vw, 5rem) 1.25rem clamp(3.5rem, 7vw, 6rem);
+  position: relative;
+  overflow: hidden;
+}
+
+.inner {
+  width: min(1140px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 3rem);
+}
+
+.header {
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.kicker {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  font-weight: 600;
+  color: #ffd966;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  line-height: 1.05;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.slider {
+  position: relative;
+}
+
+.cardsTrack {
+  --agenda-columns: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--agenda-columns), minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 1.75rem);
+  align-items: stretch;
+  transition: opacity 0.3s ease;
+}
+
+.card {
+  border-radius: 22px;
+  overflow: hidden;
+  background: #fff;
+  color: #1c1630;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.28);
+}
+
+.cardImage {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.cardPlaceholder {
+  height: 220px;
+  background: linear-gradient(135deg, #f8f0ff, #e8ddff);
+  color: #5c2d91;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cardBody {
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  flex: 1;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.dateBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 70px;
+  padding: 0.55rem 0.9rem;
+  border-radius: 18px;
+  background: linear-gradient(160deg, #ff2d6d, #ff78a8);
+  color: #fff;
+  box-shadow: 0 12px 26px rgba(255, 45, 109, 0.28);
+}
+
+.dateMonth {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.dateDay {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: flex-end;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(92, 45, 145, 0.15);
+  color: #5c2d91;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #211538;
+}
+
+.cardDate {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #5c2d91;
+  text-transform: capitalize;
+}
+
+.cardSummary {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #3a2f57;
+}
+
+.emptyState {
+  padding: 2.75rem 2rem;
+  border-radius: 18px;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  text-align: center;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.ctaRow {
+  display: flex;
+  justify-content: center;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 2.5rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff2d6d, #ff7aa8);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  box-shadow: 0 22px 46px rgba(255, 45, 109, 0.38);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: none;
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 26px 52px rgba(255, 45, 109, 0.48);
+}
+
+.navButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(15, 15, 22, 0.8);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.navButton:hover {
+  background: #ff2d6d;
+}
+
+.navButtonLeft {
+  left: -0.75rem;
+}
+
+.navButtonRight {
+  right: -0.75rem;
+}
+
+.navIcon {
+  width: 20px;
+  height: 20px;
+  filter: invert(1);
+}
+
+.navIconLeft {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 1023px) {
+  .cardsTrack {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .navButtonLeft {
+    left: 0.75rem;
+  }
+
+  .navButtonRight {
+    right: 0.75rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .section {
+    padding: 2.5rem 1rem 3.5rem;
+  }
+
+  .inner {
+    gap: 2.25rem;
+  }
+
+  .header {
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .cardBody {
+    padding: 1.5rem;
+  }
+
+  .cardImage,
+  .cardPlaceholder {
+    height: 260px;
+  }
+
+  .navButton {
+    width: 44px;
+    height: 44px;
+  }
+
+  .navButtonLeft {
+    left: 0.5rem;
+  }
+
+  .navButtonRight {
+    right: 0.5rem;
+  }
+}
+

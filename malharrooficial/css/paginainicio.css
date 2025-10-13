@@ -203,10 +203,41 @@ padding-bottom: 8px;}
 
 /* ================= CONTENEDOR NEGRO ================= */
 .contenedor-negro{
-  width: 100vw;
-  height: 1020px;
-  background-color: #1B1B1B;
-  clip-path: ellipse(100% 50% at 50% 50%);
+  position: relative;
+  width: 100%;
+  background: #111016;
+  padding: clamp(4rem, 6vw, 7rem) 0;
+  overflow: visible;
+}
+
+.contenedor-negro::before,
+.contenedor-negro::after{
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 140%;
+  height: 180px;
+  transform: translateX(-50%);
+  background: #f3f3f3;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.contenedor-negro::before{
+  top: -150px;
+  border-bottom-left-radius: 50% 70%;
+  border-bottom-right-radius: 50% 70%;
+}
+
+.contenedor-negro::after{
+  bottom: -150px;
+  border-top-left-radius: 50% 70%;
+  border-top-right-radius: 50% 70%;
+}
+
+.contenedor-negro > *{
+  position: relative;
+  z-index: 1;
 }
 
 /* ================= INICIO DESPLEGABLES ================= */

@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { API_URL } from "../config";
+import styles from "./AgendaHome.module.css";
+
+const DEFAULT_CTA_LABEL = "Ver agenda completa";
+const DEFAULT_CTA_URL = "/agenda";
+const AUTO_SLIDE_INTERVAL = 6000;
 
 const asset = (path) => {
   if (!path) return "";
@@ -10,9 +16,9 @@ const asset = (path) => {
   return `${base}${path}`;
 };
 
-const formatDate = (dateString) => {
-  if (!dateString) return { month: "", day: "" };
-  const date = new Date(dateString);
+const formatDateParts = (value) => {
+  if (!value) return { month: "", day: "" };
+  const date = new Date(value);
   if (Number.isNaN(date.getTime())) return { month: "", day: "" };
   return {
     month: date.toLocaleString("es-AR", { month: "short" }).replace(/\.$/, ""),
@@ -20,12 +26,74 @@ const formatDate = (dateString) => {
   };
 };
 
+const formatLongDate = (value) => {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return new Intl.DateTimeFormat("es-AR", {
+    weekday: "short",
+    day: "2-digit",
+    month: "long",
+  }).format(date);
+};
+
+const summarizeHtml = (html) => {
+  if (!html) return "";
+  const text = html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  if (text.length <= 160) return text;
+  return `${text.slice(0, 157)}...`;
+};
+
+const prioritizeEvents = (items) => {
+  if (!Array.isArray(items)) return [];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const upcoming = [];
+  const past = [];
+  const undated = [];
+
+  items.forEach((item) => {
+    if (!item.fecha) {
+      undated.push(item);
+      return;
+    }
+
+    const parsed = new Date(item.fecha);
+    if (Number.isNaN(parsed.getTime())) {
+      undated.push(item);
+      return;
+    }
+
+    if (parsed >= today) {
+      upcoming.push({ item, date: parsed });
+    } else {
+      past.push({ item, date: parsed });
+    }
+  });
+
+  upcoming.sort((a, b) => a.date - b.date);
+  past.sort((a, b) => b.date - a.date); // most recent past first
+  undated.sort((a, b) => (a.titulo || "").localeCompare(b.titulo || "", "es"));
+
+  const ordered = upcoming.map((entry) => entry.item);
+
+  if (!ordered.length) {
+    ordered.push(...past.map((entry) => entry.item));
+  } else if (ordered.length < 6) {
+    ordered.push(...past.map((entry) => entry.item));
+  }
+
+  ordered.push(...undated);
+  return ordered;
+};
+
 export default function Agenda() {
   const [events, setEvents] = useState([]);
-  const [cursor, setCursor] = useState(0);
-  const [ctaLabel, setCtaLabel] = useState("Ver agenda completa");
-  const [ctaUrl, setCtaUrl] = useState("#");
-  const [slidesPerView, setSlidesPerView] = useState(3);
+  const [ctaLabel, setCtaLabel] = useState(DEFAULT_CTA_LABEL);
+  const [ctaUrl, setCtaUrl] = useState(DEFAULT_CTA_URL);
+  const [slidesPerView, setSlidesPerView] = useState(1);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const touchStartRef = useRef(null);
 
   useEffect(() => {
@@ -52,18 +120,21 @@ export default function Agenda() {
 
         if (labelResponse.ok) {
           const labelData = await labelResponse.json();
-          setCtaLabel(labelData.contenido || labelData.titulo || "Ver agenda completa");
+          const label = typeof labelData.contenido === "string" ? labelData.contenido.trim() : "";
+          const fallback = typeof labelData.titulo === "string" ? labelData.titulo.trim() : "";
+          setCtaLabel(label || fallback || DEFAULT_CTA_LABEL);
         }
 
         if (urlResponse.ok) {
           const urlData = await urlResponse.json();
-          setCtaUrl(urlData.contenido || "#");
+          const value = typeof urlData.contenido === "string" ? urlData.contenido.trim() : "";
+          setCtaUrl(value || DEFAULT_CTA_URL);
         }
       } catch (error) {
         console.error(error);
         setEvents([]);
-        setCtaLabel("Ver agenda completa");
-        setCtaUrl("#");
+        setCtaLabel(DEFAULT_CTA_LABEL);
+        setCtaUrl(DEFAULT_CTA_URL);
       }
     }
 
@@ -76,7 +147,7 @@ export default function Agenda() {
     const calculateSlides = () => {
       const width = window.innerWidth;
       if (width >= 1200) return 3;
-      if (width >= 768) return 2;
+      if (width >= 900) return 2;
       return 1;
     };
 
@@ -89,60 +160,71 @@ export default function Agenda() {
     return () => window.removeEventListener("resize", updateSlides);
   }, []);
 
-  useEffect(() => {
-    setCursor((previous) => {
-      if (!events.length) return 0;
-      const normalized = ((previous % events.length) + events.length) % events.length;
-      if (events.length <= slidesPerView) {
-        return 0;
-      }
-      return normalized;
-    });
-  }, [events.length, slidesPerView]);
+  const carouselEvents = useMemo(() => prioritizeEvents(events), [events]);
+  const total = carouselEvents.length;
+  const effectiveColumns = Math.min(slidesPerView, total || 1);
+  const canNavigate = total > effectiveColumns;
 
-  const sliderColumns = Math.max(1, Math.min(slidesPerView, events.length || 1));
+  useEffect(() => {
+    if (!total) {
+      setCurrentIndex(0);
+      return;
+    }
+    setCurrentIndex((prev) => {
+      const normalized = ((prev % total) + total) % total;
+      return canNavigate ? normalized : 0;
+    });
+  }, [total, canNavigate]);
+
+  useEffect(() => {
+    if (!canNavigate) return undefined;
+    const id = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % total);
+    }, AUTO_SLIDE_INTERVAL);
+    return () => clearInterval(id);
+  }, [canNavigate, total]);
 
   const visibleEvents = useMemo(() => {
-    if (!events.length) return [];
-    if (events.length <= sliderColumns) return events;
-    const result = [];
-    for (let i = 0; i < sliderColumns; i += 1) {
-      result.push(events[(cursor + i) % events.length]);
+    if (!total) return [];
+    if (!canNavigate) {
+      return carouselEvents.slice(0, effectiveColumns);
     }
-    return result;
-  }, [events, cursor, sliderColumns]);
+    const items = [];
+    for (let i = 0; i < effectiveColumns; i += 1) {
+      items.push(carouselEvents[(currentIndex + i) % total]);
+    }
+    return items;
+  }, [carouselEvents, currentIndex, effectiveColumns, canNavigate, total]);
 
-  if (!events.length) {
-    return null;
-  }
+  const arrowIcon = asset("/malharrooficial/images/Icon_Agenda_Actualizado.svg");
+  const trackStyle = { "--agenda-columns": `${Math.max(1, effectiveColumns)}` };
+  const isExternalCta = /^https?:/i.test(ctaUrl || "");
 
-  const showControls = events.length > sliderColumns;
-
-  const goNext = () => {
-    if (!showControls) return;
-    setCursor((prev) => (prev + 1) % events.length);
+  const handlePrev = () => {
+    if (!canNavigate) return;
+    setCurrentIndex((prev) => (prev - 1 + total) % total);
   };
 
-  const goPrev = () => {
-    if (!showControls) return;
-    setCursor((prev) => (prev - 1 + events.length) % events.length);
+  const handleNext = () => {
+    if (!canNavigate) return;
+    setCurrentIndex((prev) => (prev + 1) % total);
   };
 
   const handleTouchStart = (event) => {
-    if (!showControls) return;
+    if (!canNavigate || slidesPerView !== 1) return;
     touchStartRef.current = event.touches?.[0]?.clientX ?? null;
   };
 
   const handleTouchMove = (event) => {
-    if (!showControls) return;
+    if (!canNavigate || slidesPerView !== 1) return;
     if (touchStartRef.current === null) return;
     const currentX = event.touches?.[0]?.clientX ?? 0;
     const delta = currentX - touchStartRef.current;
-    if (Math.abs(delta) > 40) {
+    if (Math.abs(delta) > 45) {
       if (delta > 0) {
-        goPrev();
+        handlePrev();
       } else {
-        goNext();
+        handleNext();
       }
       touchStartRef.current = null;
     }
@@ -153,129 +235,108 @@ export default function Agenda() {
   };
 
   return (
-    <div className="agenda-container">
-      <div className="container-fluid espaciado-vertical">
-        <div className="row justify-content-center text-center">
-          <div className="col-12">
-            <h1 className="agenda-titulo h1-titulob">Agenda</h1>
-            <p className="agenda-subtitulo p1-r">
-              Descubrí los eventos, mesas de exámenes y jornadas que tenés este año.
-            </p>
-          </div>
+    <section className={styles.section} aria-labelledby="agenda-home-heading">
+      <div className={styles.inner}>
+        <div className={styles.header}>
+          <span className={styles.kicker}>Agenda</span>
+          <h2 id="agenda-home-heading" className={styles.title}>
+            Un vistazo a los proximos encuentros
+          </h2>
+          <p className={styles.subtitle}>
+            Descubri los eventos, mesas de examenes y jornadas que tenes este ano.
+          </p>
         </div>
-      </div>
 
-      <div className="row justify-content-center">
-        <div className="col-12">
-          <div className={`agenda-wrapper ${showControls ? "" : "controls-hidden"}`}>
-            {showControls && (
-              <button className="agenda-btn left-btn" type="button" onClick={goPrev} aria-label="Anterior">
-                <img src={asset("/malharrooficial/images/Icon_Agenda_Actualizado.svg")} alt="Anterior" />
+        <div
+          className={styles.slider}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
+        >
+          {canNavigate ? (
+            <>
+              <button
+                type="button"
+                className={`${styles.navButton} ${styles.navButtonLeft}`}
+                onClick={handlePrev}
+                aria-label="Evento anterior"
+              >
+                {arrowIcon ? <img src={arrowIcon} alt="Anterior" className={`${styles.navIcon} ${styles.navIconLeft}`} /> : <span>{"<"}</span>}
               </button>
-            )}
-
-            {showControls && (
-              <button className="agenda-btn right-btn" type="button" onClick={goNext} aria-label="Siguiente">
-                <img src={asset("/malharrooficial/images/Icon_Agenda_Actualizado.svg")} alt="Siguiente" />
+              <button
+                type="button"
+                className={`${styles.navButton} ${styles.navButtonRight}`}
+                onClick={handleNext}
+                aria-label="Evento siguiente"
+              >
+                {arrowIcon ? <img src={arrowIcon} alt="Siguiente" className={styles.navIcon} /> : <span>{">"}</span>}
               </button>
-            )}
-          </div>
+            </>
+          ) : null}
 
-          <div
-            className="agenda-grid responsive-slider"
-            style={{ "--agenda-slides": sliderColumns.toString() }}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            onTouchCancel={handleTouchEnd}
-          >
-            {visibleEvents.map((event) => {
-              const { month, day } = formatDate(event.fecha);
-              return (
-                <div key={event.id} className="agenda-card active">
-                  <img className="agenda-image" src={asset(event.imageUrl)} alt={event.titulo} />
-                  <div className="agenda-tags">
-                    {(event.tags || []).map((tag, tagIndex) => (
-                      <span key={`${event.id}-${tagIndex}`} className="agenda-tag p14-etiqueta-agenda">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="agenda-info d-flex">
-                    <div className="agenda-date text-center">
-                      <p className="agenda-mes p11-mes-agenda-light">{month}</p>
-                      <p className="agenda-dia p12-dia-agenda-light">{day}</p>
+          {visibleEvents.length ? (
+            <div className={styles.cardsTrack} style={trackStyle}>
+              {visibleEvents.map((event) => {
+                const dateParts = formatDateParts(event.fecha);
+                const humanDate = formatLongDate(event.fecha);
+                const plainDescription = summarizeHtml(event.descripcion);
+                const summary = plainDescription
+                  ? `${plainDescription.charAt(0).toUpperCase()}${plainDescription.slice(1)}`
+                  : "";
+
+                return (
+                  <article key={event.id} className={styles.card}>
+                    {event.imageUrl ? (
+                      <img className={styles.cardImage} src={asset(event.imageUrl)} alt={event.titulo} />
+                    ) : (
+                      <div className={styles.cardPlaceholder} aria-hidden="true">
+                        <span>Sin imagen</span>
+                      </div>
+                    )}
+
+                    <div className={styles.cardBody}>
+                      <div className={styles.cardHeader}>
+                        <div className={styles.dateBadge}>
+                          <span className={styles.dateMonth}>{dateParts.month}</span>
+                          <span className={styles.dateDay}>{dateParts.day}</span>
+                        </div>
+                        <div className={styles.tagList}>
+                          {(event.tags || []).map((tag, index) => (
+                            <span key={`${event.id}-tag-${index}`} className={styles.tag}>
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <h3 className={styles.cardTitle}>{event.titulo || "Evento sin titulo"}</h3>
+                      {humanDate ? <p className={styles.cardDate}>{humanDate}</p> : null}
+                      {summary ? <p className={styles.cardSummary}>{summary}</p> : null}
                     </div>
-                    <div className="agenda-divider" aria-hidden="true"></div>
-                    <div className="agenda-texto">
-                      <p className="p13-texto-agenda-light" dangerouslySetInnerHTML={{ __html: event.descripcion || event.titulo }}></p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="d-flex justify-content-center mt-3">
-            <a
-              className="btn-agenda01"
-              href={ctaUrl || "#"}
-              target={ctaUrl && /^https?:/i.test(ctaUrl) ? "_blank" : undefined}
-              rel={ctaUrl && /^https?:/i.test(ctaUrl) ? "noreferrer" : undefined}
-            >
-              {ctaLabel}
+                  </article>
+                );
+              })}
+            </div>
+          ) : (
+            <div className={styles.emptyState}>
+              <p>No hay eventos publicados por el momento. Vuelve pronto para descubrir nuevas actividades.</p>
+            </div>
+          )}
+        </div>
+
+        <div className={styles.ctaRow}>
+          {isExternalCta ? (
+            <a href={ctaUrl || DEFAULT_CTA_URL} className={styles.ctaButton} target="_blank" rel="noreferrer">
+              {ctaLabel || DEFAULT_CTA_LABEL}
             </a>
-          </div>
+          ) : (
+            <Link href={ctaUrl || DEFAULT_CTA_URL} className={styles.ctaButton}>
+              {ctaLabel || DEFAULT_CTA_LABEL}
+            </Link>
+          )}
         </div>
       </div>
-      <style jsx>{`
-        :global(.agenda-wrapper.controls-hidden .agenda-btn) {
-          display: none;
-        }
-
-        :global(.agenda-grid.responsive-slider) {
-          --agenda-slides: 3;
-          display: grid;
-          grid-template-columns: repeat(var(--agenda-slides), minmax(0, 1fr));
-          gap: 24px;
-          position: relative;
-        }
-
-        :global(.agenda-grid.responsive-slider .agenda-card) {
-          margin-top: 0;
-        }
-
-        @media (max-width: 1199.98px) {
-          :global(.agenda-grid.responsive-slider) {
-            display: flex;
-            overflow: hidden;
-            gap: 0;
-            scroll-behavior: smooth;
-            scroll-snap-type: x mandatory;
-          }
-
-          :global(.agenda-grid.responsive-slider .agenda-card) {
-            flex: 0 0 calc(100% / var(--agenda-slides));
-            max-width: calc(100% / var(--agenda-slides));
-            display: block;
-            scroll-snap-align: center;
-          }
-
-          :global(.agenda-wrapper.controls-hidden) {
-            display: none;
-          }
-        }
-
-        @media (max-width: 767.98px) {
-          :global(.agenda-grid.responsive-slider) {
-            gap: 0;
-          }
-
-          :global(.agenda-grid.responsive-slider .agenda-card) {
-            flex-basis: 100%;
-            max-width: 100%;
-          }
-        }
-      `}</style>
-    </div>
+    </section>
   );
 }

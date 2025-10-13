@@ -13,6 +13,16 @@ const withAssetBase = (path) => {
   return `${base}${path}`;
 };
 
+const resolveUrl = (entry) => {
+  if (!entry) return "#";
+  const url = entry.url;
+  if (entry.id === "agenda" && (!url || url === "#")) {
+    return "/agenda";
+  }
+  if (!url) return "#";
+  return url;
+};
+
 export default function Navbar() {
   const [navbar, setNavbar] = useState(null);
   const [error, setError] = useState(null);
@@ -114,7 +124,7 @@ export default function Navbar() {
                       <ul className="dropdown-menu">
                         {item.items?.map((option) => (
                           <li key={option.id}>
-                            <a className="dropdown-item" href={option.url || "#"}>
+                            <a className="dropdown-item" href={resolveUrl(option)}>
                               {option.label}
                             </a>
                           </li>
@@ -122,7 +132,7 @@ export default function Navbar() {
                       </ul>
                     </>
                   ) : (
-                    <a className="nav-link" href={item.url || "#"}>
+                    <a className="nav-link" href={resolveUrl(item)}>
                       {item.label}
                     </a>
                   )}
@@ -131,7 +141,7 @@ export default function Navbar() {
 
               {navbar.links?.map((link) => (
                 <li key={link.id} className="nav-item list">
-                  <a className={`nav-link ${link.highlight ? "navtext" : ""}`} href={link.url || "#"}>
+                  <a className={`nav-link ${link.highlight ? "navtext" : ""}`} href={resolveUrl(link)}>
                     {link.label}
                   </a>
                 </li>

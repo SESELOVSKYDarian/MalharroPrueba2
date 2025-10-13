@@ -96,13 +96,16 @@ export default function Footer() {
           <div className="row">
             <div className="col-12">
               <div className="row g-2 footer-links justify-content-left">
-                {footer.quickLinks?.map((link) => (
-                  <div key={link.id} className="col-auto">
-                    <a href={link.url || "#"} className="footer-link">
-                      {link.label}
-                    </a>
-                  </div>
-                ))}
+                {footer.quickLinks?.map((link) => {
+                  const href = link?.id === "agenda" && (!link.url || link.url === "#") ? "/agenda" : link.url || "#";
+                  return (
+                    <div key={link.id} className="col-auto">
+                      <a href={href} className="footer-link">
+                        {link.label}
+                      </a>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
