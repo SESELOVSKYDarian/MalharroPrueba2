@@ -207,7 +207,7 @@ export default async function Page() {
                             aria-controls={collapseId}
                           >
                             <span>{career.name || career.title || "Carrera"}</span>
-                            <img src={asset( "/malharrooficial/images/Icon_DesplegarMenu.svg")} className="accordion-icon" alt="Icono desplegar" />
+                            <img src={asset("/malharrooficial/images/Icon_DesplegarMenu.svg")} className="accordion-icon" alt="Icono desplegar" />
                           </button>
                         </h2>
                         <div id={collapseId} className="accordion-collapse collapse" aria-labelledby={headingId} data-bs-parent="#accordionCarreras">
