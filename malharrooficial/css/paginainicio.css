@@ -227,7 +227,7 @@
 /*.nosotros{ 
 }*/
 /*PROBAR LUEGO*/
-/* fin acerca de malharro*/
+/* fin acerca de malharro*/
 
 /* ================= CONTENEDOR NEGRO ================= */
 .contenedor-negro {
@@ -266,13 +266,24 @@
 .contenedor-negro > * {
   position: relative;
   z-index: 1;
+  width: 100vw;
+  min-height: 1020px;
+  background-color: #1b1b1b;
+  clip-path: ellipse(100% 50% at 50% 50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
 }
 
 /* ================= INICIO DESPLEGABLES ================= */
 .carrerastitulo {
-  margin-top: 64px;
-  margin-left: 24px;
+  margin-top: 24px;
+  margin-bottom: 32px;
   color: #ffffff;
+  text-align: center;
+  width: 100%;
 }
 
 /* Reseteo Bootstrap */
@@ -496,12 +507,19 @@ custom-accordion-body
   text-align: left;
   margin: 14px;
   color: #ffffff; /* color institucional */
+  text-align: center;
+  margin: 40px 14px 14px;
+  color: #ffffff;
+  width: 100%;
 }
 
 .agenda-subtitulo {
   margin: 14px;
   text-align: left;
   color: #ffffff; /*color de texto*/
+  text-align: center;
+  color: #ffffff;
+  width: 100%;
 }
 
 .agenda-wrapper {
@@ -527,7 +545,7 @@ custom-accordion-body
 .agenda-btn {
   /*flechas*/
   width: 48px;
-  height: 48px; /*tama;o de boton de flecha*/
+  height: 48px; /*tamaño de boton de flecha*/
   display: flex;
   align-items: center;
   justify-content: center;
@@ -559,13 +577,16 @@ custom-accordion-body
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   gap: 15px;
-  margin-left: 0%;
-  margin-right: 0%;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 20px;
 }
 
 .agenda-image {
   /*imagende evento*/
+  /*imagen de evento*/
   width: 100%; /*relacion 4/5 el ancho es 257 px*/
   aspect-ratio: 4 / 5;
   object-fit: cover;
@@ -672,6 +693,9 @@ custom-accordion-body
 .titulo-prof {
   padding: 24px;
 }
+.titulo-prof {
+  padding: 24px;
+}
 .texto-prof {
   padding: 24px;
 }
@@ -680,24 +704,41 @@ custom-accordion-body
 /* ================= INICIO nuestros estudiantes ================= */
 .nuestros-estudiantes {
   width: 100vw;
-  height: 818px;
+  min-height: 818px;
   background-color: #111;
   clip-path: ellipse(100% 50% at 50% 50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
 }
 
 .estudiantes-titulo {
   margin-top: 64px;
+  margin-top: 24px;
+  margin-bottom: 20px;
   color: #ffffff;
-  margin-left: 24px;
+  text-align: center;
+  width: 100%;
 }
 
 .estudiantes-parrafo {
   margin-left: 24px;
   color: white;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 40px;
 }
 
 .galeria {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(167px, 1fr));
+  gap: 12px;
+  justify-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .galeria-img {
