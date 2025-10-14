@@ -14,11 +14,15 @@ const asset = (path) => {
   return `${base}${path}`;
 };
 
-const apiBase = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000").replace(/\/$/, "");
+const apiBase = (
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
+).replace(/\/$/, "");
 
 async function fetchSiteText(slug) {
   try {
-    const response = await fetch(`${apiBase}/api/texts/${slug}`, { cache: "no-store" });
+    const response = await fetch(`${apiBase}/api/texts/${slug}`, {
+      cache: "no-store",
+    });
     if (!response.ok) {
       return null;
     }
@@ -31,7 +35,9 @@ async function fetchSiteText(slug) {
 
 async function fetchCareers() {
   try {
-    const response = await fetch(`${apiBase}/api/sections/careers`, { cache: "no-store" });
+    const response = await fetch(`${apiBase}/api/sections/careers`, {
+      cache: "no-store",
+    });
     if (!response.ok) {
       return null;
     }
@@ -53,7 +59,7 @@ const defaultCareerVisuals = [
     id: "escenografia",
     name: "Escenografía",
     accent: "es",
-    decoration: "/malharrooficial/images/Personaje_DisenoGrafico_C.svg",
+    decoration: "/malharrooficial/images/pj_escenografia.png",
   },
   {
     id: "fotografia",
@@ -88,7 +94,8 @@ const defaultCareerVisuals = [
 ];
 
 const defaultCareerAccentOrder = ["dg", "es", "fo", "il", "ma", "pr", "re"];
-const defaultCareerDecoration = "/malharrooficial/images/Personaje_DisenoGrafico_C.svg";
+const defaultCareerDecoration =
+  "/malharrooficial/images/Personaje_DisenoGrafico_C.svg";
 
 export default async function Page() {
   const [sixtyHeadingData, sixtyBodyData, careersData] = await Promise.all([
@@ -97,16 +104,27 @@ export default async function Page() {
     fetchCareers(),
   ]);
 
-  const sixtyHeading = sixtyHeadingData?.contenido || sixtyHeadingData?.titulo || "60 años formando profesionales";
+  const sixtyHeading =
+    sixtyHeadingData?.contenido ||
+    sixtyHeadingData?.titulo ||
+    "60 años formando profesionales";
   const sixtyBody = sixtyBodyData?.contenido || sixtyBodyData?.titulo || "";
 
-  const rawCareers = Array.isArray(careersData?.data?.items) ? careersData.data.items : [];
+  const rawCareers = Array.isArray(careersData?.data?.items)
+    ? careersData.data.items
+    : [];
   const baseCareers = rawCareers.length ? rawCareers : defaultCareerVisuals;
   const careers = baseCareers.map((career, index) => {
     const preset =
-      defaultCareerVisuals.find((item) => item.id === career.id) || defaultCareerVisuals[index] || defaultCareerVisuals[0];
-    const accent = career.accent || preset?.accent || defaultCareerAccentOrder[index % defaultCareerAccentOrder.length];
-    const decoration = career.decoration || preset?.decoration || defaultCareerDecoration;
+      defaultCareerVisuals.find((item) => item.id === career.id) ||
+      defaultCareerVisuals[index] ||
+      defaultCareerVisuals[0];
+    const accent =
+      career.accent ||
+      preset?.accent ||
+      defaultCareerAccentOrder[index % defaultCareerAccentOrder.length];
+    const decoration =
+      career.decoration || preset?.decoration || defaultCareerDecoration;
     return {
       ...preset,
       ...career,
@@ -131,7 +149,12 @@ export default async function Page() {
               <a href="#carreras" className="btn-bloque btn-carreras">
                 Carreras
               </a>
-              <a href="https://esavmamalharro-bue.infd.edu.ar/aula/acceso.cgi" className="btn-bloque btn-campus" target="_blank" rel="noreferrer">
+              <a
+                href="https://esavmamalharro-bue.infd.edu.ar/aula/acceso.cgi"
+                className="btn-bloque btn-campus"
+                target="_blank"
+                rel="noreferrer"
+              >
                 Campus
               </a>
             </div>
@@ -163,7 +186,13 @@ export default async function Page() {
             </div>
             <div className="nosotros textoacercanostrs col-12 col-md-5">
               <p className="p1-r">
-                Somos una <strong>institución pública en Mar del Plata</strong> comprometida con la formación académica y profesional en el ámbito de las artes visuales. Fomentamos la <strong>creatividad</strong>, el <strong>pensamiento crítico</strong> y la <strong>innovación</strong>, contribuyendo al enriquecimiento cultural y social de nuestra comunidad.
+                Somos una <strong>institución pública en Mar del Plata</strong>{" "}
+                comprometida con la formación académica y profesional en el
+                ámbito de las artes visuales. Fomentamos la{" "}
+                <strong>creatividad</strong>, el{" "}
+                <strong>pensamiento crítico</strong> y la{" "}
+                <strong>innovación</strong>, contribuyendo al enriquecimiento
+                cultural y social de nuestra comunidad.
               </p>
               <div className="d-flex justify-content-start">
                 <a href="#carreras" className="btn btn-sabermas">
@@ -192,11 +221,19 @@ export default async function Page() {
                       .replace(/^-+|-+$/g, "");
                     const collapseId = `collapse-${slug || index}`;
                     const headingId = `heading-${slug || index}`;
-                    const accent = career.accent || defaultCareerAccentOrder[index % defaultCareerAccentOrder.length] || "dg";
+                    const accent =
+                      career.accent ||
+                      defaultCareerAccentOrder[
+                        index % defaultCareerAccentOrder.length
+                      ] ||
+                      "dg";
                     const pdfUrl = career.pdfUrl ? asset(career.pdfUrl) : "";
                     const hasPdf = Boolean(pdfUrl);
                     return (
-                      <div key={career.id || slug || index} className={`accordion-item custom-accordion-item ${accent}`}>
+                      <div
+                        key={career.id || slug || index}
+                        className={`accordion-item custom-accordion-item ${accent}`}
+                      >
                         <h2 className="accordion-header" id={headingId}>
                           <button
                             className="accordion-button custom-accordion-btn collapsed"
@@ -206,11 +243,24 @@ export default async function Page() {
                             aria-expanded="false"
                             aria-controls={collapseId}
                           >
-                            <span>{career.name || career.title || "Carrera"}</span>
-                            <img src={asset("/malharrooficial/images/Icon_DesplegarMenu.svg")} className="accordion-icon" alt="Icono desplegar" />
+                            <span>
+                              {career.name || career.title || "Carrera"}
+                            </span>
+                            <img
+                              src={asset(
+                                "/malharrooficial/images/Icon_DesplegarMenu.svg"
+                              )}
+                              className="accordion-icon"
+                              alt="Icono desplegar"
+                            />
                           </button>
                         </h2>
-                        <div id={collapseId} className="accordion-collapse collapse" aria-labelledby={headingId} data-bs-parent="#accordionCarreras">
+                        <div
+                          id={collapseId}
+                          className="accordion-collapse collapse"
+                          aria-labelledby={headingId}
+                          data-bs-parent="#accordionCarreras"
+                        >
                           <div className="accordion-body custom-accordion-body">
                             <p className="mb-4">
                               Información detallada disponible próximamente.
@@ -224,7 +274,12 @@ export default async function Page() {
                             >
                               Saber más
                             </a>
-                            <img src={asset(career.decoration)} className="decorativo" alt="" aria-hidden="true" />
+                            <img
+                              src={asset(career.decoration)}
+                              className="decorativo"
+                              alt=""
+                              aria-hidden="true"
+                            />
                           </div>
                         </div>
                       </div>
@@ -240,7 +295,10 @@ export default async function Page() {
           </section>
         </section>
 
-        <section className="container-fluid espaciado-vertical" id="formando-profesionales">
+        <section
+          className="container-fluid espaciado-vertical"
+          id="formando-profesionales"
+        >
           <div className="row">
             <div className="col-md-1" aria-hidden="true"></div>
             <div className="titulo-prof col-12 col-md-5">
