@@ -231,6 +231,41 @@
 
 /* ================= CONTENEDOR NEGRO ================= */
 .contenedor-negro {
+  position: relative;
+  width: 100%;
+  background: #111016;
+  padding: clamp(4rem, 6vw, 7rem) 0;
+  overflow: visible;
+}
+
+.contenedor-negro::before,
+.contenedor-negro::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 140%;
+  height: 180px;
+  transform: translateX(-50%);
+  background: #f3f3f3;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.contenedor-negro::before {
+  top: -150px;
+  border-bottom-left-radius: 50% 70%;
+  border-bottom-right-radius: 50% 70%;
+}
+
+.contenedor-negro::after {
+  bottom: -150px;
+  border-top-left-radius: 50% 70%;
+  border-top-right-radius: 50% 70%;
+}
+
+.contenedor-negro > * {
+  position: relative;
+  z-index: 1;
   width: 100vw;
   min-height: 1020px;
   background-color: #1b1b1b;
@@ -469,6 +504,9 @@ custom-accordion-body
 
 /* ================= INICIO agenda ================= */
 .agenda-titulo {
+  text-align: left;
+  margin: 14px;
+  color: #ffffff; /* color institucional */
   text-align: center;
   margin: 40px 14px 14px;
   color: #ffffff;
@@ -477,6 +515,8 @@ custom-accordion-body
 
 .agenda-subtitulo {
   margin: 14px;
+  text-align: left;
+  color: #ffffff; /*color de texto*/
   text-align: center;
   color: #ffffff;
   width: 100%;
@@ -545,6 +585,7 @@ custom-accordion-body
 }
 
 .agenda-image {
+  /*imagende evento*/
   /*imagen de evento*/
   width: 100%; /*relacion 4/5 el ancho es 257 px*/
   aspect-ratio: 4 / 5;
@@ -646,6 +687,12 @@ custom-accordion-body
 /* ================= FIN agenda ================= */
 
 /* ================= INICIO Formando profesionales ================= */
+.container-fluid .row {
+  padding-top: 100px;
+}
+.titulo-prof {
+  padding: 24px;
+}
 .titulo-prof {
   padding: 24px;
 }
@@ -668,6 +715,7 @@ custom-accordion-body
 }
 
 .estudiantes-titulo {
+  margin-top: 64px;
   margin-top: 24px;
   margin-bottom: 20px;
   color: #ffffff;
@@ -676,6 +724,7 @@ custom-accordion-body
 }
 
 .estudiantes-parrafo {
+  margin-left: 24px;
   color: white;
   text-align: center;
   max-width: 800px;
