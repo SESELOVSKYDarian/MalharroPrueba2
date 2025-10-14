@@ -1,5 +1,5 @@
 .section {
-  background: linear-gradient(180deg, #1b1a1d 0%, #111016 100%);
+  background: #1b1b1b;
   color: #fff;
   padding: clamp(3rem, 6vw, 5rem) 1.25rem clamp(3.5rem, 7vw, 6rem);
   position: relative;
