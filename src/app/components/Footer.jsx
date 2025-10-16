@@ -1,45 +1,58 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { API_URL } from "../config";
 
-const FOOTER_SECTION = "footer";
+// 🔹 Importa todas las imágenes
+import IconSubir from "../../../malharrooficial/images/Icon_SubirFooter.svg";
+import PersonajeDisenador from "../../../malharrooficial/images/Personajes_Diseñador_Grafico.png";
+import LogoMalharro from "../../../malharrooficial/images/Logo_Malharro.svg";
+import IconFacebook from "../../../malharrooficial/images/Icon_Facebook.svg";
+import IconInstagram from "../../../malharrooficial/images/Icon_Instagram.svg";
+import IconX from "../../../malharrooficial/images/Icon_X_Blanca.svg";
+import IconYoutube from "../../../malharrooficial/images/Icon_YT.svg";
+import LogoEducArt from "../../../malharrooficial/images/Logo_Educ_Art.svg";
+import LogoBsAs from "../../../malharrooficial/images/Logo_Direcc_BsAs.svg";
 
-const asset = (path) => {
-  if (!path) return "";
-  if (/^https?:/i.test(path)) return path;
-  const base = (API_URL || "").replace(/\/$/, "");
-  return `${base}${path}`;
-};
+// 🔹 Imágenes aleatorias
+import Profesorado from "../../../malharrooficial/images/profesorado_100_.svg";
+import Realizador from "../../../malharrooficial/images/realizador_30.svg";
+import PersonajeMedios from "../../../malharrooficial/images/Personaje_MediosA.svg";
+import Ilustracion from "../../../malharrooficial/images/Ilustracion_30_.svg";
+import Foto from "../../../malharrooficial/images/foto_100_.svg";
+import Escenografia from "../../../malharrooficial/images/pj_escenografia.png";
 
 export default function Footer() {
-  const [footer, setFooter] = useState(null);
+  const [randomImages, setRandomImages] = useState([]);
 
   useEffect(() => {
-    async function fetchFooter() {
-      try {
-        const response = await fetch(`${API_URL}/api/sections/${FOOTER_SECTION}`, { cache: "no-store" });
-        if (!response.ok) throw new Error("No se pudo cargar el pie de página");
-        const { data } = await response.json();
-        setFooter(data);
-      } catch (error) {
-        console.error(error);
-        setFooter(null);
-      }
-    }
+    const imagenes = [
+      Profesorado,
+      Realizador,
+      PersonajeMedios,
+      Ilustracion,
+      Foto,
+      Escenografia,
+      PersonajeDisenador,
+    ];
 
-    fetchFooter();
+    const seleccionadas = [...imagenes]
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 3);
+    setRandomImages(seleccionadas);
   }, []);
-
-  if (!footer) {
-    return null;
-  }
 
   return (
     <footer className="footer-malharro">
       <div className="footer-forma-curva">
-        <svg viewBox="0 0 360 150" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 0C73 0 146 10 214 30C267 47 316 69 360 95V150H0V0Z" fill="#1B1B1B" />
+        <svg
+          viewBox="0 0 360 150"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 0C73 0 146 10 214 30C267 47 316 69 360 95V150H0V0Z"
+            fill="#1B1B1B"
+          />
         </svg>
       </div>
 
@@ -47,48 +60,116 @@ export default function Footer() {
         <div className="contenido-footer">
           <div className="row align-items-start">
             <div className="footer-scroll text-end mb-3">
-              <a href="#top" className="footer-scroll-btn" aria-label="Ir arriba">
-                <img src={asset(footer.scrollIcon)} alt="Subir" />
+              <a
+                href="#top"
+                className="footer-scroll-btn"
+                aria-label="Ir arriba"
+              >
+                <img src={IconSubir.src} alt="Subir" />
               </a>
             </div>
 
             <div className="col-12 d-md-none text-left">
-              <p className="footer-frase h1-titulor" dangerouslySetInnerHTML={{ __html: footer.phrase }}></p>
+              <p className="footer-frase h1-titulor">
+                Educación <br /> pública con <br /> identidad
+              </p>
               <div>
-                <img src={asset(footer.charactersImage)} alt="Decoración" className="img-fluid" />
+                <img
+                  src={PersonajeDisenador.src}
+                  alt="Decoración"
+                  className="img-fluid"
+                />
               </div>
+
               <div className="logo-campus d-flex align-items-center gap-3">
                 <div>
-                  <img src={asset(footer.logos?.[0]?.src)} alt={footer.logos?.[0]?.alt || "Logo Malharro"} className="footer-campus-logo img-fluid" />
+                  <img
+                    src={LogoMalharro.src}
+                    alt="Logo Malharro"
+                    className="footer-campus-logo img-fluid"
+                  />
                 </div>
                 <div className="footer-campus">
-                  <a href={footer.campus?.url || "#"} className="footer-campus-link" target="_blank" rel="noreferrer">
-                    {footer.campus?.label}
+                  <a
+                    href="https://esavmamalharro-bue.infd.edu.ar/"
+                    className="footer-campus-link"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    CAMPUS
                   </a>
                 </div>
               </div>
             </div>
 
             <div className="col-md-6 d-none d-md-flex align-items-center gap-3">
-              <img src={asset(footer.charactersImage)} alt="" className="img-fluid" style={{ maxHeight: "100px" }} />
-              <p className="footer-frase m-0" dangerouslySetInnerHTML={{ __html: footer.phrase }}></p>
+              <div className="imagenes-aleatorias d-flex gap-2">
+                {randomImages.map((src, i) => (
+                  <img
+                    key={i}
+                    src={src.src}
+                    alt={`Decoración ${i}`}
+                    className="img-fluid"
+                    style={{
+                      height: "100px",
+                      width: "auto",
+                      borderRadius: "10px",
+                    }}
+                  />
+                ))}
+              </div>
+              <p className="footer-frase m-0 text-left">
+                Educación <br /> pública con <br /> identidad
+              </p>
             </div>
 
             <div className="col-md-6 d-none d-md-block text-start">
               <div className="footer-campus mb-3">
-                <a href={footer.campus?.url || "#"} className="footer-campus-link" target="_blank" rel="noreferrer">
-                  {footer.campus?.label}
+                <a
+                  href="https://esavmamalharro-bue.infd.edu.ar/"
+                  className="footer-campus-link"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  CAMPUS
                 </a>
               </div>
               <div>
-                <img src={asset(footer.logos?.[0]?.src)} alt={footer.logos?.[0]?.alt || "Logo Malharro"} className="footer-campus-logo img-fluid" />
+                <img
+                  src={LogoMalharro.src}
+                  alt="Logo Malharro"
+                  className="footer-campus-logo img-fluid"
+                />
               </div>
               <div className="footer-social">
-                {footer.socials?.map((social) => (
-                  <a key={social.id} href={social.url} target="_blank" rel="noreferrer" aria-label={social.label}>
-                    <img src={asset(social.icon)} alt={social.label} />
-                  </a>
-                ))}
+                <a
+                  href="https://www.facebook.com/avmalharro/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={IconFacebook.src} alt="Facebook" />
+                </a>
+                <a
+                  href="https://www.instagram.com/avmartinmalharro/?hl=es"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={IconInstagram.src} alt="Instagram" />
+                </a>
+                <a
+                  href="https://x.com/avmalharro"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={IconX.src} alt="X" />
+                </a>
+                <a
+                  href="https://www.youtube.com/@AVMartinMalharroOK"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={IconYoutube.src} alt="YouTube" />
+                </a>
               </div>
             </div>
           </div>
@@ -96,40 +177,18 @@ export default function Footer() {
           <div className="row">
             <div className="col-12">
               <div className="row g-2 footer-links justify-content-left">
-                {footer.quickLinks?.map((link) => {
-                  const href = link?.id === "agenda" && (!link.url || link.url === "#") ? "/agenda" : link.url || "#";
-                  return (
-                    <div key={link.id} className="col-auto">
-                      <a href={href} className="footer-link">
-                        {link.label}
-                      </a>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-12 text-left">
-              <p className="footer-direccion">{footer.address}</p>
-            </div>
-          </div>
-
-          <div className="footer-social d-md-none">
-            {footer.socials?.map((social) => (
-              <a key={`mobile-${social.id}`} href={social.url} target="_blank" rel="noreferrer" aria-label={social.label}>
-                <img src={asset(social.icon)} alt={social.label} />
-              </a>
-            ))}
-          </div>
-
-          <div className="footer-logos">
-            <div className="container-fluid">
-              <div className="row justify-content-center align-items-center">
-                {footer.logos?.slice(1).map((logo) => (
-                  <div key={logo.id} className="col-auto">
-                    <img src={asset(logo.src)} alt={logo.alt} className="footer-logo img-fluid" />
+                {[
+                  "Carreras",
+                  "Institucional",
+                  "Estudiantes",
+                  "Agenda",
+                  "Talleres",
+                  "Preguntas frecuentes",
+                ].map((label, i) => (
+                  <div key={i} className="col-auto">
+                    <a href="#" className="footer-link">
+                      {label}
+                    </a>
                   </div>
                 ))}
               </div>
@@ -138,7 +197,42 @@ export default function Footer() {
 
           <div className="row">
             <div className="col-12 text-left">
-              <p className="footer-creditos">{footer.credits}</p>
+              <p className="footer-direccion">
+                La Pampa 1619, Mar del Plata, Argentina. 7600
+              </p>
+            </div>
+          </div>
+
+          <div className="footer-logos">
+            <div className="container-fluid">
+              <div className="row justify-content-center align-items-center">
+                <div className="col-auto">
+                  <img
+                    src={LogoEducArt.src}
+                    alt="Logo Educación Artística"
+                    className="footer-logo img-fluid"
+                  />
+                </div>
+                <div className="col-auto">
+                  <img
+                    src={LogoBsAs.src}
+                    alt="Logo Dirección Cultura"
+                    className="footer-logo img-fluid"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-12 text-left">
+              <p className="footer-creditos">
+                2025 © ESCUELA DE ARTES VISUALES MARTÍN A. MALHARRO <br />
+                Sitio diseñado por alumn@s de Diseño Gráfico 4ºA <br />
+                Desarrollado por los alumn@s de la Técnica N°5 — Informática:
+                Banegas Agustina, Salvia Malena, Vallejos Alexis, Cecchini
+                Mateo, Seselovsky Darian, Willers Sara, Megnini Tiziano
+              </p>
             </div>
           </div>
         </div>
