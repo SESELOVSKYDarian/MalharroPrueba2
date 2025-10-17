@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 
 export const dynamic = "force-dynamic";
 
+
 const asset = (path) => {
   if (!path) return "";
   if (/^https?:/i.test(path)) return path;
