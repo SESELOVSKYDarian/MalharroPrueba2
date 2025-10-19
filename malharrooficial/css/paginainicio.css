@@ -618,8 +618,16 @@ custom-accordion-body
   border-radius: 10px; /* bordes redondeados */
   border: none;
   font-weight: 600; /* peso del texto */
+  text-decoration: none;
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
   cursor: pointer; /* cursor tipo botón */
+}
+
+.btn-agenda01:hover,
+.btn-agenda01:focus {
+  text-decoration: none;
+  outline: none;
+  color: #f4155b;
 }
 
 @media (min-width: 992px) {

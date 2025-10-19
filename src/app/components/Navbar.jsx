@@ -19,6 +19,12 @@ const resolveUrl = (entry) => {
   if (entry.id === "agenda" && (!url || url === "#")) {
     return "/agenda";
   }
+  if (entry.id === "faq" && (!url || url === "#")) {
+    return "/#preguntasfrecuentes";
+  }
+  if (entry.id === "campus" && (!url || url === "#")) {
+    return "https://esavmamalharro-bue.infd.edu.ar/aula/acceso.cgi";
+  }
   if (!url) return "#";
   return url;
 };

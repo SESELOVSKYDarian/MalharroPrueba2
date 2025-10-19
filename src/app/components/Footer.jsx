@@ -97,7 +97,14 @@ export default function Footer() {
             <div className="col-12">
               <div className="row g-2 footer-links justify-content-left">
                 {footer.quickLinks?.map((link) => {
-                  const href = link?.id === "agenda" && (!link.url || link.url === "#") ? "/agenda" : link.url || "#";
+                  let href = link?.url || "#";
+                  if (link?.id === "agenda" && (!link.url || link.url === "#")) {
+                    href = "/agenda";
+                  } else if (link?.id === "faq" && (!link.url || link.url === "#")) {
+                    href = "/#preguntasfrecuentes";
+                  } else if (link?.id === "campus" && (!link.url || link.url === "#")) {
+                    href = "https://esavmamalharro-bue.infd.edu.ar/aula/acceso.cgi";
+                  }
                   return (
                     <div key={link.id} className="col-auto">
                       <a href={href} className="footer-link">

@@ -154,9 +154,9 @@
 .selectField {
   width: 100%;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  border: 1px solid rgba(44, 23, 77, 0.25);
+  background: rgba(255, 255, 255, 0.92);
+  color: #2c174d;
   padding: 0.85rem 1rem;
   font-size: 0.95rem;
   transition: border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
@@ -164,7 +164,7 @@
 }
 
 .selectField {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M12.14 5.5 8 9.64 3.86 5.5 2.45 6.91 8 12.46l5.55-5.55z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%232c174d' viewBox='0 0 16 16'%3E%3Cpath d='M12.14 5.5 8 9.64 3.86 5.5 2.45 6.91 8 12.46l5.55-5.55z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   padding-right: 2.6rem;
@@ -182,15 +182,20 @@
 }
 
 .inputField::placeholder {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(44, 23, 77, 0.55);
+}
+
+.selectField option {
+  color: #2c174d;
+  background-color: #fff;
 }
 
 .inputField:focus,
 .selectField:focus {
   outline: none;
-  border-color: rgba(255, 255, 255, 0.8);
-  background: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18);
+  border-color: rgba(44, 23, 77, 0.6);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.35);
 }
 
 .filtersActions {
@@ -245,6 +250,7 @@
   margin: clamp(2rem, 6vw, 3.5rem) auto clamp(4rem, 8vw, 5rem);
   display: grid;
   gap: 1.8rem;
+  grid-template-columns: 1fr;
 }
 
 .eventCard {
@@ -360,6 +366,27 @@
 
   .eventImage {
     height: 100%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .listContainer {
+    width: min(1200px, 92vw);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  .eventCard {
+    grid-template-columns: 1fr;
+    height: 100%;
+  }
+
+  .eventMedia {
+    width: 100%;
+  }
+
+  .eventImage {
+    height: 220px;
   }
 }
 

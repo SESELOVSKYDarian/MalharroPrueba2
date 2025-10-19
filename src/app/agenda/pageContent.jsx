@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import styles from "./page.module.css";
 
 const normalizeBase = (base) => (base || "").replace(/\/$/, "");
@@ -33,6 +33,13 @@ const formatLongDate = (value) => {
   }).format(date);
 };
 
+const normalizeDateKey = (value) => {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toISOString().slice(0, 10);
+};
+
 const buildTagList = (events) => {
   const unique = new Set();
   events.forEach((event) => {
@@ -47,6 +54,7 @@ const filterEvents = (events, { search, category, tag, exactDate, allowPast }) =
   const needle = search.trim().toLocaleLowerCase("es-AR");
   const now = new Date();
   now.setHours(0, 0, 0, 0);
+  const normalizedExactDate = exactDate ? normalizeDateKey(exactDate) : "";
 
   return events.filter((event) => {
     const title = event.titulo || "";
@@ -59,13 +67,9 @@ const filterEvents = (events, { search, category, tag, exactDate, allowPast }) =
     if (category && primaryTag !== category) return false;
     if (tag && (!Array.isArray(event.tags) || !event.tags.includes(tag))) return false;
 
-    if (exactDate) {
-      const candidate = event.fecha ? new Date(event.fecha) : null;
-      if (!candidate || Number.isNaN(candidate.getTime())) return false;
-      const wanted = new Date(exactDate);
-      wanted.setHours(0, 0, 0, 0);
-      candidate.setHours(0, 0, 0, 0);
-      if (candidate.getTime() !== wanted.getTime()) return false;
+    if (normalizedExactDate) {
+      const candidateKey = normalizeDateKey(event.fecha);
+      if (!candidateKey || candidateKey !== normalizedExactDate) return false;
     }
 
     if (!event.fecha) return true;
@@ -132,8 +136,18 @@ export default function AgendaPageContent({ events, apiBase }) {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
   const [exactDate, setExactDate] = useState("");
+  const [draftFilters, setDraftFilters] = useState({
+    search: "",
+    category: "",
+    tag: "",
+    date: "",
+  });
+  const dateInputRef = useRef(null);
 
-  const { hero, rest } = useMemo(() => sortEventsForHero(events), [events]);
+  const sortedEvents = useMemo(() => {
+    const { hero, rest } = sortEventsForHero(events);
+    return hero ? [hero, ...rest] : rest;
+  }, [events]);
   const categories = useMemo(() => {
     const unique = new Set();
     events.forEach((event) => {
@@ -144,48 +158,53 @@ export default function AgendaPageContent({ events, apiBase }) {
   }, [events]);
   const tags = useMemo(() => buildTagList(events), [events]);
 
-  const hasUpcoming = useMemo(() => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return rest.some((event) => {
-      if (!event.fecha) return false;
-      const parsed = new Date(event.fecha);
-      if (Number.isNaN(parsed.getTime())) return false;
-      return parsed >= today;
-    });
-  }, [rest]);
-
   const filtered = useMemo(
     () =>
-      filterEvents(rest, {
+      filterEvents(sortedEvents, {
         search,
         category: selectedCategory,
         tag: selectedTag,
         exactDate,
-        allowPast: !hasUpcoming,
+        allowPast: true,
       }),
-    [rest, search, selectedCategory, selectedTag, exactDate, hasUpcoming]
+    [sortedEvents, search, selectedCategory, selectedTag, exactDate]
   );
 
-  const heroDateParts = formatDateParts(hero?.fecha);
-  const heroImage = hero?.imageUrl ? assetUrl(apiBase, hero.imageUrl) : "";
+  const heroImage =
+    sortedEvents[0]?.imageUrl
+      ? assetUrl(apiBase, sortedEvents[0].imageUrl)
+      : assetUrl(apiBase, "/malharrooficial/images/BANNER MUESTRA.png");
 
   const resetFilters = () => {
     setSearch("");
     setSelectedCategory("");
     setSelectedTag("");
     setExactDate("");
+    setDraftFilters({
+      search: "",
+      category: "",
+      tag: "",
+      date: "",
+    });
   };
 
   const applyFilters = () => {
-    setSearch((value) => value.trim());
+    const trimmedSearch = draftFilters.search.trim();
+    setSearch(trimmedSearch);
+    setSelectedCategory(draftFilters.category);
+    setSelectedTag(draftFilters.tag);
+    setExactDate(draftFilters.date);
+    setDraftFilters((prev) => ({
+      ...prev,
+      search: trimmedSearch,
+    }));
   };
 
   return (
     <div className={styles.pageWrapper}>
       <section className={styles.hero}>
         <div className={styles.heroMedia}>
-          {heroImage ? <img src={heroImage} alt={hero?.titulo || "Evento destacado"} className={styles.heroImage} /> : null}
+          {heroImage ? <img src={heroImage} alt="Agenda" className={styles.heroImage} /> : null}
           <div className={styles.heroOverlay}></div>
         </div>
 
@@ -193,35 +212,22 @@ export default function AgendaPageContent({ events, apiBase }) {
           <div className={styles.heroHeading}>
             <span className={styles.heroKicker}>Agenda</span>
             <h1 className={styles.heroTitle}>Un vistazo a los proximos encuentros</h1>
-            <p className={styles.heroSubtitle}>Descubri los eventos, mesas de examenes y jornadas que tenes este ano.</p>
+            <p className={styles.heroSubtitle}>Descubri los eventos, mesas de examenes y jornadas que tenes este año.</p>
           </div>
-
-          {hero ? (
-            <div className={styles.heroDateCard}>
-              <div className={styles.heroDate}>
-                <span className={styles.heroDateMonth}>{heroDateParts.month}</span>
-                <span className={styles.heroDateDay}>{heroDateParts.day}</span>
-              </div>
-              <div>
-                <p className={styles.heroEventTitle}>{hero.titulo || "Evento destacado"}</p>
-                <div className={styles.heroTags}>
-                  {(hero.tags || []).map((tag) => (
-                    <span key={tag} className={styles.heroTag}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ) : null}
         </div>
       </section>
 
       <section className={styles.filtersWrapper}>
-        <h2 className={styles.filtersHeading}>Descubri los eventos, mesas de examenes y jornadas que tenes este ano.</h2>
+        <h2 className={styles.filtersHeading}>Descubri los eventos, mesas de examenes y jornadas que tenes este año.</h2>
 
         <div className={styles.filtersGrid}>
-          <select value={selectedCategory} onChange={(event) => setSelectedCategory(event.target.value)} className={styles.selectField}>
+          <select
+            value={draftFilters.category}
+            onChange={(event) =>
+              setDraftFilters((prev) => ({ ...prev, category: event.target.value }))
+            }
+            className={styles.selectField}
+          >
             <option value="">Tipo de evento</option>
             {categories.map((category) => (
               <option key={category} value={category}>
@@ -230,7 +236,11 @@ export default function AgendaPageContent({ events, apiBase }) {
             ))}
           </select>
 
-          <select value={selectedTag} onChange={(event) => setSelectedTag(event.target.value)} className={styles.selectField}>
+          <select
+            value={draftFilters.tag}
+            onChange={(event) => setDraftFilters((prev) => ({ ...prev, tag: event.target.value }))}
+            className={styles.selectField}
+          >
             <option value="">Etiquetas</option>
             {tags.map((tag) => (
               <option key={tag} value={tag}>
@@ -241,22 +251,41 @@ export default function AgendaPageContent({ events, apiBase }) {
 
           <input
             type="date"
-            value={exactDate}
-            onChange={(event) => setExactDate(event.target.value)}
+            value={draftFilters.date}
+            onChange={(event) => setDraftFilters((prev) => ({ ...prev, date: event.target.value }))}
             className={styles.inputField}
+            ref={dateInputRef}
           />
 
           <input
             type="search"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            value={draftFilters.search}
+            onChange={(event) => setDraftFilters((prev) => ({ ...prev, search: event.target.value }))}
             className={styles.inputField}
             placeholder="Buscar..."
           />
         </div>
 
         <div className={styles.filtersActions}>
-          <button type="button" className={styles.calendarButton}>
+          <button
+            type="button"
+            className={styles.calendarButton}
+            onClick={() => {
+              if (dateInputRef.current) {
+                dateInputRef.current.focus({ preventScroll: true });
+                if (typeof dateInputRef.current.showPicker === "function") {
+                  dateInputRef.current.showPicker();
+                  return;
+                }
+              }
+              const nextDate = new Date();
+              nextDate.setHours(0, 0, 0, 0);
+              setDraftFilters((prev) => ({
+                ...prev,
+                date: nextDate.toISOString().slice(0, 10),
+              }));
+            }}
+          >
             Vista calendario
           </button>
           <button type="button" className={styles.applyButton} onClick={applyFilters}>
