@@ -7,7 +7,6 @@ import Footer from "./components/Footer";
 
 export const dynamic = "force-dynamic";
 
-
 const asset = (path) => {
   if (!path) return "";
   if (/^https?:/i.test(path)) return path;
@@ -160,7 +159,7 @@ export default async function Page() {
               </a>
             </div>
             <div className="botones-uno col-12 justify-content-center col-lg-4">
-              <a href="http://localhost:3000/agenda" className="btn-bloque btn-agenda">
+              <a href="#agenda" className="btn-bloque btn-agenda">
                 Agenda
               </a>
               <a href="#estudiantes" className="btn-bloque btn-estudiantes">
