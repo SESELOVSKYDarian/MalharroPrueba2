@@ -207,7 +207,19 @@ body{
 .navbar-toggler {
   background-color: #F4155B;
 }
+/* === CORRECCIÓN: evitar que el dropdown se superponga === */
+.navbar-collapse .dropdown {
+  position: relative; /* necesario para ubicar correctamente el ul */
+}
 
+.navbar-collapse .dropdown-menu {
+  position: absolute;
+  top: 100%;       /* se coloca justo debajo del enlace padre */
+  right: 0;        /* alineado al borde derecho del panel */
+  left: auto;
+  margin-top: 0.3rem; /* pequeño espacio visual */
+  z-index: 2000;   /* por encima del fondo, pero debajo del botón */
+}
 /* ================= Menú hamburguesa para pantallas large  ================= */
 @media (min-width: 992px) /*Esa es la medida large, en caso de usar xl, luego modificar*/
 {
