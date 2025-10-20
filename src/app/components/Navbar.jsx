@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { API_URL } from "../config";
+import Buscador from './Buscador';
 
 const NAVBAR_SECTION = "navbar";
 
@@ -72,22 +73,7 @@ export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark z-index-1000 p-3">
       <div className="container-fluid d-flex justify-content-between align-items-center">
-        <div className="logo-lupa-box">
-          <div className="d-flex align-items-center bg-highlight p-2 rounded">
-            <Link href="/" className="navbar-brand botonlogo" aria-label="Ir a inicio">
-              {navbar.logoUrl ? (
-                <img src={withAssetBase(navbar.logoUrl)} alt="Isotipo Malharro" className="logo-nav" />
-              ) : (
-                <span className="fw-bold text-white">Malharro</span>
-              )}
-            </Link>
-            {navbar.searchIconUrl && (
-              <a className="ms-2" role="button" data-bs-toggle="modal" data-bs-target="#searchModal" aria-label="Buscar">
-                <img src={withAssetBase(navbar.searchIconUrl)} alt="Buscar" className="lupa-nav" />
-              </a>
-            )}
-          </div>
-        </div>
+       <Buscador navbar={navbar} withAssetBase={withAssetBase} />
 
         <button
           className="navbar-toggler collapsed p-2"

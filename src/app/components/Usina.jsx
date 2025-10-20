@@ -16,6 +16,7 @@ export default function Usina() {
   const [cards, setCards] = useState([]);
   const [titleHtml, setTitleHtml] = useState(defaultTitle);
   const [descriptionHtml, setDescriptionHtml] = useState(defaultDescription);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     async function fetchUsina() {
@@ -59,6 +60,14 @@ export default function Usina() {
     fetchUsina();
   }, []);
 
+  const handleImageClick = (card) => {
+    setSelectedImage(card);
+  };
+
+  const handleCloseImage = () => {
+    setSelectedImage(null);
+  };
+
   return (
     <section className="container-fluid espaciado-vertical" id="estudiantes">
       <div className="row justify-content-center">
@@ -72,7 +81,11 @@ export default function Usina() {
           <div className="galeria galeria-grid col-12">
             {cards.length ? (
               cards.map((card) => (
-                <div key={card.id} className="galeria-item">
+                <div 
+                  key={card.id} 
+                  className="galeria-item"
+                  onClick={() => handleImageClick(card)}
+                >
                   <img
                     src={asset(card.imageUrl)}
                     alt={card.titulo || "Proyecto de nuestros estudiantes"}
@@ -86,6 +99,27 @@ export default function Usina() {
           </div>
         </div>
       </div>
+
+      {/* Modal para imagen seleccionada */}
+      {selectedImage && (
+        <div className="image-modal-overlay" onClick={handleCloseImage}>
+          <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-button" onClick={handleCloseImage}>×</button>
+            <img
+              src={asset(selectedImage.imageUrl)}
+              alt={selectedImage.titulo || "Proyecto de nuestros estudiantes"}
+              className="modal-image"
+            />
+            {selectedImage.titulo && (
+              <div className="image-caption">
+                <h3>{selectedImage.titulo}</h3>
+                {selectedImage.descripcion && <p>{selectedImage.descripcion}</p>}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       <style jsx>{`
         :global(.nuestros-estudiantes) {
           overflow: hidden;
@@ -97,6 +131,7 @@ export default function Usina() {
           gap: 24px;
           justify-items: center;
           padding: 0 24px 48px;
+          margin-top: 70px;
         }
 
         :global(.galeria-item) {
@@ -113,6 +148,91 @@ export default function Usina() {
           object-fit: cover;
           border-radius: 24px;
           box-shadow: 0 20px 45px rgba(15, 23, 42, 0.2);
+        }
+        
+        :global(.galeria-img:hover) {
+          cursor: pointer;
+        }
+
+        /* Estilos del modal */
+        .image-modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.8);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+          padding: 20px;
+        }
+
+        .image-modal-content {
+          position: relative;
+          max-width: 90%;
+          max-height: 90%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          background: transparent;
+          border-radius: 0;
+          padding: 0;
+          box-shadow: none;
+        }
+
+        .close-button {
+          position: absolute;
+          top: -40px;
+          right: 0;
+          background: none;
+          border: none;
+          font-size: 2rem;
+          color: white;
+          cursor: pointer;
+          z-index: 1001;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          transition: background-color 0.3s ease;
+        }
+
+        .close-button:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-image {
+          max-width: 100%;
+          max-height: 70vh;
+          object-fit: contain;
+          border-radius: 14px 14px 0 0;
+        }
+
+        .image-caption {
+          width: 100%;
+          margin-top: 0;
+          text-align: center;
+          color: white;
+          background: #333333;
+          padding: 20px;
+          border-radius: 0 0 14px 14px;
+          max-width: none;
+        }
+
+        .image-caption h3 {
+          margin-bottom: 10px;
+          font-size: 1.3rem;
+          margin-top: 0;
+        }
+
+        .image-caption p {
+          font-size: 0.7rem;
+          line-height: 1.4;
+          margin: 0;
         }
 
         @media (max-width: 1199.98px) {
@@ -134,6 +254,10 @@ export default function Usina() {
             grid-template-columns: repeat(2, minmax(140px, 1fr));
             padding: 0 24px 40px;
           }
+
+          .image-modal-content {
+            max-width: 95%;
+          }
         }
 
         @media (max-width: 575.98px) {
@@ -150,6 +274,30 @@ export default function Usina() {
 
           :global(.galeria-img) {
             border-radius: 20px;
+          }
+
+          .image-modal-content {
+            max-width: 98%;
+          }
+
+          .close-button {
+            top: -35px;
+            right: -10px;
+            font-size: 1.5rem;
+            width: 30px;
+            height: 30px;
+          }
+
+          .image-caption {
+            padding: 15px;
+          }
+
+          .image-caption h3 {
+            font-size: 1.2rem;
+          }
+
+          .image-caption p {
+            font-size: 0.9rem;
           }
         }
       `}</style>
