@@ -221,7 +221,7 @@ body{
   z-index: 2000;   /* por encima del fondo, pero debajo del botón */
 }
 /* ================= Menú hamburguesa para pantallas large  ================= */
-@media (min-width: 992px) /*Esa es la medida large, en caso de usar xl, luego modificar*/
+@media (min-width: 1350px) /*Esa es la medida large, en caso de usar xl, luego modificar*/
 {
   .navbar-collapse {
     position: static !important;
