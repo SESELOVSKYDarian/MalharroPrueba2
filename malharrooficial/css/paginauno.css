@@ -1,0 +1,90 @@
+/* =========================================================
+   Página en Proceso - Malharro Oficial
+   ========================================================= */
+
+/* ---------- BOTÓN VOLVER ---------- */
+.btn-volver {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--color-primary);
+  background-color: transparent;
+  border: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-volver:hover {
+  text-decoration: none;
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.volver-svg {
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+}
+
+.textovolver-btn {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* ---------- ESPACIADOS ---------- */
+.espaciado-vertical {
+  height: 24px;
+}
+
+.margen {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* ---------- LAYOUT GENERAL ---------- */
+.row {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.container-fluid {
+  padding: 0 16px;
+}
+
+/* ---------- TIPOGRAFÍA ---------- */
+.h1-titulob {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.p1-r {
+  font-size: 1rem;
+  color: var(--color-neutral-6);
+  line-height: 1.5;
+}
+
+/* ---------- IMÁGENES ---------- */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .h1-titulob {
+    font-size: 1.8rem;
+  }
+
+  .textovolver-btn {
+    font-size: 0.9rem;
+  }
+
+  .volver-svg {
+    width: 28px;
+    height: 28px;
+  }
+}

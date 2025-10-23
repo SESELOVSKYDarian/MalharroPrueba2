@@ -1,5 +1,8 @@
-// EnProcesoEAV.jsx
 import React from "react";
+import "../../../malharrooficial/css/bootstrap.min.css";
+import "../../../malharrooficial/css/design-system.css";
+import "../../../malharrooficial/css/styles.css";
+import "../../../malharrooficial/css/paginauno.css";
 
 export default function EnProcesoEAV() {
   return (
@@ -8,10 +11,9 @@ export default function EnProcesoEAV() {
       <div className="container-fluid">
         <div className="row">
           <div className="col-12">
-            {/* Nota: Semánticamente es mejor un <a> con clases de botón que un <button> con <a> adentro */}
             <a href="../web 05 09/index.html" className="btn btn-volver">
               <img
-                src="images/Icon_VolverActualizado.svg"
+                src="malharrooficial\images\persoanjes-enproceso.svg"
                 alt="Volver al menú principal"
                 className="volver-svg"
               />
@@ -39,7 +41,7 @@ export default function EnProcesoEAV() {
           </p>
           <div className="espaciado-vertical margen" />
           <img
-            src="images/persoanjes-enproceso.svg"
+            src="malharrooficial\images\persoanjes-enproceso.svg"
             alt="Personajes de las carreras, página en proceso"
             width={400}
           />
