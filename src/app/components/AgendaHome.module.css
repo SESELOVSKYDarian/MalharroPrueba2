@@ -56,9 +56,9 @@
 }
 
 .card {
-  border-radius: 22px;
+  border-radius: 28px;
   overflow: hidden;
-  background: #f4155b;
+  background: #ffffff;
   color: #1c1630;
   display: flex;
   flex-direction: column;
@@ -66,102 +66,174 @@
   box-shadow: 0 24px 52px rgba(0, 0, 0, 0.28);
 }
 
-.cardImage {
+.cardHero {
+  position: relative;
+  min-height: 280px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.cardHeroFallback {
+  background-image: linear-gradient(135deg, #ff2d6d, #ff66a1);
+}
+
+.cardHeroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 14, 22, 0.1) 0%, rgba(15, 14, 22, 0.8) 100%);
+}
+
+.cardHeroContent {
+  position: relative;
+  padding: clamp(1.75rem, 4vw, 2.75rem);
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.cardPlaceholder {
-  height: 220px;
-  background: linear-gradient(135deg, #f8f0ff, #e8ddff);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.cardBody {
-  padding: 1.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.15rem;
-  flex: 1;
-}
-
-.cardHeader {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
   gap: 1rem;
-  align-items: flex-start;
+  place-items: center;
+  text-align: center;
+  color: #ffffff;
 }
 
-.dateBadge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 100px;
-  padding: 0.55rem 0.9rem;
-  border-radius: 18px;
-  color: #fff;
+.heroDate {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
 }
 
-.dateMonth {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.dateDay {
-  font-size: 1.75rem;
+.heroDay {
+  font-size: clamp(2.25rem, 7vw, 3rem);
   font-weight: 700;
   line-height: 1;
 }
 
-.tagList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  justify-content: flex-end;
+.heroMonth {
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 600;
 }
 
-.tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.6rem;
-  border-radius: 999px;
-  background: rgb(255, 255, 255);
-  color: #000000;
-  font-size: 0.75rem;
+.heroTitle {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 700;
+  text-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.heroSchedule {
+  margin: 0;
+  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
   font-weight: 600;
-  text-transform: uppercase;
+  text-transform: capitalize;
   letter-spacing: 0.05em;
 }
 
-.cardTitle {
-  margin: 0;
-  font-size: 1.35rem;
+.heroTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: center;
+}
+
+.heroTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
   font-weight: 700;
-  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(255, 255, 255, 0.85);
+  color: #1c1630;
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.18);
 }
 
-.cardDate {
-  margin: 0;
+.heroTagVariant1 {
+  background: rgba(66, 219, 182, 0.95);
+  color: #013529;
+}
+
+.heroTagVariant2 {
+  background: rgba(255, 233, 122, 0.95);
+  color: #4c3200;
+}
+
+.heroTagVariant3 {
+  background: rgba(114, 193, 255, 0.95);
+  color: #04254d;
+}
+
+.heroTagVariant4 {
+  background: rgba(255, 190, 210, 0.95);
+  color: #51132a;
+}
+
+.heroTagVariant5 {
+  background: rgba(255, 255, 255, 0.9);
+  color: #1c1630;
+}
+
+.cardFooter {
+  background: linear-gradient(135deg, #142042, #202b5f);
+  color: #ffffff;
+  padding: clamp(1.4rem, 3vw, 1.75rem) clamp(1.4rem, 4vw, 2.25rem);
+  display: flex;
+  gap: clamp(1.1rem, 3vw, 1.8rem);
+  align-items: center;
+}
+
+.footerDate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 72px;
+}
+
+.footerMonth {
   font-size: 0.95rem;
-  font-weight: 600;
-  color: #ffffff;
-  text-transform: capitalize;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
 }
 
-.cardSummary {
+.footerDay {
+  font-size: clamp(2rem, 6vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.footerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.footerSchedule {
+  font-size: 0.85rem;
+  text-transform: capitalize;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.footerSummary,
+.footerSummaryFallback {
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.footerSummaryFallback {
+  font-style: italic;
 }
 
 .emptyState {
@@ -241,7 +313,7 @@
 
 @media (max-width: 1023px) {
   .cardsTrack {
-    grid-template-columnds: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .navButtonLeft {
@@ -268,13 +340,27 @@
     margin: 0 auto;
   }
 
-  .cardBody {
-    padding: 1.5rem;
+  .cardHero {
+    min-height: 240px;
   }
 
-  .cardImage,
-  .cardPlaceholder {
-    height: 100%;
+  .cardHeroContent {
+    padding: 1.75rem 1.5rem 2.1rem;
+  }
+
+  .cardFooter {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footerDate {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .footerDay {
+    font-size: 2.2rem;
   }
 
   .navButton {

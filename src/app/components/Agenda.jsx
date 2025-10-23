@@ -284,35 +284,53 @@ export default function Agenda() {
                 const summary = plainDescription
                   ? `${plainDescription.charAt(0).toUpperCase()}${plainDescription.slice(1)}`
                   : "";
+                const imageUrl = event.imageUrl ? asset(event.imageUrl) : "";
 
                 return (
                   <article key={event.id} className={styles.card}>
-                    {event.imageUrl ? (
-                      <img className={styles.cardImage} src={asset(event.imageUrl)} alt={event.titulo} />
-                    ) : (
-                      <div className={styles.cardPlaceholder} aria-hidden="true">
-                        <span>Sin imagen</span>
-                      </div>
-                    )}
-
-                    <div className={styles.cardBody}>
-                      <div className={styles.cardHeader}>
-                        <div className={styles.dateBadge}>
-                          <span className={styles.dateMonth}>{dateParts.month}</span>
-                          <span className={styles.dateDay}>{dateParts.day}</span>
+                    <div
+                      className={`${styles.cardHero} ${imageUrl ? "" : styles.cardHeroFallback}`.trim()}
+                      style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
+                    >
+                      <div className={styles.cardHeroOverlay} />
+                      <div className={styles.cardHeroContent}>
+                        <div className={styles.heroDate}>
+                          <span className={styles.heroDay}>{dateParts.day || "--"}</span>
+                          <span className={styles.heroMonth}>{dateParts.month || ""}</span>
                         </div>
-                        <div className={styles.tagList}>
-                          {(event.tags || []).map((tag, index) => (
-                            <span key={`${event.id}-tag-${index}`} className={styles.tag}>
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
+
+                        <h3 className={styles.heroTitle}>{event.titulo || "Evento sin titulo"}</h3>
+                        {humanDate ? <p className={styles.heroSchedule}>{humanDate}</p> : null}
+
+                        {(event.tags || []).length ? (
+                          <div className={styles.heroTags}>
+                            {(event.tags || []).map((tag, index) => (
+                              <span
+                                key={`${event.id}-tag-${index}`}
+                                className={`${styles.heroTag} ${styles[`heroTagVariant${(index % 5) + 1}`]}`}
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+
+                    <div className={styles.cardFooter}>
+                      <div className={styles.footerDate}>
+                        <span className={styles.footerMonth}>{dateParts.month || ""}</span>
+                        <span className={styles.footerDay}>{dateParts.day || "--"}</span>
                       </div>
 
-                      <h3 className={styles.cardTitle}>{event.titulo || "Evento sin titulo"}</h3>
-                      {humanDate ? <p className={styles.cardDate}>{humanDate}</p> : null}
-                      {summary ? <p className={styles.cardSummary}>{summary}</p> : null}
+                      <div className={styles.footerInfo}>
+                        {humanDate ? <span className={styles.footerSchedule}>{humanDate}</span> : null}
+                        {summary ? (
+                          <p className={styles.footerSummary}>{summary}</p>
+                        ) : (
+                          <p className={styles.footerSummaryFallback}>Próximamente más información.</p>
+                        )}
+                      </div>
                     </div>
                   </article>
                 );
