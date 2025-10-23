@@ -3,6 +3,14 @@ import "../../../malharrooficial/css/bootstrap.min.css";
 import "../../../malharrooficial/css/design-system.css";
 import "../../../malharrooficial/css/styles.css";
 import "../../../malharrooficial/css/paginauno.css";
+import { API_URL } from "../config";
+
+const asset = (path) => {
+  if (!path) return "";
+  if (/^https?:/i.test(path)) return path;
+  const base = (API_URL || "").replace(/\/$/, "");
+  return `${base}${path}`;
+};
 
 export default function EnProcesoEAV() {
   return (
@@ -13,7 +21,7 @@ export default function EnProcesoEAV() {
           <div className="col-12">
             <a href="../web 05 09/index.html" className="btn btn-volver">
               <img
-                src="malharrooficial\images\persoanjes-enproceso.svg"
+                src={asset("/malharrooficial/images/persoanjes-enproceso.svg")}
                 alt="Volver al menú principal"
                 className="volver-svg"
               />
@@ -41,7 +49,7 @@ export default function EnProcesoEAV() {
           </p>
           <div className="espaciado-vertical margen" />
           <img
-            src="malharrooficial\images\persoanjes-enproceso.svg"
+            src={asset("/malharrooficial/images/persoanjes-enproceso.svg")}
             alt="Personajes de las carreras, página en proceso"
             width={400}
           />
