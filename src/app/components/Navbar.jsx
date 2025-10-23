@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { API_URL } from "../config";
 import Buscador from './Buscador';
 
@@ -14,8 +13,22 @@ const withAssetBase = (path) => {
   return `${base}${path}`;
 };
 
+const CAREER_LINK_IDS = new Set([
+  "carreras",
+  "diseno-grafico",
+  "escenografia",
+  "fotografia",
+  "ilustracion",
+  "medios-audiovisuales",
+  "profesorado",
+  "realizador",
+]);
+
 const resolveUrl = (entry) => {
   if (!entry) return "#";
+  if (CAREER_LINK_IDS.has(entry.id)) {
+    return "/carreras";
+  }
   const url = entry.url;
   if (entry.id === "agenda" && (!url || url === "#")) {
     return "/agenda";
