@@ -293,28 +293,6 @@ export default function Agenda() {
                       style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
                     >
                       <div className={styles.cardHeroOverlay} />
-                      <div className={styles.cardHeroContent}>
-                        <div className={styles.heroDate}>
-                          <span className={styles.heroDay}>{dateParts.day || "--"}</span>
-                          <span className={styles.heroMonth}>{dateParts.month || ""}</span>
-                        </div>
-
-                        <h3 className={styles.heroTitle}>{event.titulo || "Evento sin titulo"}</h3>
-                        {humanDate ? <p className={styles.heroSchedule}>{humanDate}</p> : null}
-
-                        {(event.tags || []).length ? (
-                          <div className={styles.heroTags}>
-                            {(event.tags || []).map((tag, index) => (
-                              <span
-                                key={`${event.id}-tag-${index}`}
-                                className={`${styles.heroTag} ${styles[`heroTagVariant${(index % 5) + 1}`]}`}
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                        ) : null}
-                      </div>
                     </div>
 
                     <div className={styles.cardFooter}>
@@ -330,6 +308,18 @@ export default function Agenda() {
                         ) : (
                           <p className={styles.footerSummaryFallback}>Próximamente más información.</p>
                         )}
+                        {(event.tags || []).length ? (
+                          <div className={styles.footerTags}>
+                            {(event.tags || []).map((tag, index) => (
+                              <span
+                                key={`${event.id}-tag-${index}`}
+                                className={`${styles.footerTag} ${styles[`footerTagVariant${(index % 5) + 1}`]}`}
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
                       </div>
                     </div>
                   </article>

@@ -87,104 +87,8 @@
   background: linear-gradient(180deg, rgba(15, 14, 22, 0.1) 0%, rgba(15, 14, 22, 0.8) 100%);
 }
 
-.cardHeroContent {
-  position: relative;
-  padding: clamp(1.75rem, 4vw, 2.75rem);
-  width: 100%;
-  display: grid;
-  gap: 1rem;
-  place-items: center;
-  text-align: center;
-  color: #ffffff;
-}
-
-.heroDate {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.35rem;
-  padding: 0.35rem 0.9rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(8px);
-}
-
-.heroDay {
-  font-size: clamp(2.25rem, 7vw, 3rem);
-  font-weight: 700;
-  line-height: 1;
-}
-
-.heroMonth {
-  font-size: clamp(1rem, 3vw, 1.2rem);
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-weight: 600;
-}
-
-.heroTitle {
-  margin: 0;
-  font-size: clamp(1.8rem, 4vw, 2.4rem);
-  font-weight: 700;
-  text-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-}
-
-.heroSchedule {
-  margin: 0;
-  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
-  font-weight: 600;
-  text-transform: capitalize;
-  letter-spacing: 0.05em;
-}
-
-.heroTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  justify-content: center;
-}
-
-.heroTag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.3rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  background: rgba(255, 255, 255, 0.85);
-  color: #1c1630;
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.18);
-}
-
-.heroTagVariant1 {
-  background: rgba(66, 219, 182, 0.95);
-  color: #013529;
-}
-
-.heroTagVariant2 {
-  background: rgba(255, 233, 122, 0.95);
-  color: #4c3200;
-}
-
-.heroTagVariant3 {
-  background: rgba(114, 193, 255, 0.95);
-  color: #04254d;
-}
-
-.heroTagVariant4 {
-  background: rgba(255, 190, 210, 0.95);
-  color: #51132a;
-}
-
-.heroTagVariant5 {
-  background: rgba(255, 255, 255, 0.9);
-  color: #1c1630;
-}
-
 .cardFooter {
-  background: linear-gradient(135deg, #142042, #202b5f);
+  background: #ff155b;
   color: #ffffff;
   padding: clamp(1.4rem, 3vw, 1.75rem) clamp(1.4rem, 4vw, 2.25rem);
   display: flex;
@@ -234,6 +138,53 @@
 
 .footerSummaryFallback {
   font-style: italic;
+}
+
+.footerTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+}
+
+.footerTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(255, 255, 255, 0.85);
+  color: #1c1630;
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.18);
+}
+
+.footerTagVariant1 {
+  background: rgba(66, 219, 182, 0.95);
+  color: #013529;
+}
+
+.footerTagVariant2 {
+  background: rgba(255, 233, 122, 0.95);
+  color: #4c3200;
+}
+
+.footerTagVariant3 {
+  background: rgba(114, 193, 255, 0.95);
+  color: #04254d;
+}
+
+.footerTagVariant4 {
+  background: rgba(255, 190, 210, 0.95);
+  color: #51132a;
+}
+
+.footerTagVariant5 {
+  background: rgba(255, 255, 255, 0.9);
+  color: #1c1630;
 }
 
 .emptyState {
