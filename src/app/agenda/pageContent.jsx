@@ -311,7 +311,11 @@ export default function AgendaPageContent({ events, apiBase }) {
             return (
               <article key={event.id} className={styles.eventCard}>
                 <div className={styles.eventMedia}>
-                  {image ? <img src={image} alt={event.titulo} className={styles.eventImage} /> : null}
+                  {image ? (
+                    <img src={image} alt={event.titulo} className={styles.eventImage} />
+                  ) : (
+                    <div className={styles.eventHeroFallback}>Sin imagen</div>
+                  )}
                   <div className={styles.eventBadge}>
                     <div>
                       <span className={styles.eventMonth}>{parts.month}</span>
