@@ -58,7 +58,7 @@
 .card {
   border-radius: 22px;
   overflow: hidden;
-  background: #fff;
+  background: #f4155b;
   color: #1c1630;
   display: flex;
   flex-direction: column;
@@ -68,14 +68,14 @@
 
 .cardImage {
   width: 100%;
-  height: 220px;
+  height: 100%;
   object-fit: cover;
 }
 
 .cardPlaceholder {
   height: 220px;
   background: linear-gradient(135deg, #f8f0ff, #e8ddff);
-  color: #5c2d91;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -104,12 +104,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 70px;
+  min-width: 100px;
   padding: 0.55rem 0.9rem;
   border-radius: 18px;
-  background: linear-gradient(160deg, #ff2d6d, #ff78a8);
   color: #fff;
-  box-shadow: 0 12px 26px rgba(255, 45, 109, 0.28);
 }
 
 .dateMonth {
@@ -136,8 +134,8 @@
   align-items: center;
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
-  background: rgba(92, 45, 145, 0.15);
-  color: #5c2d91;
+  background: rgb(255, 255, 255);
+  color: #000000;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -148,14 +146,14 @@
   margin: 0;
   font-size: 1.35rem;
   font-weight: 700;
-  color: #211538;
+  color: #ffffff;
 }
 
 .cardDate {
   margin: 0;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #5c2d91;
+  color: #ffffff;
   text-transform: capitalize;
 }
 
@@ -163,7 +161,7 @@
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #3a2f57;
+  color: #ffffff;
 }
 
 .emptyState {
@@ -243,7 +241,7 @@
 
 @media (max-width: 1023px) {
   .cardsTrack {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columnds: minmax(0, 1fr);
   }
 
   .navButtonLeft {
@@ -276,7 +274,7 @@
 
   .cardImage,
   .cardPlaceholder {
-    height: 260px;
+    height: 100%;
   }
 
   .navButton {
@@ -292,4 +290,3 @@
     right: 0.5rem;
   }
 }
-
