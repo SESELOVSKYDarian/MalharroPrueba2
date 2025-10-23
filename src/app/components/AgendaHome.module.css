@@ -68,23 +68,27 @@
 
 .cardHero {
   position: relative;
-  min-height: 280px;
-  display: flex;
-  background: #f2f2f2;
   overflow: hidden;
+  background: #0f0f16;
+  border-bottom: 1px solid rgba(15, 15, 22, 0.18);
+  aspect-ratio: 16 / 9;
+  min-height: clamp(220px, 32vw, 280px);
+}
+
+.cardImage,
+.cardHeroFallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .cardImage {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
   display: block;
-  flex: 1;
 }
 
 .cardHeroFallback {
-  height: 100%;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -236,7 +240,8 @@
 .navIcon {
   width: 20px;
   height: 20px;
-  filter: invert(1);
+  color: #ffffff;
+  transition: transform 0.2s ease;
 }
 
 .navIconLeft {
@@ -273,7 +278,8 @@
   }
 
   .cardHero {
-    min-height: 240px;
+    aspect-ratio: 4 / 3;
+    min-height: clamp(200px, 58vw, 240px);
   }
 
   .cardHeroContent {

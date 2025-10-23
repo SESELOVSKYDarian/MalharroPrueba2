@@ -16,6 +16,20 @@ const asset = (path) => {
   return `${base}${path}`;
 };
 
+const ArrowIcon = ({ direction = "right" }) => (
+  <svg
+    className={`${styles.navIcon} ${direction === "left" ? styles.navIconLeft : ""}`}
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M8.47 4.47a.75.75 0 0 1 1.06 0l7 7a.75.75 0 0 1 0 1.06l-7 7a.75.75 0 1 1-1.06-1.06L14.94 12 8.47 5.53a.75.75 0 0 1 0-1.06Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
 const formatDateParts = (value) => {
   if (!value) return { month: "", day: "" };
   const date = new Date(value);
@@ -196,7 +210,6 @@ export default function Agenda() {
     return items;
   }, [carouselEvents, currentIndex, effectiveColumns, canNavigate, total]);
 
-  const arrowIcon = asset("/malharrooficial/images/Icon_Agenda_Actualizado.svg");
   const trackStyle = { "--agenda-columns": `${Math.max(1, effectiveColumns)}` };
   const isExternalCta = /^https?:/i.test(ctaUrl || "");
 
@@ -262,7 +275,7 @@ export default function Agenda() {
                 onClick={handlePrev}
                 aria-label="Evento anterior"
               >
-                {arrowIcon ? <img src={arrowIcon} alt="Anterior" className={`${styles.navIcon} ${styles.navIconLeft}`} /> : <span>{"<"}</span>}
+                <ArrowIcon direction="left" />
               </button>
               <button
                 type="button"
@@ -270,7 +283,7 @@ export default function Agenda() {
                 onClick={handleNext}
                 aria-label="Evento siguiente"
               >
-                {arrowIcon ? <img src={arrowIcon} alt="Siguiente" className={styles.navIcon} /> : <span>{">"}</span>}
+                <ArrowIcon direction="right" />
               </button>
             </>
           ) : null}
