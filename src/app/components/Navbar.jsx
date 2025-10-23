@@ -58,11 +58,13 @@ export default function Navbar() {
 
   if (error) {
     return (
+      <div className="responsive">
       <nav className="navbar navbar-expand-lg navbar-dark z-index-1000 p-3">
         <div className="container-fluid d-flex justify-content-between align-items-center">
           <span className="text-white">{error}</span>
         </div>
       </nav>
+      </div>
     );
   }
 

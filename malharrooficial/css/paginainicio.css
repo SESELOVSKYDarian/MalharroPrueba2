@@ -651,6 +651,82 @@ custom-accordion-body
     display: none;
   }
 }
+
+/* Usa el breakpoint md de Bootstrap (768px) */
+/* ------------- Forzar visibilidad en todos los tamaños ------------- */
+/* Sobrescribimos d-none / d-md-flex para que el col se muestre en móviles */
+.col-md-6.d-none.d-md-flex {
+  display: flex !important; /* fuerza visibilidad */
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Contenedor general */
+.imagenes-aleatorias {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap; /* permitimos que las imágenes hagan wrap en pantallas muy pequeñas */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Reglas generales para las imágenes: override de .img-fluid */
+.imagenes-aleatorias img,
+.imagenes-aleatorias img.img-fluid {
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+  height: auto !important;
+  max-height: 140px !important; /* límite superior para pantallas grandes */
+  width: auto !important;
+}
+
+/* -------------------- Móviles (<= 767.98px) -------------------- */
+/* Tres imágenes en fila (cada una ~ 1/3 del ancho) y responsive */
+@media (max-width: 767.98px) {
+  .imagenes-aleatorias {
+    gap: 8px;
+  }
+
+  .imagenes-aleatorias img,
+  .imagenes-aleatorias img.img-fluid {
+    /* Cada imagen ocupa cerca del 1/3 del ancho disponible */
+    flex: 0 0 calc((100% - 16px) / 3); /* 16px = 2 * gap aproximado */
+    width: calc((100% - 16px) / 3) !important;
+    max-width: calc((100% - 16px) / 3) !important;
+    height: auto !important;
+    max-height: none;
+  }
+}
+
+/* -------------------- Tablet / md (>=768px) -------------------- */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .imagenes-aleatorias img {
+    flex: 0 0 auto;
+    height: 90px !important; /* más chico en tablet */
+    width: auto !important;
+    max-width: 120px !important;
+  }
+}
+
+/* -------------------- Desktop grande (>=1200px) -------------------- */
+@media (min-width: 1200px) {
+  .imagenes-aleatorias img {
+    height: 70px !important; /* aún más pequeño en pantallas grandes */
+    width: auto !important;
+    max-width: 120px !important;
+  }
+}
+
+/* Opcional: efecto hover sin romper layout */
+.imagenes-aleatorias img:hover {
+  transform: scale(1.05);
+  transition: transform 0.18s ease;
+  z-index: 1;
+}
+
 /* ================= FIN agenda ================= */
 
 /* ================= INICIO Formando profesionales ================= */
