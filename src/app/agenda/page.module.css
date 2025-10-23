@@ -264,14 +264,31 @@
 
 .eventMedia {
   position: relative;
-  width: 104%;
+  width: 100%;
   overflow: hidden;
+  background: #0f0f16;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .eventImage {
+  display: block;
   width: 100%;
-  height: 220px;
-  object-fit: cover;
+  height: auto;
+}
+
+.eventHeroFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 220px;
+  background-image: linear-gradient(135deg, #ff2d6d, #ff66a1);
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .eventBadge {
@@ -364,8 +381,8 @@
     grid-template-columns: 310px 1fr;
   }
 
-  .eventImage {
-    height: 100%;
+  .eventMedia {
+    align-items: stretch;
   }
 }
 
@@ -383,10 +400,6 @@
 
   .eventMedia {
     width: 100%;
-  }
-
-  .eventImage {
-    height: 220px;
   }
 }
 
