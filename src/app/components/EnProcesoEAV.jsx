@@ -21,7 +21,7 @@ export default function EnProcesoEAV() {
           <div className="col-12">
             <a href="../web 05 09/index.html" className="btn btn-volver">
               <img
-                src={asset("/malharrooficial/images/persoanjes-enproceso.svg")}
+                src={asset("/malharrooficial/images/Icon_Volver.svg")}
                 alt="Volver al menú principal"
                 className="volver-svg"
               />
