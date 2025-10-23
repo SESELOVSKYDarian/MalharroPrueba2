@@ -16,6 +16,20 @@ const asset = (path) => {
   return `${base}${path}`;
 };
 
+const ArrowIcon = ({ direction = "right" }) => (
+  <svg
+    className={`${styles.navIcon} ${direction === "left" ? styles.navIconLeft : ""}`}
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M8.47 4.47a.75.75 0 0 1 1.06 0l7 7a.75.75 0 0 1 0 1.06l-7 7a.75.75 0 1 1-1.06-1.06L14.94 12 8.47 5.53a.75.75 0 0 1 0-1.06Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
 const formatDateParts = (value) => {
   if (!value) return { month: "", day: "" };
   const date = new Date(value);
@@ -196,7 +210,6 @@ export default function Agenda() {
     return items;
   }, [carouselEvents, currentIndex, effectiveColumns, canNavigate, total]);
 
-  const arrowIcon = asset("/malharrooficial/images/Icon_Agenda_Actualizado.svg");
   const trackStyle = { "--agenda-columns": `${Math.max(1, effectiveColumns)}` };
   const isExternalCta = /^https?:/i.test(ctaUrl || "");
 
@@ -262,7 +275,7 @@ export default function Agenda() {
                 onClick={handlePrev}
                 aria-label="Evento anterior"
               >
-                {arrowIcon ? <img src={arrowIcon} alt="Anterior" className={`${styles.navIcon} ${styles.navIconLeft}`} /> : <span>{"<"}</span>}
+                <ArrowIcon direction="left" />
               </button>
               <button
                 type="button"
@@ -270,7 +283,7 @@ export default function Agenda() {
                 onClick={handleNext}
                 aria-label="Evento siguiente"
               >
-                {arrowIcon ? <img src={arrowIcon} alt="Siguiente" className={styles.navIcon} /> : <span>{">"}</span>}
+                <ArrowIcon direction="right" />
               </button>
             </>
           ) : null}
@@ -284,35 +297,48 @@ export default function Agenda() {
                 const summary = plainDescription
                   ? `${plainDescription.charAt(0).toUpperCase()}${plainDescription.slice(1)}`
                   : "";
+                const imageUrl = event.imageUrl ? asset(event.imageUrl) : "";
 
                 return (
                   <article key={event.id} className={styles.card}>
-                    {event.imageUrl ? (
-                      <img className={styles.cardImage} src={asset(event.imageUrl)} alt={event.titulo} />
-                    ) : (
-                      <div className={styles.cardPlaceholder} aria-hidden="true">
-                        <span>Sin imagen</span>
-                      </div>
-                    )}
+                    <div className={styles.cardHero}>
+                      {imageUrl ? (
+                        <img
+                          className={styles.cardImage}
+                          src={imageUrl}
+                          alt={event.titulo || "Imagen del evento"}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className={styles.cardHeroFallback} aria-hidden="true">
+                          <span>Sin imagen</span>
+                        </div>
+                      )}
+                    </div>
 
-                    <div className={styles.cardBody}>
-                      <div className={styles.cardHeader}>
-                        <div className={styles.dateBadge}>
-                          <span className={styles.dateMonth}>{dateParts.month}</span>
-                          <span className={styles.dateDay}>{dateParts.day}</span>
-                        </div>
-                        <div className={styles.tagList}>
-                          {(event.tags || []).map((tag, index) => (
-                            <span key={`${event.id}-tag-${index}`} className={styles.tag}>
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
+                    <div className={styles.cardFooter}>
+                      <div className={styles.footerDate}>
+                        <span className={styles.footerMonth}>{dateParts.month || ""}</span>
+                        <span className={styles.footerDay}>{dateParts.day || "--"}</span>
                       </div>
 
-                      <h3 className={styles.cardTitle}>{event.titulo || "Evento sin titulo"}</h3>
-                      {humanDate ? <p className={styles.cardDate}>{humanDate}</p> : null}
-                      {summary ? <p className={styles.cardSummary}>{summary}</p> : null}
+                      <div className={styles.footerInfo}>
+                        {humanDate ? <span className={styles.footerSchedule}>{humanDate}</span> : null}
+                        {summary ? (
+                          <p className={styles.footerSummary}>{summary}</p>
+                        ) : (
+                          <p className={styles.footerSummaryFallback}>Próximamente más información.</p>
+                        )}
+                        {(event.tags || []).length ? (
+                          <div className={styles.tagList}>
+                            {(event.tags || []).map((tag, index) => (
+                              <span key={`${event.id}-tag-${index}`} className={styles.tag}>
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
                     </div>
                   </article>
                 );
