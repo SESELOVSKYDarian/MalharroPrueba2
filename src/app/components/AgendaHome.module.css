@@ -85,7 +85,7 @@
 
 .cardImage {
   object-fit: cover;
-  display: block;
+  
 }
 
 .cardHeroFallback {
@@ -208,6 +208,7 @@
 }
 
 .navButton {
+  z-index: 100;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
