@@ -256,7 +256,7 @@ export default function Agenda() {
             Un vistazo a los proximos encuentros
           </h2>
           <p className={styles.subtitle}>
-            Descubri los eventos, mesas de examenes y jornadas que tenes este ano.
+            Descubri los eventos, mesas de examenes y jornadas que tenes este año.
           </p>
         </div>
 

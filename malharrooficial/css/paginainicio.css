@@ -312,7 +312,7 @@ custom-accordion-body
   position: relative;
   padding: 1.5rem;
   color: #fff;
-  min-height: 150px;
+  min-height: 10n0px;
 }
 .custom-accordion-body > * {
   position: relative;
@@ -727,6 +727,7 @@ custom-accordion-body
   z-index: 1;
 }
 
+
 /* ================= FIN agenda ================= */
 
 /* ================= INICIO Formando profesionales ================= */
@@ -781,6 +782,7 @@ custom-accordion-body
   height: 223px;
   margin-bottom: 12px;
 }
+
 /* ================= FIN nuestros estudiantes ================= */
 
 /* ================= INICIO Preguntas frecuentes ================= */

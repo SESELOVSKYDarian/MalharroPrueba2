@@ -235,14 +235,27 @@ export default function Usina() {
           margin: 0;
         }
 
-        @media (max-width: 1199.98px) {
-          :global(.nuestros-estudiantes) {
-            clip-path: none;
-            border-radius: 72px 72px 0 0;
-            padding-bottom: 64px;
-            height: auto;
-          }
+       .contenedor-negro{
+  width: 100vw;
+  height: 1250px;
+  background-color: #1E1E1E;
+  clip-path: ellipse(160% 50% at 50% 50%);
+  z-index: 0;
+}
 
+@media (min-width: 768px) {
+  .contenedor-negro{
+      width: 100vw;
+  height: 1200px;
+  background-color: #1E1E1E;
+  clip-path: ellipse(100% 50% at 50% 50%);
+  z-index: 0;}
+}
+
+.margenovalo{
+  margin-top: -1250px;
+ z-index: 3;
+}
           :global(.galeria.galeria-grid) {
             grid-template-columns: repeat(3, minmax(140px, 1fr));
             gap: 20px;
