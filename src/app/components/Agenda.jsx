@@ -288,11 +288,19 @@ export default function Agenda() {
 
                 return (
                   <article key={event.id} className={styles.card}>
-                    <div
-                      className={`${styles.cardHero} ${imageUrl ? "" : styles.cardHeroFallback}`.trim()}
-                      style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
-                    >
-                      <div className={styles.cardHeroOverlay} />
+                    <div className={styles.cardHero}>
+                      {imageUrl ? (
+                        <img
+                          className={styles.cardImage}
+                          src={imageUrl}
+                          alt={event.titulo || "Imagen del evento"}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className={styles.cardHeroFallback} aria-hidden="true">
+                          <span>Sin imagen</span>
+                        </div>
+                      )}
                     </div>
 
                     <div className={styles.cardFooter}>
@@ -309,12 +317,9 @@ export default function Agenda() {
                           <p className={styles.footerSummaryFallback}>Próximamente más información.</p>
                         )}
                         {(event.tags || []).length ? (
-                          <div className={styles.footerTags}>
+                          <div className={styles.tagList}>
                             {(event.tags || []).map((tag, index) => (
-                              <span
-                                key={`${event.id}-tag-${index}`}
-                                className={`${styles.footerTag} ${styles[`footerTagVariant${(index % 5) + 1}`]}`}
-                              >
+                              <span key={`${event.id}-tag-${index}`} className={styles.tag}>
                                 {tag}
                               </span>
                             ))}
