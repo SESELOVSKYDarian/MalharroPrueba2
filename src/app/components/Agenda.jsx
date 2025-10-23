@@ -8,6 +8,37 @@ import styles from "./AgendaHome.module.css";
 const DEFAULT_CTA_LABEL = "Ver agenda completa";
 const DEFAULT_CTA_URL = "/agenda";
 const AUTO_SLIDE_INTERVAL = 6000;
+const DEFAULT_TAG_POSITION = { x: 50, y: 85 };
+
+const buildEventKey = (event, fallbackIndex) => {
+  if (!event || typeof event !== "object") {
+    return `agenda-event-${fallbackIndex}`;
+  }
+
+  if (event.id !== undefined && event.id !== null) {
+    return `id-${event.id}`;
+  }
+
+  if (event._id !== undefined && event._id !== null) {
+    return `id-${event._id}`;
+  }
+
+  if (typeof event.slug === "string" && event.slug.trim()) {
+    return `slug-${event.slug.trim()}`;
+  }
+
+  if (typeof event.titulo === "string" && event.titulo.trim()) {
+    const normalizedTitle = event.titulo.trim().toLowerCase().replace(/\s+/g, "-");
+    const datePart = typeof event.fecha === "string" && event.fecha.trim() ? event.fecha.trim() : `idx-${fallbackIndex}`;
+    return `title-${normalizedTitle}-${datePart}`;
+  }
+
+  if (typeof event.descripcion === "string" && event.descripcion.trim()) {
+    return `desc-${event.descripcion.trim().slice(0, 24)}-${fallbackIndex}`;
+  }
+
+  return `agenda-event-${fallbackIndex}`;
+};
 
 const asset = (path) => {
   if (!path) return "";
@@ -94,6 +125,7 @@ export default function Agenda() {
   const [ctaUrl, setCtaUrl] = useState(DEFAULT_CTA_URL);
   const [slidesPerView, setSlidesPerView] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [tagPositions, setTagPositions] = useState({});
   const touchStartRef = useRef(null);
 
   useEffect(() => {
@@ -196,9 +228,127 @@ export default function Agenda() {
     return items;
   }, [carouselEvents, currentIndex, effectiveColumns, canNavigate, total]);
 
+  useEffect(() => {
+    if (!carouselEvents.length) {
+      setTagPositions((previous) => (Object.keys(previous).length ? {} : previous));
+      return;
+    }
+
+    setTagPositions((previous) => {
+      const allowedKeys = new Set(carouselEvents.map((eventItem, index) => buildEventKey(eventItem, index)));
+      const next = {};
+      let changed = false;
+
+      Object.entries(previous).forEach(([key, value]) => {
+        if (allowedKeys.has(key)) {
+          next[key] = value;
+        } else {
+          changed = true;
+        }
+      });
+
+      if (!changed && Object.keys(next).length === Object.keys(previous).length) {
+        return previous;
+      }
+
+      return next;
+    });
+  }, [carouselEvents]);
+
   const arrowIcon = asset("/malharrooficial/images/Icon_Agenda_Actualizado.svg");
   const trackStyle = { "--agenda-columns": `${Math.max(1, effectiveColumns)}` };
   const isExternalCta = /^https?:/i.test(ctaUrl || "");
+
+  const getTagPosition = (key) => tagPositions[key] || DEFAULT_TAG_POSITION;
+
+  const updateTagPosition = (key, x, y) => {
+    setTagPositions((previous) => {
+      const clampedX = Math.min(95, Math.max(5, x));
+      const clampedY = Math.min(95, Math.max(5, y));
+      const current = previous[key];
+
+      if (current && Math.abs(current.x - clampedX) < 0.1 && Math.abs(current.y - clampedY) < 0.1) {
+        return previous;
+      }
+
+      return {
+        ...previous,
+        [key]: { x: clampedX, y: clampedY },
+      };
+    });
+  };
+
+  const updateTagPositionFromPointer = (event, key) => {
+    const overlay = event.currentTarget;
+    const container = overlay?.parentElement;
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+
+    const relativeX = ((event.clientX - rect.left) / rect.width) * 100;
+    const relativeY = ((event.clientY - rect.top) / rect.height) * 100;
+    updateTagPosition(key, relativeX, relativeY);
+  };
+
+  const handleTagPointerDown = (event, key) => {
+    if (!event.isPrimary) return;
+    event.preventDefault();
+    const overlay = event.currentTarget;
+    if (typeof overlay.focus === "function") {
+      overlay.focus({ preventScroll: true });
+    }
+    if (overlay.setPointerCapture) {
+      overlay.setPointerCapture(event.pointerId);
+    }
+    updateTagPositionFromPointer(event, key);
+  };
+
+  const handleTagPointerMove = (event, key) => {
+    const overlay = event.currentTarget;
+    const supportsPointerCapture = typeof overlay.hasPointerCapture === "function";
+    if (supportsPointerCapture && !overlay.hasPointerCapture(event.pointerId)) {
+      return;
+    }
+    updateTagPositionFromPointer(event, key);
+  };
+
+  const handleTagPointerUp = (event) => {
+    const overlay = event.currentTarget;
+    if (
+      typeof overlay.releasePointerCapture === "function" &&
+      typeof overlay.hasPointerCapture === "function" &&
+      overlay.hasPointerCapture(event.pointerId)
+    ) {
+      overlay.releasePointerCapture(event.pointerId);
+    }
+  };
+
+  const handleTagKeyDown = (event, key) => {
+    const step = event.shiftKey ? 5 : 2;
+    const position = getTagPosition(key);
+
+    switch (event.key) {
+      case "ArrowUp":
+        event.preventDefault();
+        updateTagPosition(key, position.x, position.y - step);
+        break;
+      case "ArrowDown":
+        event.preventDefault();
+        updateTagPosition(key, position.x, position.y + step);
+        break;
+      case "ArrowLeft":
+        event.preventDefault();
+        updateTagPosition(key, position.x - step, position.y);
+        break;
+      case "ArrowRight":
+        event.preventDefault();
+        updateTagPosition(key, position.x + step, position.y);
+        break;
+      default:
+        break;
+    }
+  };
 
   const handlePrev = () => {
     if (!canNavigate) return;
@@ -277,36 +427,57 @@ export default function Agenda() {
 
           {visibleEvents.length ? (
             <div className={styles.cardsTrack} style={trackStyle}>
-              {visibleEvents.map((event) => {
+              {visibleEvents.map((event, index) => {
                 const dateParts = formatDateParts(event.fecha);
                 const humanDate = formatLongDate(event.fecha);
                 const plainDescription = summarizeHtml(event.descripcion);
                 const summary = plainDescription
                   ? `${plainDescription.charAt(0).toUpperCase()}${plainDescription.slice(1)}`
                   : "";
+                const eventKey = buildEventKey(event, index);
+                const position = getTagPosition(eventKey);
+                const tagOverlayLabel = event.titulo
+                  ? `Etiquetas del evento ${event.titulo}. Arrastrá o usá las flechas para moverlas.`
+                  : "Etiquetas del evento. Arrastrá o usá las flechas para moverlas.";
 
                 return (
-                  <article key={event.id} className={styles.card}>
-                    {event.imageUrl ? (
-                      <img className={styles.cardImage} src={asset(event.imageUrl)} alt={event.titulo} />
-                    ) : (
-                      <div className={styles.cardPlaceholder} aria-hidden="true">
-                        <span>Sin imagen</span>
-                      </div>
-                    )}
+                  <article key={eventKey} className={styles.card}>
+                    <div className={styles.cardMedia}>
+                      {event.imageUrl ? (
+                        <img className={styles.cardMediaImage} src={asset(event.imageUrl)} alt={event.titulo} />
+                      ) : (
+                        <div className={styles.cardMediaPlaceholder} aria-hidden="true">
+                          <span>Sin imagen</span>
+                        </div>
+                      )}
+
+                      {(event.tags || []).length ? (
+                        <div
+                          role="button"
+                          tabIndex={0}
+                          aria-label={tagOverlayLabel}
+                          className={styles.tagOverlay}
+                          style={{ left: `${position.x}%`, top: `${position.y}%` }}
+                          onPointerDown={(pointerEvent) => handleTagPointerDown(pointerEvent, eventKey)}
+                          onPointerMove={(pointerEvent) => handleTagPointerMove(pointerEvent, eventKey)}
+                          onPointerUp={handleTagPointerUp}
+                          onPointerCancel={handleTagPointerUp}
+                          onKeyDown={(keyboardEvent) => handleTagKeyDown(keyboardEvent, eventKey)}
+                        >
+                          {(event.tags || []).map((tag, tagIndex) => (
+                            <span key={`${eventKey}-tag-${tagIndex}`} className={styles.tag}>
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
 
                     <div className={styles.cardBody}>
                       <div className={styles.cardHeader}>
                         <div className={styles.dateBadge}>
                           <span className={styles.dateMonth}>{dateParts.month}</span>
                           <span className={styles.dateDay}>{dateParts.day}</span>
-                        </div>
-                        <div className={styles.tagList}>
-                          {(event.tags || []).map((tag, index) => (
-                            <span key={`${event.id}-tag-${index}`} className={styles.tag}>
-                              {tag}
-                            </span>
-                          ))}
                         </div>
                       </div>
 
