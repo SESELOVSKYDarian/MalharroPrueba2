@@ -234,7 +234,7 @@
   width: 100vw;
   min-height: 1020px;
   background-color: #1b1b1b;
-  clip-path: ellipse(100% 50% at 50% 50%);
+  clip-path: ellipse(140% 50% at 50% 50%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -769,7 +769,7 @@ custom-accordion-body
 
 .galeria {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(167px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 12px;
   justify-items: center;
   max-width: 1200px;

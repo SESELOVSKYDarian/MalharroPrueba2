@@ -12,7 +12,8 @@ const asset = (path) => {
 
 export default function Usina() {
   const defaultTitle = "Nuestros <br><b>estudiantes</b>";
-  const defaultDescription = "Descubrí los proyectos creados en nuestros talleres y aulas.";
+  const defaultDescription =
+    "Descubrí los proyectos creados en nuestros talleres y aulas.";
   const [cards, setCards] = useState([]);
   const [titleHtml, setTitleHtml] = useState(defaultTitle);
   const [descriptionHtml, setDescriptionHtml] = useState(defaultDescription);
@@ -21,11 +22,16 @@ export default function Usina() {
   useEffect(() => {
     async function fetchUsina() {
       try {
-        const [postsResponse, titleResponse, descriptionResponse] = await Promise.all([
-          fetch(`${API_URL}/api/usina`, { cache: "no-store" }),
-          fetch(`${API_URL}/api/texts/home_students_title`, { cache: "no-store" }),
-          fetch(`${API_URL}/api/texts/home_students_description`, { cache: "no-store" }),
-        ]);
+        const [postsResponse, titleResponse, descriptionResponse] =
+          await Promise.all([
+            fetch(`${API_URL}/api/usina`, { cache: "no-store" }),
+            fetch(`${API_URL}/api/texts/home_students_title`, {
+              cache: "no-store",
+            }),
+            fetch(`${API_URL}/api/texts/home_students_description`, {
+              cache: "no-store",
+            }),
+          ]);
 
         if (postsResponse.ok) {
           const data = await postsResponse.json();
@@ -47,7 +53,11 @@ export default function Usina() {
 
         if (descriptionResponse.ok) {
           const descriptionData = await descriptionResponse.json();
-          setDescriptionHtml(descriptionData.contenido || descriptionData.titulo || defaultDescription);
+          setDescriptionHtml(
+            descriptionData.contenido ||
+              descriptionData.titulo ||
+              defaultDescription
+          );
         }
       } catch (error) {
         console.error(error);
@@ -73,7 +83,10 @@ export default function Usina() {
       <div className="row justify-content-center">
         <div className="nuestros-estudiantes col-12">
           <div className="estudiantes-titulo col-12">
-            <h1 className="h1-titulor" dangerouslySetInnerHTML={{ __html: titleHtml }} />
+            <h1
+              className="h1-titulor"
+              dangerouslySetInnerHTML={{ __html: titleHtml }}
+            />
           </div>
           <div className="estudiantes-parrafo p1-r">
             <p dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
@@ -81,8 +94,8 @@ export default function Usina() {
           <div className="galeria galeria-grid col-12">
             {cards.length ? (
               cards.map((card) => (
-                <div 
-                  key={card.id} 
+                <div
+                  key={card.id}
                   className="galeria-item"
                   onClick={() => handleImageClick(card)}
                 >
@@ -94,7 +107,9 @@ export default function Usina() {
                 </div>
               ))
             ) : (
-              <p className="p1-r text-white m-0">Pronto compartiremos nuevos proyectos.</p>
+              <p className="p1-r text-white m-0">
+                Pronto compartiremos nuevos proyectos.
+              </p>
             )}
           </div>
         </div>
@@ -103,8 +118,13 @@ export default function Usina() {
       {/* Modal para imagen seleccionada */}
       {selectedImage && (
         <div className="image-modal-overlay" onClick={handleCloseImage}>
-          <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-button" onClick={handleCloseImage}>×</button>
+          <div
+            className="image-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button className="close-button" onClick={handleCloseImage}>
+              ×
+            </button>
             <img
               src={asset(selectedImage.imageUrl)}
               alt={selectedImage.titulo || "Proyecto de nuestros estudiantes"}
@@ -113,21 +133,24 @@ export default function Usina() {
             {selectedImage.titulo && (
               <div className="image-caption">
                 <h3>{selectedImage.titulo}</h3>
-                {selectedImage.descripcion && <p>{selectedImage.descripcion}</p>}
+                {selectedImage.descripcion && (
+                  <p>{selectedImage.descripcion}</p>
+                )}
               </div>
             )}
           </div>
         </div>
       )}
 
-      <style jsx>{`
+    <style jsx>{`
         :global(.nuestros-estudiantes) {
           overflow: hidden;
         }
 
         :global(.galeria.galeria-grid) {
           display: grid;
-          grid-template-columns: repeat(4, minmax(140px, 1fr));
+          /* Grid más flexible para cargar más imágenes desde el dashboard */
+          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
           gap: 24px;
           justify-items: center;
           padding: 0 24px 48px;
@@ -235,36 +258,47 @@ export default function Usina() {
           margin: 0;
         }
 
-       .contenedor-negro{
-  width: 100vw;
-  height: 1250px;
-  background-color: #1E1E1E;
-  clip-path: ellipse(160% 50% at 50% 50%);
-  z-index: 0;
-}
+        /* Óvalo negro más pequeño */
+        .contenedor-negro{
+          width: 100vw;
+          height: 500px;
+          background-color: #1E1E1E;
+          clip-path: ellipse(110% 35% at 50% 50%);
+          z-index: 0;
+        }
 
-@media (min-width: 768px) {
-  .contenedor-negro{
-      width: 100vw;
-  height: 1200px;
-  background-color: #1E1E1E;
-  clip-path: ellipse(100% 50% at 50% 50%);
-  z-index: 0;}
-}
-
-.margenovalo{
-  margin-top: -1250px;
- z-index: 3;
-}
-          :global(.galeria.galeria-grid) {
-            grid-template-columns: repeat(3, minmax(140px, 1fr));
-            gap: 20px;
+        @media (min-width: 768px) {
+          .contenedor-negro{
+            width: 100vw;
+            height: 450px;
+            clip-path: ellipse(85% 35% at 50% 50%);
+            z-index: 0;
           }
+          
+          /* En tablets permitir más columnas */
+          :global(.galeria.galeria-grid) {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+          }
+        }
+
+        @media (min-width: 1200px) {
+          /* En pantallas grandes mostrar aún más imágenes */
+          :global(.galeria.galeria-grid) {
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+        }
+
+        .margenovalo{
+          margin-top: -500px;
+          z-index: 3;
         }
 
         @media (max-width: 991.98px) {
           :global(.galeria.galeria-grid) {
-            grid-template-columns: repeat(2, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             padding: 0 24px 40px;
           }
 
@@ -312,8 +346,10 @@ export default function Usina() {
           .image-caption p {
             font-size: 0.9rem;
           }
+          
+          .margenovalo{
+            margin-top: -500px;
+          }
         }
-      `}</style>
-    </section>
-  );
-}
+   `}</style>
+</section>)}
