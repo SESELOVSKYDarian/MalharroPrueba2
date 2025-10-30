@@ -18,7 +18,9 @@ const asset = (path) => {
 
 const ArrowIcon = ({ direction = "right" }) => (
   <svg
-    className={`${styles.navIcon} ${direction === "left" ? styles.navIconLeft : ""}`}
+    className={`${styles.navIcon} ${
+      direction === "left" ? styles.navIconLeft : ""
+    }`}
     viewBox="0 0 24 24"
     aria-hidden="true"
     focusable="false"
@@ -53,7 +55,10 @@ const formatLongDate = (value) => {
 
 const summarizeHtml = (html) => {
   if (!html) return "";
-  const text = html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  const text = html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
   if (text.length <= 160) return text;
   return `${text.slice(0, 157)}...`;
 };
@@ -115,8 +120,12 @@ export default function Agenda() {
       try {
         const [agendaResponse, labelResponse, urlResponse] = await Promise.all([
           fetch(`${API_URL}/api/agenda`, { cache: "no-store" }),
-          fetch(`${API_URL}/api/texts/home_agenda_cta_label`, { cache: "no-store" }),
-          fetch(`${API_URL}/api/texts/home_agenda_cta_url`, { cache: "no-store" }),
+          fetch(`${API_URL}/api/texts/home_agenda_cta_label`, {
+            cache: "no-store",
+          }),
+          fetch(`${API_URL}/api/texts/home_agenda_cta_url`, {
+            cache: "no-store",
+          }),
         ]);
 
         if (agendaResponse.ok) {
@@ -134,14 +143,21 @@ export default function Agenda() {
 
         if (labelResponse.ok) {
           const labelData = await labelResponse.json();
-          const label = typeof labelData.contenido === "string" ? labelData.contenido.trim() : "";
-          const fallback = typeof labelData.titulo === "string" ? labelData.titulo.trim() : "";
+          const label =
+            typeof labelData.contenido === "string"
+              ? labelData.contenido.trim()
+              : "";
+          const fallback =
+            typeof labelData.titulo === "string" ? labelData.titulo.trim() : "";
           setCtaLabel(label || fallback || DEFAULT_CTA_LABEL);
         }
 
         if (urlResponse.ok) {
           const urlData = await urlResponse.json();
-          const value = typeof urlData.contenido === "string" ? urlData.contenido.trim() : "";
+          const value =
+            typeof urlData.contenido === "string"
+              ? urlData.contenido.trim()
+              : "";
           setCtaUrl(value || DEFAULT_CTA_URL);
         }
       } catch (error) {
@@ -253,10 +269,11 @@ export default function Agenda() {
         <div className={styles.header}>
           <span className={styles.kicker}>Agenda</span>
           <h2 id="agenda-home-heading" className={styles.title}>
-            Un vistazo a los proximos encuentros
+            Un vistazo a los próximos encuentros
           </h2>
           <p className={styles.subtitle}>
-            Descubri los eventos, mesas de examenes y jornadas que tenes este año.
+            Descubrí los eventos, mesas de exámenes y jornadas que tenes este
+            año.
           </p>
         </div>
 
@@ -295,7 +312,9 @@ export default function Agenda() {
                 const humanDate = formatLongDate(event.fecha);
                 const plainDescription = summarizeHtml(event.descripcion);
                 const summary = plainDescription
-                  ? `${plainDescription.charAt(0).toUpperCase()}${plainDescription.slice(1)}`
+                  ? `${plainDescription
+                      .charAt(0)
+                      .toUpperCase()}${plainDescription.slice(1)}`
                   : "";
                 const imageUrl = event.imageUrl ? asset(event.imageUrl) : "";
 
@@ -310,7 +329,10 @@ export default function Agenda() {
                           loading="lazy"
                         />
                       ) : (
-                        <div className={styles.cardHeroFallback} aria-hidden="true">
+                        <div
+                          className={styles.cardHeroFallback}
+                          aria-hidden="true"
+                        >
                           <span>Sin imagen</span>
                         </div>
                       )}
@@ -318,21 +340,34 @@ export default function Agenda() {
 
                     <div className={styles.cardFooter}>
                       <div className={styles.footerDate}>
-                        <span className={styles.footerMonth}>{dateParts.month || ""}</span>
-                        <span className={styles.footerDay}>{dateParts.day || "--"}</span>
+                        <span className={styles.footerMonth}>
+                          {dateParts.month || ""}
+                        </span>
+                        <span className={styles.footerDay}>
+                          {dateParts.day || "--"}
+                        </span>
                       </div>
 
                       <div className={styles.footerInfo}>
-                        {humanDate ? <span className={styles.footerSchedule}>{humanDate}</span> : null}
+                        {humanDate ? (
+                          <span className={styles.footerSchedule}>
+                            {humanDate}
+                          </span>
+                        ) : null}
                         {summary ? (
                           <p className={styles.footerSummary}>{summary}</p>
                         ) : (
-                          <p className={styles.footerSummaryFallback}>Próximamente más información.</p>
+                          <p className={styles.footerSummaryFallback}>
+                            Próximamente más información.
+                          </p>
                         )}
                         {(event.tags || []).length ? (
                           <div className={styles.tagList}>
                             {(event.tags || []).map((tag, index) => (
-                              <span key={`${event.id}-tag-${index}`} className={styles.tag}>
+                              <span
+                                key={`${event.id}-tag-${index}`}
+                                className={styles.tag}
+                              >
                                 {tag}
                               </span>
                             ))}
@@ -346,14 +381,22 @@ export default function Agenda() {
             </div>
           ) : (
             <div className={styles.emptyState}>
-              <p>No hay eventos publicados por el momento. Vuelve pronto para descubrir nuevas actividades.</p>
+              <p>
+                No hay eventos publicados por el momento. Vuelve pronto para
+                descubrir nuevas actividades.
+              </p>
             </div>
           )}
         </div>
 
         <div className={styles.ctaRow}>
           {isExternalCta ? (
-            <a href={ctaUrl || DEFAULT_CTA_URL} className={styles.ctaButton} target="_blank" rel="noreferrer">
+            <a
+              href={ctaUrl || DEFAULT_CTA_URL}
+              className={styles.ctaButton}
+              target="_blank"
+              rel="noreferrer"
+            >
               {ctaLabel || DEFAULT_CTA_LABEL}
             </a>
           ) : (

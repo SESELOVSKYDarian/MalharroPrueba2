@@ -50,7 +50,10 @@ const buildTagList = (events) => {
   return Array.from(unique).sort((a, b) => a.localeCompare(b, "es"));
 };
 
-const filterEvents = (events, { search, category, tag, exactDate, allowPast }) => {
+const filterEvents = (
+  events,
+  { search, category, tag, exactDate, allowPast }
+) => {
   const needle = search.trim().toLocaleLowerCase("es-AR");
   const now = new Date();
   now.setHours(0, 0, 0, 0);
@@ -65,7 +68,8 @@ const filterEvents = (events, { search, category, tag, exactDate, allowPast }) =
 
     const primaryTag = Array.isArray(event.tags) ? event.tags[0] : "";
     if (category && primaryTag !== category) return false;
-    if (tag && (!Array.isArray(event.tags) || !event.tags.includes(tag))) return false;
+    if (tag && (!Array.isArray(event.tags) || !event.tags.includes(tag)))
+      return false;
 
     if (normalizedExactDate) {
       const candidateKey = normalizeDateKey(event.fecha);
@@ -170,10 +174,9 @@ export default function AgendaPageContent({ events, apiBase }) {
     [sortedEvents, search, selectedCategory, selectedTag, exactDate]
   );
 
-  const heroImage =
-    sortedEvents[0]?.imageUrl
-      ? assetUrl(apiBase, sortedEvents[0].imageUrl)
-      : assetUrl(apiBase, "/malharrooficial/images/BANNER MUESTRA.png");
+  const heroImage = sortedEvents[0]?.imageUrl
+    ? assetUrl(apiBase, sortedEvents[0].imageUrl)
+    : assetUrl(apiBase, "/malharrooficial/images/BANNER MUESTRA.png");
 
   const resetFilters = () => {
     setSearch("");
@@ -204,27 +207,39 @@ export default function AgendaPageContent({ events, apiBase }) {
     <div className={styles.pageWrapper}>
       <section className={styles.hero}>
         <div className={styles.heroMedia}>
-          {heroImage ? <img src={heroImage} alt="Agenda" className={styles.heroImage} /> : null}
+          {heroImage ? (
+            <img src={heroImage} alt="Agenda" className={styles.heroImage} />
+          ) : null}
           <div className={styles.heroOverlay}></div>
         </div>
 
         <div className={styles.heroContent}>
           <div className={styles.heroHeading}>
             <span className={styles.heroKicker}>Agenda</span>
-            <h1 className={styles.heroTitle}>Un vistazo a los proximos encuentros</h1>
-            <p className={styles.heroSubtitle}>Descubri los eventos, mesas de examenes y jornadas que tenes este año.</p>
+            <h1 className={styles.heroTitle}>
+              Un vistazo a los próximos encuentros
+            </h1>
+            <p className={styles.heroSubtitle}>
+              Descubrí los eventos, mesas de exámenes y jornadas que tenes este
+              año.
+            </p>
           </div>
         </div>
       </section>
 
       <section className={styles.filtersWrapper}>
-        <h2 className={styles.filtersHeading}>Descubri los eventos, mesas de examenes y jornadas que tenes este año.</h2>
+        <h2 className={styles.filtersHeading}>
+          Descubri los eventos, mesas de examenes y jornadas que tenes este año.
+        </h2>
 
         <div className={styles.filtersGrid}>
           <select
             value={draftFilters.category}
             onChange={(event) =>
-              setDraftFilters((prev) => ({ ...prev, category: event.target.value }))
+              setDraftFilters((prev) => ({
+                ...prev,
+                category: event.target.value,
+              }))
             }
             className={styles.selectField}
           >
@@ -238,7 +253,9 @@ export default function AgendaPageContent({ events, apiBase }) {
 
           <select
             value={draftFilters.tag}
-            onChange={(event) => setDraftFilters((prev) => ({ ...prev, tag: event.target.value }))}
+            onChange={(event) =>
+              setDraftFilters((prev) => ({ ...prev, tag: event.target.value }))
+            }
             className={styles.selectField}
           >
             <option value="">Etiquetas</option>
@@ -252,7 +269,9 @@ export default function AgendaPageContent({ events, apiBase }) {
           <input
             type="date"
             value={draftFilters.date}
-            onChange={(event) => setDraftFilters((prev) => ({ ...prev, date: event.target.value }))}
+            onChange={(event) =>
+              setDraftFilters((prev) => ({ ...prev, date: event.target.value }))
+            }
             className={styles.inputField}
             ref={dateInputRef}
           />
@@ -260,7 +279,12 @@ export default function AgendaPageContent({ events, apiBase }) {
           <input
             type="search"
             value={draftFilters.search}
-            onChange={(event) => setDraftFilters((prev) => ({ ...prev, search: event.target.value }))}
+            onChange={(event) =>
+              setDraftFilters((prev) => ({
+                ...prev,
+                search: event.target.value,
+              }))
+            }
             className={styles.inputField}
             placeholder="Buscar..."
           />
@@ -288,10 +312,18 @@ export default function AgendaPageContent({ events, apiBase }) {
           >
             Vista calendario
           </button>
-          <button type="button" className={styles.applyButton} onClick={applyFilters}>
+          <button
+            type="button"
+            className={styles.applyButton}
+            onClick={applyFilters}
+          >
             Filtrar
           </button>
-          <button type="button" className={styles.resetButton} onClick={resetFilters}>
+          <button
+            type="button"
+            className={styles.resetButton}
+            onClick={resetFilters}
+          >
             Limpiar filtros
           </button>
         </div>
@@ -301,18 +333,27 @@ export default function AgendaPageContent({ events, apiBase }) {
         {!filtered.length ? (
           <div className={styles.emptyState}>
             <h3 className={styles.emptyTitle}>No encontramos eventos</h3>
-            <p className={styles.emptyCopy}>Probalo con otra combinacion de filtros o volve a mostrar todos los eventos.</p>
+            <p className={styles.emptyCopy}>
+              Probalo con otra combinacion de filtros o volve a mostrar todos
+              los eventos.
+            </p>
           </div>
         ) : (
           filtered.map((event) => {
             const parts = formatDateParts(event.fecha);
             const humanDate = formatLongDate(event.fecha);
-            const image = event.imageUrl ? assetUrl(apiBase, event.imageUrl) : "";
+            const image = event.imageUrl
+              ? assetUrl(apiBase, event.imageUrl)
+              : "";
             return (
               <article key={event.id} className={styles.eventCard}>
                 <div className={styles.eventMedia}>
                   {image ? (
-                    <img src={image} alt={event.titulo} className={styles.eventImage} />
+                    <img
+                      src={image}
+                      alt={event.titulo}
+                      className={styles.eventImage}
+                    />
                   ) : (
                     <div className={styles.eventHeroFallback}>Sin imagen</div>
                   )}
@@ -323,7 +364,10 @@ export default function AgendaPageContent({ events, apiBase }) {
                     </div>
                     <div className={styles.eventTags}>
                       {(event.tags || []).map((tag) => (
-                        <span key={`${event.id}-${tag}`} className={styles.eventTag}>
+                        <span
+                          key={`${event.id}-${tag}`}
+                          className={styles.eventTag}
+                        >
                           {tag}
                         </span>
                       ))}
@@ -333,7 +377,9 @@ export default function AgendaPageContent({ events, apiBase }) {
 
                 <div className={styles.eventBody}>
                   <h3 className={styles.eventTitle}>{event.titulo}</h3>
-                  {humanDate ? <p className={styles.eventDate}>{humanDate}</p> : null}
+                  {humanDate ? (
+                    <p className={styles.eventDate}>{humanDate}</p>
+                  ) : null}
                   {event.descripcion ? (
                     <div
                       className={styles.eventDescription}
