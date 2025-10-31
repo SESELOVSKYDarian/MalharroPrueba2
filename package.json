@@ -3,15 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "node scripts/dev.js",
+    "dev:frontend": "next dev --turbopack -p 3000",
+    "dev:backend": "npm --prefix backend run dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "npm --prefix backend install"
   },
   "dependencies": {
-    "@react-oauth/google": "^0.12.2",
     "axios": "^1.9.0",
-    "next": "15.3.1",
+    "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.6.0",

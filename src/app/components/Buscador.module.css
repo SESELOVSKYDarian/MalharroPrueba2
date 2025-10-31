@@ -1,0 +1,151 @@
+/* Buscador.module.css */
+
+.list {
+  list-style: none;
+  margin-top: 8px;
+  padding: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-width: 250px;
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: fadeIn 0.3s forwards;
+}
+
+.list li {
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
+
+.list li:hover {
+  background-color: #70b7f5 !important;
+  color: #000000 !important;
+}
+
+.listTitle {
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin: 8px 0 4px 5px;
+  color: #555 !important;
+}
+
+.listContainer {
+  background-color: #ffffff;
+}
+
+/* --- Contenedor de búsqueda --- */
+.searchContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  color: #000;
+  animation: fadeInSearch 0.4s ease forwards;
+}
+
+.searcher {
+  flex: 1;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 28px;
+  border: 1px solid #ccc;
+  width: 100%; /* Cambié de 250px a 100% */
+  outline: none;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  color: #000000 !important; /* Asegurar color del texto */
+}
+
+.searcher:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #ffffff;
+  padding: 5px 10px;
+  transition: color 0.2s ease;
+}
+
+.closeBtn:hover {
+  color: #555555;
+}
+
+/* --- Animaciones del logo --- */
+.fadeInLogo {
+  animation: fadeInLogo 0.4s ease forwards;
+}
+
+.fadeOutLogo {
+  animation: fadeOutLogo 0.3s ease forwards;
+}
+
+@keyframes fadeInLogo {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeOutLogo {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+/* --- Animaciones del buscador (input) --- */
+.fadeInSearch {
+  animation: fadeInSearch 0.4s ease forwards;
+}
+
+.fadeOutSearch {
+  animation: fadeOutSearch 0.3s ease forwards;
+}
+
+@keyframes fadeInSearch {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutSearch {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+/* Agrega la animación fadeIn que falta */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

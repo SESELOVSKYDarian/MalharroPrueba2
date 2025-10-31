@@ -1,0 +1,107 @@
+/* =========================================================
+   Design System - Malharro Oficial
+   Define tipografías, colores, espaciados y jerarquías
+   ========================================================= */
+
+/* ---------- VARIABLES DE COLOR ---------- */
+:root {
+  --color-primary: #1a237e;
+  --color-secondary: #3949ab;
+  --color-accent: #ffca28;
+  --color-neutral-0: #ffffff;
+  --color-neutral-3: #d6d6d6;
+  --color-neutral-6: #757575;
+  --color-neutral-9: #212121;
+  --color-neutral-: #000000;
+}
+
+/* ---------- TIPOGRAFÍAS ---------- */
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+
+body {
+  font-family: "Inter", Arial, sans-serif;
+  color: var(--color-neutral-9);
+  background-color: var(--color-neutral-0);
+}
+
+/* ---------- TITULOS ---------- */
+.h1-titulob {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+.h2-titulob {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 0.75rem;
+}
+
+.h3-titulob {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+/* ---------- PÁRRAFOS Y TEXTOS ---------- */
+.p1-r {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.p1-b {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.textovolver-btn {
+  margin-left: 0.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* ---------- ESPACIADOS ---------- */
+.espaciado-vertical {
+  height: 24px;
+}
+
+.margen {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* ---------- BOTONES Y LINKS ---------- */
+.btn {
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+.btn-volver {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--color-primary);
+}
+
+.btn-volver img {
+  width: 28px;
+  height: 28px;
+}
+
+/* ---------- IMÁGENES ---------- */
+.volver-svg {
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+}
