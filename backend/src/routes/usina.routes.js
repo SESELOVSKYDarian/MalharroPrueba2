@@ -1,17 +1,18 @@
 import express from "express";
 import { authenticate } from "../middleware/auth.js";
-import { query } from "../db.js";
+import {
+  getUsinaPosts,
+  createUsinaPost,
+  updateUsinaPost,
+  deleteUsinaPost,
+} from "../services/dataStore.js";
 
 const router = express.Router();
 
 router.get("/", async (_req, res) => {
   try {
-    const { rows } = await query(
-      `SELECT id, titulo, texto, image_url AS "imageUrl", tags
-       FROM usina_posts
-       ORDER BY id DESC`
-    );
-    return res.json({ items: rows });
+    const items = await getUsinaPosts();
+    return res.json({ items });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "No se pudo obtener la usina" });
@@ -37,13 +38,13 @@ router.post("/", authenticate, async (req, res) => {
   }
 
   try {
-    const { rows } = await query(
-      `INSERT INTO usina_posts (titulo, texto, image_url, tags)
-       VALUES ($1, $2, $3, $4)
-       RETURNING id`,
-      [titulo, texto || "", imageUrl || "", normalizedTags]
-    );
-    return res.status(201).json({ id: rows[0].id });
+    const { id } = await createUsinaPost({
+      titulo,
+      texto,
+      imageUrl,
+      tags: normalizedTags,
+    });
+    return res.status(201).json({ id });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "No se pudo crear el contenido" });
@@ -64,15 +65,12 @@ router.put("/:id", authenticate, async (req, res) => {
     }
   }
   try {
-    await query(
-      `UPDATE usina_posts
-       SET titulo = COALESCE($1, titulo),
-           texto = COALESCE($2, texto),
-           image_url = COALESCE($3, image_url),
-           tags = COALESCE($4, tags)
-       WHERE id = $5`,
-      [titulo, texto, imageUrl, normalizedTags, id]
-    );
+    await updateUsinaPost(id, {
+      titulo,
+      texto,
+      imageUrl,
+      tags: normalizedTags,
+    });
     return res.json({ message: "Contenido actualizado" });
   } catch (error) {
     console.error(error);
@@ -83,7 +81,7 @@ router.put("/:id", authenticate, async (req, res) => {
 router.delete("/:id", authenticate, async (req, res) => {
   const { id } = req.params;
   try {
-    await query("DELETE FROM usina_posts WHERE id = $1", [id]);
+    await deleteUsinaPost(id);
     return res.json({ message: "Contenido eliminado" });
   } catch (error) {
     console.error(error);
